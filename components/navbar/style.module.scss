@@ -1,0 +1,39 @@
+.nav_header {
+    max-width: 100%;
+    margin: 0px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    .nav_right{
+        display: flex;
+        align-items: center;
+        .nav_header_ul {
+            display: flex;
+            align-items: center;
+            margin: 5px;
+          li {
+            padding: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            &:hover{
+                box-shadow: 4px 4px 4px orange;
+                transition: all 0.2s linear;
+                cursor: pointer;
+            }
+            a{
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                span{
+                    padding: 2px;
+                }
+            }
+          }
+        }
+    }
+  }
