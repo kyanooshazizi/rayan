@@ -31,11 +31,11 @@ const Resnav = () => {
   return (
     <>
       <Nav_mobile isOpen={iconstate} toggle={Navmobile} />
-      <nav className={`${styles.nav_header} ${clientWindowHeight>0? "bg-white text-black mt-0 z-50":"text-white mt-5"}`} id="nav_menu">
+      <nav className={`${styles.nav_header} ${clientWindowHeight>0? "bg-white text-txnotcolor mt-0 z-50":"text-txcolor mt-5"}`} id="nav_menu">
         <div className={styles.nav_right}>
           <div className="p-3">
             <Image
-              src="/logo.JPG"
+              src="/logo.jpg"
               alt="logo"
               width={100}
               height={100}
@@ -49,7 +49,7 @@ const Resnav = () => {
           </div>
           {/* icon for mobil end */}
           <div className="hidden md:block">
-            <ul className={styles.nav_header_ul}>
+            <ul className={`${styles.nav_header_ul}`}>
               <li>
                 <Link href={"/service"}>
                   {" "}
@@ -73,7 +73,7 @@ const Resnav = () => {
         </div>
         <div className="p-3">
           <Link href="/login_logout">
-            <button className="p-3 bg-orange-500 text-white shadow-[-4px_3px_5px_1px_orange] rounded-md hover:bg-orange-100 hover:text-black hover:transition-all hover:duration-300 font-bold flex text-xs md:text-base">
+            <button className="p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-md hover:bg-utils-300 text-txcolor hover:transition-all hover:duration-300 font-bold flex text-xs md:text-base">
               <span> ورود | عضویت</span>
               <IoMdLogIn className="text-sm md:text-2xl " />
             </button>

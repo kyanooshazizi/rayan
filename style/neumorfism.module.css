@@ -1,0 +1,12 @@
+.neumorfism{
+    border-radius: 17px;
+background: linear-gradient(145deg, #cacaca, #f0f0f0);
+box-shadow:  20px 20px 40px #afafaf,
+             -20px -20px 40px #ffffff;
+}
+
+.numDatapicker{
+    border-radius: 16px;
+background: #000b76;
+box-shadow: inset 5px 5px 0px #03129b,
+            inset -5px -5px 0px #081aba;}

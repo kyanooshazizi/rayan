@@ -1,5 +1,9 @@
 import Head from "next/head";
+import Nextui from "../components/nextui/nextprovider";
 import "./globals.css";
+// redux
+import { Providers } from "../components/Redux/provider";
+import { ThemeContextProvider } from "../components/context/store";
 
 export const metadata = {
   title: "Rayan Post",
@@ -8,7 +12,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-[#f4f3f3]">
       <Head>
         <link
           rel="icon"
@@ -17,7 +21,15 @@ export default function RootLayout({ children }) {
           sizes="16x16"
         />
       </Head>
-      <body>{children}</body>
+      <body>
+    <Nextui>
+        <ThemeContextProvider>
+          <Providers>{children}</Providers>
+        </ThemeContextProvider>
+
+    </Nextui>
+    
+      </body>
     </html>
   );
 }

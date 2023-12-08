@@ -1,43 +1,57 @@
 "use client";
-import Option from "./optin";
+import Option_city from "./optin_city";
+import Option_servic from "./optin-service";
 import "animate.css";
 import { FaAnglesLeft } from "react-icons/fa6";
+import Link from "next/link";
+import { useState } from "react";
+import { useThemeContext } from "../context/store.js";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { MethodBackHomepage} from "../Redux/orderslice.js";
+import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from 'uuid';
 const Alloptien = () => {
-  const router = useRouter();
-  const [allcity, setAllcity] = useState([]);
-
-  const formHandler = (event) => {
-    event.preventDefault();
-    router.push("/formservice");
-  };
+  const dispatch = useDispatch();
+  const router=useRouter();
+  const { datacity,datapaket } = useThemeContext();
+  const [city, setCity] = useState([
+    {
+      id:1,
+      stylex: "rounded-r-lg bg-white",
+      placholder: "شهر مبدا",
+      slug:"pick"  
+    },
+    {
+      id:2,
+      stylex: "bg-white",
+      placholder: "شهر مقصد",
+      slug:"deliv" 
+    },
+  ]);
 
   return (
-    <form action="" className="grid md:grid-cols-4 mt-10">
-      <Option
-        stylex={"rounded-r-lg"}
-        placholder="شهر مبدا"
-        url={"https://mohaddesepkz.pythonanywhere.com/cities/"}
-      />
-      <Option
+    <section className="grid md:grid-cols-4 mt-10">
+      {city.map((item) => {
+        return <Option_city key={uuidv4()} {...item} data={datacity} />;
+      })}
+
+      <Option_servic
         stylex={""}
-        placholder="منطقه"
-        url={"https://mohaddesepkz.pythonanywhere.com/cities/region/"}
+        placholder="محتوا مرسوله"
+        data={datapaket}
       />
-      <Option
-        stylex={""}
-        placholder="محله"
-        url={"https://mohaddesepkz.pythonanywhere.com/cities/district/"}
-      />
-      <button
-        onClick={formHandler}
-        className="mt-5 rounded-l-lg md:mt-0 p-3 md:p-7 bg-orange-500 hover:bg-orange-600 hover:transition-all hover:duration-300 font-bold flex align-middle justify-center md:justify-between text-xs md:text-base text-white"
-      >
-        <span>ثبت درخواست </span>
-        <FaAnglesLeft className="text-sm md:text-2xl " />
-      </button>
-    </form>
+     
+        <button className="mt-5 rounded-l-lg md:mt-0 p-3 md:p-7 bg-utils-300 hover:bg-utils-400 hover:transition-all hover:duration-300 font-bold flex align-middle justify-center md:justify-between text-xs md:text-base text-txcolor"
+        onClick={()=>{
+          dispatch(MethodBackHomepage())
+          router.push("/order/requst");
+        }}
+        >
+          <span>ثبت درخواست </span>
+          <FaAnglesLeft className="text-sm md:text-2xl mr-3" />
+        </button>
+     
+    </section>
   );
 };
 

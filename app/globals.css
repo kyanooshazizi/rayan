@@ -2,25 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-
+@layer base {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
 
 @font-face {
-    font-family: Iransans;
-    src: url(/font/Iranian\ Sans.woff2);
-    /* font-family: Sahel;
-    src: url(/font/Sahel.woff2) format("woff2")
-    url(../public/font/Sahel.woff) format("woff"); */
+    /* font-family: Iransans;
+    src: url(/font/Iranian\ Sans.woff2); */
+    font-family: Sahel;
+    src: url(/font/Sahel-FD.woff2) format("woff2");
     font-weight: normal;
     font-display: swap;
-}
-
-
-body{
+  }
+  
+  
+  body{
+    /* font-size:18px; */
  box-sizing: border-box;
  padding: 0px;
  margin: 0px;
  text-decoration: none;
  direction: rtl;
- font-family:Iransans,sans-serif;
+ font-family:Sahel,sans-serif;
  
 }

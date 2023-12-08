@@ -1,36 +1,34 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
-
+import React, { useEffect, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
+// redux start
+import { MethodPick_up, MethodDelivery } from "../Redux/orderslice.js";
+import { useDispatch, useSelector } from "react-redux";
+// redux end
 
-const Option = ({stylex,placholder,url}) => {
-  const [allcity, setAllcity] = useState([]);
+const Option = ({ stylex, placholder, data, slug }) => {
+  // start change redux
+  const dispatch = useDispatch();
+ 
+  // end change redux
+
   const [inputValue, setInputValue] = useState("");
   const [selected, setSelected] = useState("");
   const [open, setOpen] = useState(false);
-  const search = useRef(null);
-  useEffect(() => {
-    // https://restallcity.com/v2/all?fields=${value}
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setAllcity(data);
-      });
-  }, []);
+  const dataorder=useSelector((state) => state.order.order);
   return (
     <div className={` font-medium h-10 cursor-pointer relative`}>
       <div
         onClick={() => {
-          search.current.autofocus = "true";
           return setOpen(!open);
         }}
-        className={`${stylex} border-l-2 border-gray-200 p-3 md:p-7 text-sm md:text-base bg-white w-full flex items-center justify-between ${
+        className={`${stylex} border-l-2 text-txnotcolor border-gray-200 p-3 md:p-7 text-sm md:text-base w-full flex items-center justify-between ${
           !selected && "text-gray-700"
         }`}
       >
-        {selected ? selected : placholder}
+        {slug === "pick" ? (dataorder.pick_up?dataorder.pick_up:placholder) : (dataorder.delivery?dataorder.delivery:placholder)}
+        {/* {selected?selected:placholder} */}
         <BiChevronDown size={20} className={`${open && "rotate-180"}`} />
       </div>
       <ul
@@ -45,17 +43,16 @@ const Option = ({stylex,placholder,url}) => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value.toLowerCase())}
             placeholder="جستجو..."
-            className="placeholder:text-gray-500 p-2 my-3 outline-blue-700 bg-orange-100 text-sm w-40"
-            ref={search}
+            className="placeholder:text-gray-500 p-2 my-3 outline-utils-300 bg-orange-100 text-sm w-40"
           />
         </div>
-        {allcity.map((city) => (
+        {data.map((city) => (
           <li
             key={city.id}
-            className={`p-2 pr-5 text-sm hover:bg-sky-600 hover:text-white
+            className={`p-2 pr-5 text-sm text-txnotcolor hover:bg-utils-300 hover:text-txcolor
             ${
               city.name.toLowerCase() === selected.toLowerCase() &&
-              "bg-sky-600 text-white"
+              "bg-utils-300 text-txcolor"
             }
             ${
               city.name.toLowerCase().startsWith(inputValue)
@@ -63,15 +60,19 @@ const Option = ({stylex,placholder,url}) => {
                 : "hidden"
             }`}
             onClick={(event) => {
-                setSelected(city.name);
-                setOpen(false);
-                setInputValue("");
+              setSelected(city.name);
+              setOpen(false);
+              setInputValue("");
+              {
+                slug === "pick"
+                  ? dispatch(MethodPick_up(city.name))
+                  : dispatch(MethodDelivery(city.name));
+              }
             }}
           >
             {city.name}
           </li>
         ))}
-
       </ul>
     </div>
   );

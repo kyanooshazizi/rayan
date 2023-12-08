@@ -8,7 +8,17 @@ const nextConfig = {
  
 // module.exports = nextConfig
 module.exports = {
+  // reactStrictMode: false,
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'mohaddesepkz.pythonanywhere.com',
+        pathname: '/media/**',
+      },
+    ],
   },
 }
