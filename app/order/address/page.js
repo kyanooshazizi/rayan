@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from "../../../components/utilsorder/Navbar/navbar";
 import Sidbar from "../../../components/utilsorder/Saidbar/sidbar";
-import GoogleMap from "../../../components/utilsorder/pageAddress/googleMap";
+import Address from "../../../components/utilsorder/pageAddress/Address/index";
 const page = () => {
   return (
     <>
@@ -10,7 +10,7 @@ const page = () => {
       {/* end nav */}
 
       <main className="grid grid-cols-6">
-        {/* <GoogleMap/> */}
+       <Address/>
         {/* start sidebar */}
           <Sidbar/>
         {/* end sidebar */}

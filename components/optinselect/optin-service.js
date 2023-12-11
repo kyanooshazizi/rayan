@@ -28,13 +28,13 @@ const Servic = ({ stylex, placholder,data}) => {
         }`}
       >
         {/* placeholder:start */}
-        {/* {dataorder.service ? dataorder.service : placholder} */}
-        {selected?selected:placholder}
+        {dataorder.service ? dataorder.service : placholder}
         {/* placeholder:end */}
         <BiChevronDown size={20} className={`${open && "rotate-180"}`} />
+        {dataorder.service ? <span className="absolute top-0 opacity-60">محتوا مرسوله</span> : ""}
       </div>
       <ul
-        className={`z-10 bg-whit shadow-xl mt-0 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
+        className={`z-40 bg-whit shadow-xl mt-0 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
           open ? "max-h-60" : "hidden"
         }`}
       >
@@ -51,7 +51,7 @@ const Servic = ({ stylex, placholder,data}) => {
         {data.map((item) => (
           <li
             key={item.id}
-            className={`group p-2 pr-5 text-sm text-txnotcolor hover:bg-utils-300 hover:text-txnotcolor
+            className={`group p-2 pr-5 text-sm text-txnotcolor hover:bg-utils-300 bg-white
             ${
               item.title.toLowerCase().startsWith(inputValue)
                 ? "block"

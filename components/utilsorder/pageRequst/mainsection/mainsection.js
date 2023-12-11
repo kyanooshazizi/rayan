@@ -32,22 +32,22 @@ const Main_section = () => {
         {/* مبدا ومقصد شروع*/}
         <div className="flex align-middle justify-center mt-4 w-full">
           <div className="relative mx-4 basis-52">
-            <span className="absolute top-0 z-10 text-sm text-gray-800 bg-white rounded-full p-2 left-5">
+            {/* <span className="absolute top-0 z-10 text-sm text-gray-800 bg-white rounded-full p-2 left-5">
               مبدا
-            </span>
+            </span> */}
             <Selectpick_delivery
-              stylex="rounded-xl bg-utils-300 text-txcolor !important"
+              stylex="rounded-xl bg-white !important"
               placholder={datastore.pick_up || "مبدا"}
               data={datacity}
               slug="pick"
             />
           </div>
           <div className="relative mx-4 basis-52">
-            <span className="absolute top-0 z-10 text-sm text-gray-800 bg-white rounded-full p-2 left-4">
+            {/* <span className="absolute top-0 z-10 text-sm text-gray-800 bg-white rounded-full p-2 left-4">
               مقصد
-            </span>
+            </span> */}
             <Selectpick_delivery
-              stylex="rounded-xl bg-utils-300 text-txcolor !important"
+              stylex="rounded-xl bg-white !important"
               placholder={datastore.delivery || "مقصد"}
               data={datacity}
               slug="deliv"
@@ -78,7 +78,7 @@ const Main_section = () => {
                     >
                       {optin.title}
                       <Image
-                        className="inline-block mr-2"
+                        className="inline-block mr-2 rounded-sm"
                         src={optin.icon}
                         width={25}
                         height={25}

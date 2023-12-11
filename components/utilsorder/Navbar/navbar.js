@@ -47,9 +47,9 @@ import { BsCheckCircleFill } from "react-icons/bs";
           </li>
           <li className="inline-block p-2">پرداخت</li>
         </ul>
-        <Link href="/login_logout">
+        <Link href="/auth/register">
           <button className="p-2 bg-utils-300 text-txcolor shadow-[-4px_3px_5px_1px_#utils-300] rounded-md hover:bg-utils-300 hover:transition-all hover:duration-300 font-bold flex text-md md:text-base mt-2 ml-4">
-            <span> ورود | عضویت</span>
+            <span> ورود </span>
             <IoMdLogIn className="text-sm md:text-2xl " />
           </button>
         </Link>

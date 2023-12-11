@@ -72,12 +72,11 @@ const Resnav = () => {
           </div>
         </div>
         <div className="p-3">
-          <Link href="/login_logout">
+          
             <button className="p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-md hover:bg-utils-300 text-txcolor hover:transition-all hover:duration-300 font-bold flex text-xs md:text-base">
-              <span> ورود | عضویت</span>
+              <span><Link href="/auth/register" className="hover:text-[blue]">ورود</Link>|<Link href="/auth/Login" className="hover:text-[blue]">عضویت</Link></span>
               <IoMdLogIn className="text-sm md:text-2xl " />
             </button>
-          </Link>
         </div>
       </nav>
     </>

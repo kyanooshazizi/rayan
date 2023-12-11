@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backdropBlur: {
+        '5': '5px',
+      },
       colors: {
         utils: {
           // 300: "#facc15",

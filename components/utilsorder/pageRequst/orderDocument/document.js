@@ -117,11 +117,10 @@ const Package = () => {
               onClick={() => document.getElementById("my_modal_4").showModal()}
             >
               {" "}
-              <span className="bg-red-600 py-1 px-3 text-white rounded">
+              <span className="bg-[red] py-1 px-3 text-white rounded">
                 توجه!
               </span>
-              <p className="text-blue-700 inline-block mx-1">
-                {" "}
+              <p className="text-blue-700 inline-block mx-1 mt-3">
                 ابعاد مجاز برای هر پاکت را از اینجا مطالعه کنید
               </p>
             </button>

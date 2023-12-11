@@ -30,6 +30,8 @@ const Option = ({ stylex, placholder, data, slug }) => {
         {slug === "pick" ? (dataorder.pick_up?dataorder.pick_up:placholder) : (dataorder.delivery?dataorder.delivery:placholder)}
         {/* {selected?selected:placholder} */}
         <BiChevronDown size={20} className={`${open && "rotate-180"}`} />
+        {slug === "pick" ? (dataorder.pick_up?<span className={`absolute top-0 opacity-60 `}>مبدا</span>:"") : (dataorder.delivery?<span className={`absolute top-0 opacity-60 `}>مقصد</span>:"")}
+         
       </div>
       <ul
         className={`z-10 bg-white shadow-xl mt-0 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${

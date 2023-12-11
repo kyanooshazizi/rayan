@@ -242,7 +242,7 @@ return null;
                 <button
                   className={`btnoutline border-2 border-white bg-utils-300 py-2 px-2 rounded-md text-txcolor hover:bg-bgbtnhover
                   hover:text-navbarrequst transition-all transition-500 ease-linear ${
-                    MethodFlagHandler(datastore.service) ? "bg-text-white" : ""
+                    MethodFlagHandler(datastore.service) ? "bg-green-800" : ""
                   }`}
                   onClick={()=>{
                     if(MethodFlagHandler(datastore.service)){
