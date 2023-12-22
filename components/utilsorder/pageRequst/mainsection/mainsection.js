@@ -1,21 +1,27 @@
 "use client";
 
-import React from "react";
-import { useThemeContext } from "../../../context/store";
+import useCity_servise from "@/components/TanstakQury/useCity_servise";
 import { useDispatch, useSelector } from "react-redux";
 import { MethodService } from "../../../Redux/orderslice";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 // utils
 import Pakage from "../orderpackage/package";
 import Document from "../orderDocument/document";
 // servise
 import Selectpick_delivery from "../../../optinselect/optin_city";
-import Image from 'next/image';
+import Image from "next/image";
+import { useState, useEffect } from "react";
 const Main_section = () => {
-  const { datacity, datapaket } = useThemeContext();
-  console.log(datacity, datapaket);
+  const { datacity, dataservise } = useCity_servise();
+  console.log(datacity.isPending, dataservise.isPending);
   const dispatch = useDispatch();
   const datastore = useSelector((state) => state.order.order);
+  // Hydration error:strat
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  // Hydration error:end
   // شروع:انتخاب نوع محصول
   const OrderHandler = (item) => {
     switch (item) {
@@ -26,71 +32,95 @@ const Main_section = () => {
     }
   };
   // پایان:انتخاب نوع محصول
+  if (datacity.isPending || dataservise.isPending) {
+    return (
+      <div className="col-span-5 mt-[60px] flex items-center justify-center w-100 h-[100vh] bg-white">
+        <Image
+          src="/loadgetfetch.svg"
+          width={200}
+          height={200}
+          alt="Picture of the author"
+          priority
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <section className="col-span-5 mt-[60px]">
         {/* مبدا ومقصد شروع*/}
-        <div className="flex align-middle justify-center mt-4 w-full">
-          <div className="relative mx-4 basis-52">
-            {/* <span className="absolute top-0 z-10 text-sm text-gray-800 bg-white rounded-full p-2 left-5">
-              مبدا
-            </span> */}
-            <Selectpick_delivery
-              stylex="rounded-xl bg-white !important"
-              placholder={datastore.pick_up || "مبدا"}
-              data={datacity}
-              slug="pick"
-            />
+        {datacity.isError ? (
+          <div className="flex align-middle justify-center mt-8">
+            <span className="text-center p-3 bg-white border-2 border-bgcolor w-1/2 rounded-md">
+              {datacity.error.message}
+            </span>
           </div>
-          <div className="relative mx-4 basis-52">
-            {/* <span className="absolute top-0 z-10 text-sm text-gray-800 bg-white rounded-full p-2 left-4">
-              مقصد
-            </span> */}
-            <Selectpick_delivery
-              stylex="rounded-xl bg-white !important"
-              placholder={datastore.delivery || "مقصد"}
-              data={datacity}
-              slug="deliv"
-            />
+        ) : (
+          <div className="flex align-middle justify-center mt-4 w-full">
+            <div className=" mx-4 basis-52">
+              <Selectpick_delivery
+                stylex="rounded-xl bg-white !important"
+                placholder={datastore.pick_up || "مبدا"}
+                data={datacity.data}
+                slug="pick"
+              />
+            </div>
+            <div className=" mx-4 basis-52">
+              <Selectpick_delivery
+                stylex="rounded-xl bg-white !important"
+                placholder={datastore.delivery || "مقصد"}
+                data={datacity.data}
+                slug="deliv"
+              />
+            </div>
           </div>
-        </div>
+        )}
         {/* پایان مبدا و مقصد */}
         {/* شروع نوع مرسوله */}
-        <div className="mt-24">
-          {datastore.service ? (
-            OrderHandler(datastore.service)
-          ) : (
-            <div>
-              <div className="flex justify-center">
-                <p className="text-center shadow w-72 py-3 px-4 rounded-md">
-                  مرسوله مورد نظر را انتخاب کنید:
-                </p>
+        {dataservise.isError ? (
+          <div className="flex justify-center">
+            <span className="bg-white p-3 mt-6">
+              {dataservise.error.message}
+            </span>
+          </div>
+        ) : (
+          <div className="mt-24">
+            {isClient && datastore.service ? (
+              OrderHandler(datastore.service)
+            ) : (
+              <div>
+                <div className="flex justify-center">
+                  <p className="text-center shadow w-72 py-3 px-4 rounded-md">
+                    مرسوله مورد نظر را انتخاب کنید:
+                  </p>
+                </div>
+                <div className="flex align-middle justify-center m-4">
+                  {dataservise.data?.map((optin) => {
+                    return (
+                      <button
+                        key={uuidv4()}
+                        className="py-2 px-6 rounded-md m-4 bg-utils-300 text-txcolor !important"
+                        onClick={(event) => {
+                          dispatch(MethodService(optin.title));
+                        }}
+                      >
+                        {optin.title}
+                        <Image
+                          className="inline-block mr-2 rounded-sm"
+                          src={optin.icon}
+                          width={25}
+                          height={25}
+                          alt="Picture of the author"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              <div className="flex align-middle justify-center m-4">
-                {datapaket.map((optin) => {
-                  return (
-                    <button
-                    key={uuidv4()}
-                      className="py-2 px-6 rounded-md m-4 bg-utils-300 text-txcolor !important"
-                      onClick={(event) => {
-                        dispatch(MethodService(optin.title));
-                      }}
-                    >
-                      {optin.title}
-                      <Image
-                        className="inline-block mr-2 rounded-sm"
-                        src={optin.icon}
-                        width={25}
-                        height={25}
-                        alt="Picture of the author"
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
         {/* پایان نوع مرسوله */}
       </section>
     </>

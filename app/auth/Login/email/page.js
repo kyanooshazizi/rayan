@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { RiLockPasswordFill } from "react-icons/ri";
 import { MdEmail } from "react-icons/md";
@@ -6,7 +7,7 @@ const page = () => {
   return (
     <div className="flex justify-center">
     <div className="md:w-1/2 lg:w-[430px] w-[92%] sm:w-[80%] relative bg-transparent">
-       <div className="absolute w-full top-0 rounded-xl shadow-[0_2px_5px_rgba(0,0,0,0.4)] backdrop-blur-5 p-5">
+       <div className="absolute w-full top-0 rounded-xl shadow-[0_2px_5px_rgba(0,0,0,0.4)] backdrop-blur-5 p-5 mt-[100px]">
          <p className="text-center md:text-xl sm:text-lg text-sm font-bold bg-bgcolor text-white py-4 rounded-md">
             ورود
          </p>
@@ -35,7 +36,7 @@ const page = () => {
            </button>
            <p className="inline mr-2"> 
            حساب کاربری ندارید؟
-             <Link className="text-[blue] cursor-pointer pr-2" href="/auth/Login">ثبت نام کنید</Link>
+             <Link className="text-[blue] cursor-pointer pr-2" href="/auth/register">ثبت نام کنید</Link>
            </p>
            <hr className="mt-2"/>
            <button  className=" mt-4 mr-8 text-utils-300 font-bold"> 
@@ -49,3 +50,4 @@ const page = () => {
 }
 
 export default page
+

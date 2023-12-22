@@ -1,7 +1,7 @@
 import React from 'react'
-import Navbar from "../../../components/utilsorder/Navbar/navbar";
-import Sidbar from "../../../components/utilsorder/Saidbar/sidbar";
-import Address from "../../../components/utilsorder/pageAddress/Address/index";
+import Navbar from "@/components/utilsorder/Navbar/navbar";
+import Sidbar from "@/components/utilsorder/Saidbar/sidbar";
+import Address from "@/components/utilsorder/pageAddress/Address/index";
 const page = () => {
   return (
     <>

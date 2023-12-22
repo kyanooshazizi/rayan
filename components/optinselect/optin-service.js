@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from 'next/image'
-
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
 // redux start
@@ -15,11 +14,16 @@ const Servic = ({ stylex, placholder,data}) => {
   const [inputValue, setInputValue] = useState("");
   const [selected, setSelected] = useState("");
   const [open, setOpen] = useState(false);
- const dataorder=useSelector((state) => state.order.order);
-
+  const dataorder=useSelector((state) => state.order.order);
+// Hydration error:strat
+const [isClient, setIsClient] = useState(false);
+useEffect(() => {
+  setIsClient(true)
+}, [])
+// Hydration error:end
   return (
     <div className={` font-medium h-10 cursor-pointer relative`}>
-      <div
+      <div 
         onClick={() => {
           return setOpen(!open);
         }}
@@ -28,10 +32,10 @@ const Servic = ({ stylex, placholder,data}) => {
         }`}
       >
         {/* placeholder:start */}
-        {dataorder.service ? dataorder.service : placholder}
+        {isClient&&dataorder.service ? dataorder.service : placholder}
         {/* placeholder:end */}
         <BiChevronDown size={20} className={`${open && "rotate-180"}`} />
-        {dataorder.service ? <span className="absolute top-0 opacity-60">محتوا مرسوله</span> : ""}
+        {dataorder.service && isClient ? <span className="absolute top-0 opacity-60">محتوا مرسوله</span> : ""}
       </div>
       <ul
         className={`z-40 bg-whit shadow-xl mt-0 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
@@ -48,7 +52,7 @@ const Servic = ({ stylex, placholder,data}) => {
             className="placeholder:text-gray-500 p-2 my-3 outline-utils-300 bg-orange-100 text-sm w-40"
           />
         </div>
-        {data.map((item) => (
+        {data?.map((item) => (
           <li
             key={item.id}
             className={`group p-2 pr-5 text-sm text-txnotcolor hover:bg-utils-300 bg-white

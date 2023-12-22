@@ -1,3 +1,4 @@
+"use client"
 export const Validate =(data)=>{
     const error={};
     if(!data.user.trim()){

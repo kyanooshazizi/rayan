@@ -35,7 +35,7 @@ const Resnav = () => {
         <div className={styles.nav_right}>
           <div className="p-3">
             <Image
-              src="/logo.jpg"
+              src="/logoRayan.png"
               alt="logo"
               width={100}
               height={100}
@@ -74,7 +74,7 @@ const Resnav = () => {
         <div className="p-3">
           
             <button className="p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-md hover:bg-utils-300 text-txcolor hover:transition-all hover:duration-300 font-bold flex text-xs md:text-base">
-              <span><Link href="/auth/register" className="hover:text-[blue]">ورود</Link>|<Link href="/auth/Login" className="hover:text-[blue]">عضویت</Link></span>
+              <span><Link href="/auth/login" className="hover:text-[blue]">ورود</Link>|<Link href="/auth/register" className="hover:text-[blue]">عضویت</Link></span>
               <IoMdLogIn className="text-sm md:text-2xl " />
             </button>
         </div>

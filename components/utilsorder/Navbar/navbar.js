@@ -39,15 +39,16 @@ import { BsCheckCircleFill } from "react-icons/bs";
           </li>
           <li className={`inline-block p-2 ${(flagnav.faddress)?"text-navbarrequst font-bold":""}`}>
           {/* <BsCheckCircleFill className='inline-block ml-1 text-lg'/> */}
-            آدرس <FaAngleLeft className="inline-block" />
+            اطلاعات فرستنده و گیرنده <FaAngleLeft className="inline-block" />
           </li>
           <li className="inline-block p-2">
             
-            بیمه <FaAngleLeft className="inline-block" />
+            بازبینی سفارش <FaAngleLeft className="inline-block" />
           </li>
-          <li className="inline-block p-2">پرداخت</li>
+          <li className="inline-block p-2">پرداخت <FaAngleLeft className="inline-block" /></li>
+          <li className="inline-block p-2">نهایی سازی سفارش</li>
         </ul>
-        <Link href="/auth/register">
+        <Link href="/auth/login">
           <button className="p-2 bg-utils-300 text-txcolor shadow-[-4px_3px_5px_1px_#utils-300] rounded-md hover:bg-utils-300 hover:transition-all hover:duration-300 font-bold flex text-md md:text-base mt-2 ml-4">
             <span> ورود </span>
             <IoMdLogIn className="text-sm md:text-2xl " />

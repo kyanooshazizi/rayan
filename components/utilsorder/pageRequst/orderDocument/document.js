@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
+
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState, useRef } from "react";
-import { useThemeContext } from "../../../context/store";
 import {
   MethodDocument,
   MethodPrice,
@@ -15,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaCertificate } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { v4 as uuidv4 } from "uuid";
+import useValuedefult from "@/components/TanstakQury/useValuedefult";
 // تقویم
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import transition from "react-element-popper/animations/transition";
@@ -22,6 +22,7 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DatePickerHeader from "react-multi-date-picker/plugins/date_picker_header";
 import "react-multi-date-picker/styles/colors/yellow.css";
+import { useMutation } from '@tanstack/react-query';
 // module style
 import stylecard from "../../../../style/card.module.css";
 import styles from "../../../../style/neumorfism.module.css";
@@ -31,8 +32,7 @@ const Package = () => {
   const [getprice, setGetprice] = useState("");
   const [isshow, setIsshow] = useState("");
   const [value, setValue] = useState("");
-  const { datacity, datapaket, content_value } = useThemeContext();
-  console.log(content_value);
+  const content_value=useValuedefult();
 
   let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.document.number}`;
   let flag_Complate_Order =
@@ -50,7 +50,7 @@ const Package = () => {
     });
 
   // console.log(dataorder);
-
+// const {data,isPending}=useMutation({mutationFn:})
   // send requst for back:end
   useEffect(() => {
     if (flag_Complate_Order) {
@@ -58,7 +58,6 @@ const Package = () => {
       var OrderData = {
         from_city: dataorder.pick_up,
         to_city: dataorder.delivery,
-        vehicle: "موتور",
         count: [dataorder.document.number],
         service: [dataorder.service],
       };
@@ -67,11 +66,6 @@ const Package = () => {
       Object.keys(OrderData).forEach((key) => {
         var value = OrderData[key];
         formData.append(key, value);
-      });
-
-      // Log FormData key-value pairs
-      formData.forEach((value, key) => {
-        // console.log(key, value,typeof(value));
       });
 
       try {
@@ -258,15 +252,17 @@ const Package = () => {
                             ارزش مرسوله شما چقدر است؟
                           </span>
                           <select
-                            className="w-1/2 border-solid border-2 py-2 px-3 rounded-tl-md rounded-bl-md outline-0 text-black absolute left-20 bottom-2 cursor-pointer"
-                            onChange={(event) => {
+                            className="w-1/2 border-solid border-2 py-2 px-3 rounded-tl-md rounded-bl-md outline-0 text-black absolute right-[193px] bottom-2 cursor-pointer"
+                            onClick={(event) => {
                               dispatch(
                                 MethodInsurance_value(event.target.value)
                               );
                             }}
                           >
-                            {(content_value.Value_data).map((item,index) => {
-                              return <option key={index}>{`${item.min_value.toLocaleString()}-${item.max_value.toLocaleString()}    تومان`}</option>
+                           
+                            {(content_value.data.Value_data).map((item,index) => {
+                                return <option key={index}  >{`${item.min_value.toLocaleString()}-${item.max_value.toLocaleString()} میلیون تومان`}</option>
+                              
                              
                             })}
                           </select>
@@ -315,9 +311,10 @@ const Package = () => {
             <div className="flex justify-center mt-10 ">
               <Image
                 src="/loading.svg"
-                width={200}
-                height={200}
+                width={100}
+                height={100}
                 alt="Picture of the author"
+                priority
               />
             </div>
           )

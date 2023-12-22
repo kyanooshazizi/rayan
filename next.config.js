@@ -1,15 +1,10 @@
 /**
  * @type {import('next').NextConfig}
  */
-const path = require('path')
-const nextConfig = {
-  /* config options here */
-}
- 
+const path = require('path');
 
-module.exports = nextConfig
 module.exports = {
-  // reactStrictMode: false,
+  
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
@@ -19,7 +14,7 @@ module.exports = {
         protocol: 'https',
         hostname: 'mohaddesepkz.pythonanywhere.com',
         pathname: '/media/**',
-      },
+      }
     ],
   },
 }

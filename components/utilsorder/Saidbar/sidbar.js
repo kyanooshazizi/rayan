@@ -13,15 +13,14 @@ import {
   Button,
 } from "@nextui-org/react";
 import { MethodDeletOrder } from "../../Redux/orderslice";
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname } from "next/navigation";
 const Sidbar = () => {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const pathname=usePathname();
   const dispatch = useDispatch();
   const router=useRouter();
   const datastore = useSelector((state) => state.order.order);
- console.log(typeof datastore.Insurance.Product_value)
   const [urldata,setUrldata]=useState("");
+  
   useEffect(() => {
     const url = `${pathname}`;
     setUrldata(()=>{
@@ -30,8 +29,8 @@ const Sidbar = () => {
       }else{
         return null;
       }
-    })
-    // console.log(url)
+    },[])
+  
     // You can now use the current URL
     // ...
   }, [pathname])
@@ -142,20 +141,21 @@ switch(servisName){
 }
 return null;
 }
+
   return (
     <>
       <aside className="bg-bgcolor p-2 fixed top-[60px] left-0 col-span-1 h-[calc(100vh_-_60px)] w-1/4">
         {/* شروع:عنوان */}
         <div className="text-txcolor text-center">
-          <h3 className="text-center shadow-sm bg-white text-bgcolor mb-3 w-[200px] py-2 rounded font-bold mx-auto !important">
+          <div className="text-center shadow-sm bg-white text-bgcolor mb-3 w-[200px] py-2 rounded font-bold mx-auto !important">
             خلاصه سفارش
-          </h3>
+          </div>
           {datastore.service ? (
             ""
           ) : (
-            <h4 className="text-justify p-2">
+            <div className="text-justify p-2">
               برای دریافت قیمت، مقصد ، مبدا و نوع مرسوله را انتخاب کنید
-            </h4>
+            </div>
           )}
         </div>
         {/* پایان:عنوان */}
@@ -250,7 +250,7 @@ return null;
                     }
                   }}
                 >
-                      تکمیل سفارش<AiFillBackward className="text-xl inline-block mr-2" />
+                    ادامه   <AiFillBackward className="text-xl inline-block mr-2" />
                 </button>
               </PopoverTrigger>
               {MethodFlagHandler(datastore.service) ? (

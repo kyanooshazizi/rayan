@@ -3,6 +3,8 @@
 "use client"; //this is a client side component
 
 import { createSlice } from "@reduxjs/toolkit";
+import { useEffect } from "react";
+
 const x={
   pick_up: "",
   delivery: "",
@@ -22,11 +24,16 @@ const x={
   },
   pickup_date: "",
 }
-const initialState = {
-  order: localStorage.getItem("order")
+
+
+  const initialState = {
+    order:typeof window !== "undefined"?(localStorage.getItem("order")
     ? JSON.parse(localStorage.getItem("order"))
-    :x ,
-};
+    :x):x,
+  };
+
+  
+
 
 export const orderSlice = createSlice({
   name: "order",

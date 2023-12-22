@@ -1,6 +1,6 @@
-import Headerpage from "../components/Header";
-import Footer from "../components/Footer";
-import Maincomponent from "@/components/mainpage";
+import Headerpage from "@/components/Homepage/Header";
+import Footer from "@/components/Homepage/Footer";
+import Maincomponent from "@/components/Homepage/mainpage";
 
 const Homepage = () => {
   return (

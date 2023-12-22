@@ -17,9 +17,16 @@ const Option = ({ stylex, placholder, data, slug }) => {
   const [selected, setSelected] = useState("");
   const [open, setOpen] = useState(false);
   const dataorder=useSelector((state) => state.order.order);
+  // Hydration error:strat
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+  // Hydration error:end
+
   return (
     <div className={` font-medium h-10 cursor-pointer relative`}>
-      <div
+      <div suppressHydrationWarning 
         onClick={() => {
           return setOpen(!open);
         }}
@@ -30,7 +37,7 @@ const Option = ({ stylex, placholder, data, slug }) => {
         {slug === "pick" ? (dataorder.pick_up?dataorder.pick_up:placholder) : (dataorder.delivery?dataorder.delivery:placholder)}
         {/* {selected?selected:placholder} */}
         <BiChevronDown size={20} className={`${open && "rotate-180"}`} />
-        {slug === "pick" ? (dataorder.pick_up?<span className={`absolute top-0 opacity-60 `}>مبدا</span>:"") : (dataorder.delivery?<span className={`absolute top-0 opacity-60 `}>مقصد</span>:"")}
+        {slug === "pick" ? (isClient&&dataorder.pick_up?<span className={`absolute top-0 opacity-60 `}>مبدا</span>:"") : (isClient&&dataorder.delivery?<span className={`absolute top-0 opacity-60 `}>مقصد</span>:"")}
          
       </div>
       <ul
@@ -48,7 +55,7 @@ const Option = ({ stylex, placholder, data, slug }) => {
             className="placeholder:text-gray-500 p-2 my-3 outline-utils-300 bg-orange-100 text-sm w-40"
           />
         </div>
-        {data.map((city) => (
+        {data?.map((city) => (
           <li
             key={city.id}
             className={`p-2 pr-5 text-sm text-txnotcolor hover:bg-utils-300 hover:text-txcolor

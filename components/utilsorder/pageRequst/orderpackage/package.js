@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
+
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState,useRef } from "react";
-import { useThemeContext } from "../../../context/store";
 import {
   Methodpackageadd,
   Methodpackagedelet,
@@ -16,6 +15,8 @@ import {
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { FaCertificate } from "react-icons/fa";
+import useValuedefult from "@/components/TanstakQury/useValuedefult";
+
 // تقویم
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import transition from "react-element-popper/animations/transition";
@@ -33,8 +34,10 @@ const Package = () => {
   const dataorder = useSelector((state) => state.order.order);
   const [getprice, setGetprice] = useState("");
   const [isshow, setIsshow] = useState("");
-  const { datacity,datapaket,content_value } = useThemeContext();
-  console.log(isshow, getprice);
+ 
+  const content_value=useValuedefult();
+
+  
 
   let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.package.packB.number}+${dataorder.package.packM.number}+${dataorder.package.packS.number}`;
   let flag_Complate_Order =
@@ -342,12 +345,15 @@ dispatch(MethodDate(new DateObject(object).format()))
                     />
                   </div>
                   {isshow[index] ? (
-                    <form className="mt-8 flex justify-between">
-                      <div className="w-3/5">
-                        <select className="border-solid border-blue-600 border-2 py-3 px-4 rounded-md outline-2 outline-blue-600 w-full inline-block text-black cursor-pointer"
-                        onChange={(event)=>dispatch(MethodInsurance_content(event.target.value))}
+                    <form className="mt-8 flex ">
+                      <div className="w-3/5 flex">
+                      <span className="text-sm right-3 bottom-2 py-[15px] px-2 bg-tickboxprice text-txcolor rounded-tr-md rounded-br-md outline-none border-none">
+                             محتوا مرسوله را مشخص کنید
+                          </span>
+                        <select className="w-2/5  py-3 px-4 rounded-l-md  outline-none inline-block text-black cursor-pointer text-sm"
+                        onClick={(event)=>dispatch(MethodInsurance_content(event.target.value))}
                         >
-                          {(content_value.Content_data).map((item,index)=>{
+                          {(content_value.data.Content_data).map((item,index)=>{
                           return <option key={index}>
                            {item.title}
                           </option>
@@ -355,11 +361,14 @@ dispatch(MethodDate(new DateObject(object).format()))
         
                         </select>
                       </div>
-                      <div className="w-4/12 relative">
-                        <select className="border-solid text-black border-blue-600 border-2 py-3 px-4 rounded-md outline-2 outline-blue-600 w-full"
-                          onChange={(event)=>dispatch(MethodInsurance_value(event.target.value))}>
-                          {(content_value.Value_data).map((item,index)=>{
-                          return <option key={index}>{`${(item.min_value).toLocaleString()}-${(item.max_value).toLocaleString()} تومان`}</option>
+                      <div className="w-2/5 flex">
+                      <span className="text-sm right-3 bottom-2 py-[15px] px-2 bg-tickboxprice text-txcolor rounded-r-md outline-none border-none">
+                           ارزش مرسوله
+                          </span>
+                        <select className="border-solid text-black  py-3 px-4 rounded-l-md  outline-none w-3/5 text-sm cursor-pointer"
+                          onClick={(event)=>dispatch(MethodInsurance_value(event.target.value))}>
+                          {(content_value.data.Value_data).map((item,index)=>{
+                          return <option key={index}>{`${(item.min_value).toLocaleString()}-${(item.max_value).toLocaleString()} میلیون تومان`}</option>
                           })}
                           </select>
                       </div>

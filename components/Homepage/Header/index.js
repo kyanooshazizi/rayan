@@ -1,8 +1,5 @@
 import Navbar from "../navbar";
-import Autowriter from "../writeraauto";
-import Image from "next/image";
-
-import Selectinput from "../optinselect";
+import Selectinput from "../../optinselect";
 
 const Headerpage = () => {
   return (
