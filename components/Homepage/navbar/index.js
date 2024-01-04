@@ -7,10 +7,18 @@ import { TiThMenu } from "react-icons/ti";
 import { MdOutlineClose } from "react-icons/md";
 import styles from "./style.module.scss";
 import { useEffect, useState } from "react";
+import { FaUserAlt } from "react-icons/fa";
+import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import { TbLogout } from "react-icons/tb";
+import {deleteCookie } from 'cookies-next';
+import React from "react";
+import {Skeleton} from "@nextui-org/react";
 // nav mobile
 import Nav_mobile from "../navbar_mobile";
-
+import { useThemeContext } from '../../context/store';
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 const Resnav = () => {
+  const { username, islogin,setIslogin,isloading} = useThemeContext();
   const [iconstate, setIconstate] = useState("true");
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
   const Navmobile = () => {
@@ -71,13 +79,41 @@ const Resnav = () => {
             </ul>
           </div>
         </div>
-        <div className="p-3">
-          
+        {isloading?<Skeleton className="h-12 w-32 ml-3 rounded-md"/> :(islogin?
+        
+        <Dropdown>
+        <DropdownTrigger>
+        <div  className="group p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-full hover:bg-txcolor hover:transition-all hover:duration-300 font-bold  md:text-base cursor-pointer ml-10 ">
+          <FaUserAlt className="text-txcolor group-hover:text-utils-300 text-2xl " />
+        </div>
+        </DropdownTrigger>
+        <DropdownMenu aria-label="Static Actions" className="">
+          <DropdownItem className="py-5 ">
+          <Link href="/dashboard">
+            <div className="text-bgcolor ">
+              <span className="pr-2"><FaUserAlt className="inline text-md ml-3 text-bgcolor"/>مشاهده حساب کاربری</span>
+              <MdOutlineKeyboardDoubleArrowLeft  className="inline mr-4 font-bold text-lg"/>
+            </div>
+          </Link>
+          </DropdownItem>
+          <DropdownItem className="text-danger">
+          <button onClick={()=>
+            {deleteCookie("access_token");
+            setIslogin(false)}} className="text-[red] py-4">
+              <span className="pr-2"><TbLogout className="inline text-lg ml-3"/>خروج از حساب کاربری</span>
+            </button>
+         
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+        
+        :<div className="p-3">       
             <button className="p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-md hover:bg-utils-300 text-txcolor hover:transition-all hover:duration-300 font-bold flex text-xs md:text-base">
               <span><Link href="/auth/login" className="hover:text-[blue]">ورود</Link>|<Link href="/auth/register" className="hover:text-[blue]">عضویت</Link></span>
               <IoMdLogIn className="text-sm md:text-2xl " />
             </button>
-        </div>
+        </div>)}
+        
       </nav>
     </>
   );

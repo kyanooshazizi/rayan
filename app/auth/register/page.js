@@ -1,17 +1,24 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { setCookie } from "cookies-next";
+import React, { useState, useEffect, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 // icon
 import { FaUserAlt } from "react-icons/fa";
 
 import { Validate } from "./Validate";
 import { IoEyeSharp } from "react-icons/io5";
 import { BsEyeSlashFill } from "react-icons/bs";
+import { useThemeContext } from "@/components/context/store";
+import { useSelector } from "react-redux";
+import { MethodFlagHandler } from "@/components/utilsorder/utils/MethodFlagHandler";
 
-const Login = () => {
+const Register = () => {
+  const datastore = useSelector((state) => state.order.order);
+  const router = useRouter();
   const [data, setData] = useState({
     user: "",
     password: "",
@@ -19,13 +26,58 @@ const Login = () => {
   });
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [flagPost, setFlagPost] = useState(false);
 
   const [flagicon, setFlagicon] = useState(false);
   const [error, setError] = useState({});
   const [focus, setFocus] = useState({});
+  // start:checkregister user
+  const { setIslogin} = useThemeContext();
+
+  const CheckRegister = (res) => {
+    if (res.token) {
+      setCookie("access_token", res.token.access);
+      setIslogin(true)
+      if (MethodFlagHandler(datastore)) {
+        router.push("/order/address");
+      } else {
+        router.push("/");
+      }
+      notify("success", "ثبت نام با موفقیت انجام شد");
+    } else if(res.phone||res.email) {
+      notify("warn", "کاربری با این اطلاعات وجود دارد");
+    }else if(res.non_field_errors){
+      notify("warn", "لطفا پسورد قویتری را وارد کنید");
+    }
+  };
+  // end:checkregister user
   useEffect(() => {
     setError(Validate(data));
-  }, [data]);
+    if (flagPost) {
+      fetch("https://mohaddesepkz.pythonanywhere.com/users/register/", {
+        method: "POST",
+        //  withCredentials: true,
+        credentials: "include",
+        body: JSON.stringify({
+          phone,
+          email,
+          password: data.password,
+          password2: data.confirm_password,
+        }),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((res) => {
+            return res.json();
+        })
+        .then((res) => {
+          CheckRegister(res)})
+        .catch((error) => {
+          notify("warn", "خطایی رخ داده است");
+          console.error(error)});
+      setFlagPost(false);
+    }
+  }, [data, flagPost]);
+
   const notify = (type, text) => {
     if (type === "success") {
       toast.success(text, {
@@ -54,19 +106,7 @@ const Login = () => {
     setFocus({ ...focus, [e.target.name]: true });
   };
   // usemutate:start
-  const { mutate: mutation } = useMutation(
-    (course) => {
-      return fetch("https://mohaddesepkz.pythonanywhere.com/users/register/", {
-        method: "POST",
-        body: JSON.stringify({
-          ...course
-        }),
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
-    }
-  );
+
   // usemutate:end
   const formHandler = (event) => {
     event.preventDefault();
@@ -83,10 +123,7 @@ const Login = () => {
       } else {
         setPhone(data.user);
       }
-      const res = mutation({phone, email, password:data.password, password2:data.confirm_password});
-      console.log(res);
-      // notify("success","ثبت نام با موفقیت انجام شد")
-      // console.log(data)
+      setFlagPost(true);
     }
   };
 
@@ -115,7 +152,7 @@ const Login = () => {
                 <input
                   name="user"
                   type="text"
-                  value={data.name}
+                  value={data.user}
                   className={`mt-4 px-2 py-3 rounded-md  w-[90%]  mr-5 cursor-pointer ${ColorinputHandler(
                     error.user,
                     focus.user
@@ -215,4 +252,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

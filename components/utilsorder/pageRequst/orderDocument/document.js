@@ -5,15 +5,16 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState, useRef } from "react";
 import {
-  MethodDocument,
+  MethodDocument_plus,
   MethodPrice,
   MethodInsurance_value,
   MethodDate,
+  MethodDocument_mines,
+  MethodBackHomepage
 } from "../../../Redux/orderslice";
 import { useDispatch, useSelector } from "react-redux";
 import { FaCertificate } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
-import { v4 as uuidv4 } from "uuid";
 import useValuedefult from "@/components/TanstakQury/useValuedefult";
 // تقویم
 import DatePicker, { DateObject } from "react-multi-date-picker";
@@ -22,21 +23,24 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DatePickerHeader from "react-multi-date-picker/plugins/date_picker_header";
 import "react-multi-date-picker/styles/colors/yellow.css";
-import { useMutation } from '@tanstack/react-query';
 // module style
 import stylecard from "../../../../style/card.module.css";
 import styles from "../../../../style/neumorfism.module.css";
+import usecity_servise from "@/components/TanstakQury/useCity_servise"
 const Package = () => {
+  const {datacity, dataservise}=usecity_servise()
+  // console.log(datacity.data,dataservise.data)
   const dispatch = useDispatch();
   const dataorder = useSelector((state) => state.order.order);
+  console.log(dataorder)
   const [getprice, setGetprice] = useState("");
   const [isshow, setIsshow] = useState("");
   const [value, setValue] = useState("");
   const content_value=useValuedefult();
 
-  let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.document.number}`;
+  let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.document.afour.number}+${dataorder.document.athree.number}`;
   let flag_Complate_Order =
-    dataorder.pick_up && dataorder.delivery && dataorder.document.number;
+    dataorder.pick_up && dataorder.delivery && (dataorder.document.afour.number||dataorder.document.athree.number);
   const notify = () =>
     toast.warn("حداکثر تعداد پاکت مجاز را انتخاب کرده اید", {
       position: "top-center",
@@ -54,12 +58,14 @@ const Package = () => {
   // send requst for back:end
   useEffect(() => {
     if (flag_Complate_Order) {
+      dispatch(MethodBackHomepage());
       var formData = new FormData();
       var OrderData = {
         from_city: dataorder.pick_up,
         to_city: dataorder.delivery,
-        count: [dataorder.document.number],
-        service: [dataorder.service],
+        count: [dataorder.document.athree.number,dataorder.document.afour.number],
+        package: [dataorder.service,dataorder.service],
+        size: ["A3", "A4"],
       };
 
       // Loop through the object and append values to FormData
@@ -75,7 +81,7 @@ const Package = () => {
         })
           .then((response) => response.json())
           .then((res) => {
-            console.log(res);
+            console.log("hhhhhhhhh",res);
             setGetprice(res);
             setIsshow(new Array([...res].length).fill(0));
           })
@@ -135,7 +141,69 @@ const Package = () => {
           </div>
           {/* modal end */}
           {/* ثبت سفارش */}
-           <div className={`mt-5 absolute right-[50%] translate-x-[50%]`}>
+          <div className="flex justify-around mt-8">
+          {(dataservise.data[0].size).map((item)=>{
+            switch(item.title){
+              case "A4":
+              return(
+                <div className="relative mt-5">
+                <Image
+                  src="/document1.png"
+                  width={130}
+                  height={130}
+                  alt="Picture of the author"
+                  loading="lazy"
+                />
+                {/* badge */}
+                {dataorder.document.afour.number ? (
+                  <span className="absolute bg-bgcolor text-txcolor px-3 py-2 rounded-full -top-[6px] right-[21px]">
+                    {dataorder.document.afour.number}+
+                  </span>
+                ) : null}
+                {/* badge */}
+                <span className="absolute top-[89px] right-[35px] text-sm">پاکت A4</span>
+                {dataorder.document.afour.number == 0 ? (
+                  <button
+                    className="bg-utils-300 text-txcolor py-2 px-3 rounded-md"
+                    onClick={() => {
+                      dispatch(MethodDocument_plus(`A4*${item.id}`));
+                    }}
+                  >
+                    انتخاب کن
+                  </button>
+                ) : (
+                  <div className="flex justify-center ">
+                    <button
+                      className="text-xl ml-3 bg-bgcolor px-3 py-2 text-txcolor font-bold rounded-full"
+                      onClick={() => {
+                        if (dataorder.document.afour.number > 24) {
+                          notify();
+                        } else {
+                          dispatch(MethodDocument_plus(`A4*${item.id}`));
+                        }
+                      }}
+                    >
+                      +
+                    </button>
+                    <button
+                      className="text-2xl bg-bgcolor px-4 py-2 text-txcolor font-bold rounded-full"
+                      onClick={() => {
+                        dispatch(MethodDocument_mines(`A4*${item.id}`));
+                      }}
+                    >
+                      {dataorder.document.afour.number <= 1 ? (
+                        <AiOutlineDelete />
+                      ) : (
+                        "-"
+                      )}
+                    </button>
+                  </div>
+                )}
+              </div>
+              )
+              case "A3":
+                return(
+                  <div className="relative">
                   <Image
                     src="/document1.png"
                     width={150}
@@ -144,17 +212,18 @@ const Package = () => {
                     loading="lazy"
                   />
                   {/* badge */}
-                  {dataorder.document.number ? (
-                    <span className="absolute bg-bgcolor text-txcolor px-3 py-2 rounded-full -top-[6px] right-[47px]">
-                      {dataorder.document.number}+
+                  {dataorder.document.athree.number ? (
+                    <span className="absolute bg-bgcolor text-txcolor px-3 py-2 rounded-full -top-[6px] right-[40px]">
+                      {dataorder.document.athree.number}+
                     </span>
                   ) : null}
                   {/* badge */}
-                  {dataorder.document.number == 0 ? (
+                  <span className="absolute top-[102px] right-[46px] text-sm">پاکت A3</span>
+                  {dataorder.document.athree.number == 0 ? (
                     <button
                       className="bg-utils-300 text-txcolor py-2 px-3 rounded-md"
                       onClick={() => {
-                        dispatch(MethodDocument("plus"));
+                        dispatch(MethodDocument_plus(`A3*${item.id}`));
                       }}
                     >
                       انتخاب کن
@@ -164,10 +233,10 @@ const Package = () => {
                       <button
                         className="text-xl ml-3 bg-bgcolor px-3 py-2 text-txcolor font-bold rounded-full"
                         onClick={() => {
-                          if (dataorder.document.number > 24) {
+                          if (dataorder.document.athree.number > 24) {
                             notify();
                           } else {
-                            dispatch(MethodDocument("plus"));
+                            dispatch(MethodDocument_plus(`A3*${item.id}`));
                           }
                         }}
                       >
@@ -176,10 +245,10 @@ const Package = () => {
                       <button
                         className="text-2xl bg-bgcolor px-4 py-2 text-txcolor font-bold rounded-full"
                         onClick={() => {
-                          dispatch(MethodDocument("mines"));
+                          dispatch(MethodDocument_mines(`A3*${item.id}`));
                         }}
                       >
-                        {dataorder.document.number <= 1 ? (
+                        {dataorder.document.athree.number <= 1 ? (
                           <AiOutlineDelete />
                         ) : (
                           "-"
@@ -188,6 +257,12 @@ const Package = () => {
                     </div>
                   )}
                 </div>
+                )
+            }
+ 
+          })}
+          </div>
+          
           {/* ثبت سفرش */}
         </div>
         {/* پایان سایز  پاکت */}
@@ -212,7 +287,7 @@ const Package = () => {
                         return y;
                       });
                     });
-                    dispatch(MethodPrice(item.amount));
+                    dispatch(MethodPrice(item));
                   }}
                   className={`${
                     isshow[index] ? "shadow-md shadow-bgcolor" : ""
@@ -254,9 +329,11 @@ const Package = () => {
                           <select
                             className="w-1/2 border-solid border-2 py-2 px-3 rounded-tl-md rounded-bl-md outline-0 text-black absolute right-[193px] bottom-2 cursor-pointer"
                             onClick={(event) => {
-                              dispatch(
-                                MethodInsurance_value(event.target.value)
-                              );
+                              const item1=content_value.data.Value_data.find((item)=>item.min_value==event.target.value.split("-")[0])
+                              console.log("ddd",item1)
+                                return(
+                                  dispatch(MethodInsurance_value(`${event.target.value}*${item1.id}`))
+                                )
                             }}
                           >
                            

@@ -7,6 +7,7 @@ import { MdShoppingCart } from "react-icons/md";
 import { FaWallet } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
 import { usePathname } from 'next/navigation'
+import { ImAddressBook } from "react-icons/im";
 const index = () => {
   const path=usePathname();
   const pathflag=path.split("/")
@@ -29,9 +30,13 @@ const index = () => {
       <FaWallet className="mr-1"/>
         کیف پول
       </Link>
-      <Link href="/" className="block my-10 mr-5 text-txcolor">
-      <FaUserAlt  className="mr-1" />
+      <Link href="/dashboard/Profile" className="block my-10 mr-5 text-txcolor">
+      <FaUserAlt  className={`mr-1 text-xl ${pathflag[2]==="Profile"?"text-utils-300":""}`} />
         پروفایل
+      </Link>
+      <Link href="/dashboard/Addres" className="block my-10 mr-5 text-txcolor">
+      <ImAddressBook   className={`mr-1 text-xl ${pathflag[2]==="Addres"?"text-utils-300":""}`} />
+       آدرس ها
       </Link>
     </div>
   );

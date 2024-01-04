@@ -16,6 +16,8 @@
     "@tanstack/react-query-devtools": "^5.14.0",
     "animate.css": "^4.1.1",
     "axios": "^1.6.2",
+    "cookies-next": "^4.1.0",
+    "crypto-js": "^4.2.0",
     "framer-motion": "^10.16.9",
     "hover.css": "^2.3.2",
     "js-cookie": "^3.0.5",

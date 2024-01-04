@@ -65,7 +65,7 @@ useEffect(() => {
               setSelected(item.title);
               setOpen(false);
               setInputValue("");
-              dispatch(MethodService(item.title));
+              dispatch(MethodService(item));
             }}
           >
             <div

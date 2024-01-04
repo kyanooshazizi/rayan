@@ -1,10 +1,12 @@
+
 import React from "react";
 import Navbar from "@/components/utilsDashboard/Navbar";
 import Sidbar from "@/components/utilsDashboard/Sydbar";
-import Neworder from "@/components/optinselect/index";
+import Main from "@/components/utilsDashboard/profile/index";
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation";
-import {getData} from "@/components/utilsFunction/checklogin";
+import {getData} from "@/components/utilsFunction/checklogin"; 
+
 
 const page = async() => {
   const cookieStore = cookies()
@@ -13,12 +15,12 @@ const page = async() => {
   if(value_cooki){
     var data=await getData(value_cooki)
     if(!data.username){ 
-      redirect("/auth/login")  
+      redirect("/auth/login") 
        }
   }else{
     redirect("/auth/login")  
   }
-  
+   
   return (
     <div>
       <Navbar data={data}/>
@@ -26,10 +28,8 @@ const page = async() => {
         <div className="col-start-1 col-end-2">
           <Sidbar />
         </div>
-        <div className="col-start-2 col-end-13 mt-28">
-         <div className="w-3/5 mx-auto">
-         <Neworder btncolor={"bgcolor"} />
-         </div>
+        <div className="col-start-2 col-end-13 mt-28 flex">
+           <Main data={data}/>
         </div>
       </div>
     </div>

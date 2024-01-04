@@ -13,7 +13,6 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 const Main_section = () => {
   const { datacity, dataservise } = useCity_servise();
-  console.log(datacity.isPending, dataservise.isPending);
   const dispatch = useDispatch();
   const datastore = useSelector((state) => state.order.order);
   // Hydration error:strat
@@ -25,7 +24,7 @@ const Main_section = () => {
   // شروع:انتخاب نوع محصول
   const OrderHandler = (item) => {
     switch (item) {
-      case "بسته":
+      case "بسته": 
         return <Pakage />;
       case "پاکت":
         return <Document />;
@@ -101,8 +100,8 @@ const Main_section = () => {
                       <button
                         key={uuidv4()}
                         className="py-2 px-6 rounded-md m-4 bg-utils-300 text-txcolor !important"
-                        onClick={(event) => {
-                          dispatch(MethodService(optin.title));
+                        onClick={() => {
+                          dispatch(MethodService(optin));
                         }}
                       >
                         {optin.title}

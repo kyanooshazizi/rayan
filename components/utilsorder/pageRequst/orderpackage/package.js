@@ -11,11 +11,13 @@ import {
   MethodInsurance_value,
   MethodInsurance_content,
   MethodDate,
+  MethodBackHomepage
 } from "../../../Redux/orderslice";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { FaCertificate } from "react-icons/fa";
 import useValuedefult from "@/components/TanstakQury/useValuedefult";
+import usecity_servise from "@/components/TanstakQury/useCity_servise"
 
 // تقویم
 import DatePicker, { DateObject } from "react-multi-date-picker";
@@ -28,15 +30,17 @@ import { BsBoxSeamFill } from "react-icons/bs";
 // style module
 import styles from "../../../../style/neumorfism.module.css";
 import stylecard from  "../../../../style/card.module.css";
-import { button } from "@nextui-org/react";
 const Package = () => {
   const dispatch = useDispatch();
   const dataorder = useSelector((state) => state.order.order);
+  console.log(dataorder)
   const [getprice, setGetprice] = useState("");
   const [isshow, setIsshow] = useState("");
  
   const content_value=useValuedefult();
-
+  // console.log(content_value.data)
+  const {datacity, dataservise}=usecity_servise()
+// console.log(datacity.data,dataservise.data)
   
 
   let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.package.packB.number}+${dataorder.package.packM.number}+${dataorder.package.packS.number}`;
@@ -61,12 +65,13 @@ const Package = () => {
 
     useEffect(() => {
       if (flag_Complate_Order) {
+        dispatch(MethodBackHomepage());
         var formData = new FormData();
         var OrderData = {
           from_city: dataorder.pick_up,
           to_city:dataorder.delivery,
           count: [dataorder.package.packB.number,dataorder.package.packM.number,dataorder.package.packS.number],
-          service: [dataorder.service,dataorder.service,dataorder.service],
+          package: [dataorder.service,dataorder.service,dataorder.service],
           size: ["بزرگ", "متوسط","کوچک"],
         };
     
@@ -149,8 +154,12 @@ dispatch(MethodDate(new DateObject(object).format()))
           {/* modal end */}
            {/* ثبت سفارش */}
           <div className="flex justify-around mt-8">
-            {/* start packB */}
-            <div className="bg-utils-300 w-40 h-36 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
+           
+            {(dataservise.data[1].size).map((item)=>{
+              switch(item.title){
+                case "بزرگ":
+                   {/* start packB */}
+              return <div className="bg-utils-300 w-40 h-36 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
               {/* start badge */}
               {dataorder.package.packB.number ? (
                 <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-4 left-[128px]">
@@ -160,7 +169,7 @@ dispatch(MethodDate(new DateObject(object).format()))
                 ""
               )}
               {/* end badge */}
-              <p className="text-txcolor">بسته بزرگ</p>
+              <p className="text-txcolor">بسته {item.title}</p>
               <div className="flex justify-center text-6xl text-iconbox">
               <BsBoxSeamFill />
               </div>
@@ -171,7 +180,7 @@ dispatch(MethodDate(new DateObject(object).format()))
                     {
                       dataorder.package.packB.number >= 25
                         ? notify()
-                        : dispatch(Methodpackageadd("packB"));
+                        : dispatch(Methodpackageadd(`packB*${item.id}`));
                     }
                   }}
                 >
@@ -196,100 +205,106 @@ dispatch(MethodDate(new DateObject(object).format()))
               </div>
             </div>
             {/* end packB */}
-            {/* start packM */}
-            <div className="bg-utils-300 w-36 h-32 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
-              {/* start badge */}
-              {dataorder.package.packM.number ? (
-                <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-4 left-[115px]">
-                  {dataorder.package.packM.number}+
-                </span>
-              ) : (
-                ""
-              )}
-              {/* end badge */}
-              <p className="text-txcolor">بسته متوسط</p>
-              <div className="flex justify-center text-5xl text-iconbox">
-              <BsBoxSeamFill />
-              </div>
-              <div className="flex justify-center mt-4 cursor-pointer">
-                <button
-                  className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-                  onClick={() => {
-                    {
-                      dataorder.package.packM.number >= 25
-                        ? notify()
-                        : dispatch(Methodpackageadd("packM"));
-                    }
-                  }}
-                >
-                  {dataorder.package.packM.number ? "+" : "انتخاب کن"}
-                </button>
-                {dataorder.package.packM.number ? (
-                  <button
-                    className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-                    onClick={() => {
-                      dispatch(Methodpackagedelet("packM"));
-                    }}
-                  >
-                    {dataorder.package.packM.number > 1 ? (
-                      " - "
-                    ) : (
-                      <RiDeleteBin6Fill />
-                    )}
-                  </button>
+             case "متوسط":
+          {/* start packM */}
+          return <div className="bg-utils-300 w-36 h-32 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
+          {/* start badge */}
+          {dataorder.package.packM.number ? (
+            <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-4 left-[115px]">
+              {dataorder.package.packM.number}+
+            </span>
+          ) : (
+            ""
+          )}
+          {/* end badge */}
+          <p className="text-txcolor">بسته {item.title}</p>
+          <div className="flex justify-center text-5xl text-iconbox">
+          <BsBoxSeamFill />
+          </div>
+          <div className="flex justify-center mt-4 cursor-pointer">
+            <button
+              className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
+              onClick={() => {
+                {
+                  dataorder.package.packM.number >= 25
+                    ? notify()
+                    : dispatch(Methodpackageadd(`packM*${item.id}`));
+                }
+              }}
+            >
+              {dataorder.package.packM.number ? "+" : "انتخاب کن"}
+            </button>
+            {dataorder.package.packM.number ? (
+              <button
+                className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
+                onClick={() => {
+                  dispatch(Methodpackagedelet(`packM`));
+                }}
+              >
+                {dataorder.package.packM.number > 1 ? (
+                  " - "
                 ) : (
-                  ""
+                  <RiDeleteBin6Fill />
                 )}
-              </div>
-            </div>
-            {/* end packM */}
-            {/* start packS */}
-            <div className="bg-utils-300 w-32 h-28 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
-              {/* start badge */}
-              {dataorder.package.packS.number ? (
-                <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-5 left-[100px]">
-                  {dataorder.package.packS.number}+
-                </span>
-              ) : (
-                ""
-              )}
-              {/* end badge */}
-              <p className="text-txcolor">بسته کوچک</p>
-              <div className="flex justify-center text-3xl text-iconbox">
-              <BsBoxSeamFill />
-              </div>
-              <div className="flex justify-center mt-4 cursor-pointer">
-                <button
-                  className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-                  onClick={() => {
-                    {
-                      dataorder.package.packS.number >= 25
-                        ? notify()
-                        : dispatch(Methodpackageadd("packS"));
-                    }
-                  }}
-                >
-                  {dataorder.package.packS.number ? "+" : "انتخاب کن"}
-                </button>
-                {dataorder.package.packS.number ? (
-                  <button
-                    className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-                    onClick={() => {
-                      dispatch(Methodpackagedelet("packS"));
-                    }}
-                  >
-                    {dataorder.package.packS.number > 1 ? (
-                      " - "
-                    ) : (
-                      <RiDeleteBin6Fill />
-                    )}
-                  </button>
-                ) : (
-                  ""
-                )}
-              </div>
-            </div>
-            {/* end packS */}
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+        {/* end packM */}
+        case "کوچک":
+ {/* start packS */}
+ return <div className="bg-utils-300 w-32 h-28 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
+ {/* start badge */}
+ {dataorder.package.packS.number ? (
+   <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-5 left-[100px]">
+     {dataorder.package.packS.number}+
+   </span>
+ ) : (
+   ""
+ )}
+ {/* end badge */}
+ <p className="text-txcolor">بسته {item.title}</p>
+ <div className="flex justify-center text-3xl text-iconbox">
+ <BsBoxSeamFill />
+ </div>
+ <div className="flex justify-center mt-4 cursor-pointer">
+   <button
+     className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
+     onClick={() => {
+       {
+         dataorder.package.packS.number >= 25
+           ? notify()
+           : dispatch(Methodpackageadd(`packS*${item.id}`));
+       }
+     }}
+   >
+     {dataorder.package.packS.number ? "+" : "انتخاب کن"}
+   </button>
+   {dataorder.package.packS.number ? (
+     <button
+       className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
+       onClick={() => {
+         dispatch(Methodpackagedelet("packS"));
+       }}
+     >
+       {dataorder.package.packS.number > 1 ? (
+         " - "
+       ) : (
+         <RiDeleteBin6Fill />
+       )}
+     </button>
+   ) : (
+     ""
+   )}
+ </div>
+</div>
+{/* end packS */}
+              }
+             
+                  })}    
+           
           </div>
           {/* ثبت سفرش */}
         </div>
@@ -315,7 +330,7 @@ dispatch(MethodDate(new DateObject(object).format()))
                         return y;
                       });
                     });
-                    dispatch(MethodPrice(item.amount));
+                    dispatch(MethodPrice(item));
                   }}
                   className={`${isshow[index]?"shadow-md shadow-bgcolor":""} w-1/2 mx-auto p-6 mt-10 -translate-x-3 block ${stylecard.card} `}
                 >
@@ -330,7 +345,7 @@ dispatch(MethodDate(new DateObject(object).format()))
                     <div className="flex justify-start">
                       <div className="mx-10">
                         <p className="font-bold">نزدیک ترین زمان دریافت</p>
-                        <p>14{`${item.earliest_pickup.split("_")[0]}`}</p>
+                        <p>{`${item.earliest_pickup.split("_")[0]}`}</p>
                       </div>
                       <div className="mx-10">
                         <p className="font-bold"> زمان تحویل</p>
@@ -351,7 +366,13 @@ dispatch(MethodDate(new DateObject(object).format()))
                              محتوا مرسوله را مشخص کنید
                           </span>
                         <select className="w-2/5  py-3 px-4 rounded-l-md  outline-none inline-block text-black cursor-pointer text-sm"
-                        onClick={(event)=>dispatch(MethodInsurance_content(event.target.value))}
+                        onClick={(event)=>{ 
+                          const item=content_value.data.Content_data.find((item)=>item.title===event.target.value)
+                          // console.log("fff",item)
+                          return(
+                            dispatch(MethodInsurance_content(`${event.target.value}*${item.id}`))
+                          )
+                          }}
                         >
                           {(content_value.data.Content_data).map((item,index)=>{
                           return <option key={index}>
@@ -366,9 +387,16 @@ dispatch(MethodDate(new DateObject(object).format()))
                            ارزش مرسوله
                           </span>
                         <select className="border-solid text-black  py-3 px-4 rounded-l-md  outline-none w-3/5 text-sm cursor-pointer"
-                          onClick={(event)=>dispatch(MethodInsurance_value(event.target.value))}>
+                          onClick={(event)=>{
+                            const item1=content_value.data.Value_data.find((item)=>item.min_value==event.target.value.split("-")[0])
+                          // console.log("ddd",item1)
+                            return(
+                              dispatch(MethodInsurance_value(`${event.target.value}*${item1.id}`))
+                            )
+                           }}>
+
                           {(content_value.data.Value_data).map((item,index)=>{
-                          return <option key={index}>{`${(item.min_value).toLocaleString()}-${(item.max_value).toLocaleString()} میلیون تومان`}</option>
+                          return <option key={index}>{`${(item.min_value)}-${(item.max_value)} میلیون تومان`}</option>
                           })}
                           </select>
                       </div>

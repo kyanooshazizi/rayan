@@ -1,11 +1,12 @@
 "use client";
-import React ,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AiFillDelete } from "react-icons/ai";
 import { GoArrowLeft } from "react-icons/go";
 import { AiFillBackward } from "react-icons/ai";
 import { AiOutlineForward } from "react-icons/ai";
+import {MethodFlagHandler,MethodFlagHandlerAddress} from "../utils/MethodFlagHandler";
 import {
   Popover,
   PopoverTrigger,
@@ -14,55 +15,30 @@ import {
 } from "@nextui-org/react";
 import { MethodDeletOrder } from "../../Redux/orderslice";
 import { usePathname } from "next/navigation";
+import { useThemeContext } from '../../context/store';
 const Sidbar = () => {
-  const pathname=usePathname();
+  const { islogin} = useThemeContext();
+  const pathname = usePathname();
   const dispatch = useDispatch();
-  const router=useRouter();
+  const router = useRouter();
   const datastore = useSelector((state) => state.order.order);
-  const [urldata,setUrldata]=useState("");
-  
+  const dataAddress = useSelector((state) => state.order.address);
+  const [urldata, setUrldata] = useState("");
+
   useEffect(() => {
     const url = `${pathname}`;
-    setUrldata(()=>{
-      if(url.split("/")[2]){
-        return url.split("/")[2]
-      }else{
+    setUrldata(() => {
+      if (url.split("/")[2]) {
+        return url.split("/")[2];
+      } else {
         return null;
       }
-    },[])
-  
+    }, []);
+
     // You can now use the current URL
     // ...
-  }, [pathname])
-   // شروع:مدیریت نوع مرسوله
-  const MethodFlagHandler=(serveisName)=>{
-          switch(serveisName){
-             case "بسته":
-               return(
-                 datastore.pick_up &&
-                 datastore.delivery &&
-                 (datastore.package.packB.number ||
-                   datastore.package.packM.number ||
-                   datastore.package.packS.number ||
-                   datastore.document.number) &&
-                 datastore.Price &&
-                 datastore.pickup_date &&
-                 datastore.Insurance.Product_value &&
-                 datastore.Insurance.Product_content
-               )
-             case "پاکت":
-              return(
-                datastore.pick_up &&
-                datastore.delivery &&
-                datastore.document.number&&
-                datastore.Price &&
-                datastore.pickup_date &&
-                datastore.Insurance.Product_value  
-              )  
-
-          }
-          return null
-  }
+  }, [pathname]);
+  // شروع:مدیریت نوع مرسوله
   const ServiceNameHandler = (serveisName) => {
     switch (serveisName) {
       case "بسته":
@@ -94,10 +70,18 @@ const Sidbar = () => {
         ];
       case "پاکت":
         return [
-          datastore.document.number ? (
+          datastore.document.afour.number ? (
             <div className="flex items-center justify-around">
-              <span>تعداد پاکت انتخاب شده:</span>
-              <span> {datastore.document.number} عدد</span>
+              <span>پاکت A4</span>
+              <span> {datastore.document.afour.number} عدد</span>
+            </div>
+          ) : (
+            ""
+          ),
+          datastore.document.athree.number ? (
+            <div className="flex items-center justify-around">
+              <span>پاکت A3</span>
+              <span> {datastore.document.athree.number} عدد</span>
             </div>
           ) : (
             ""
@@ -106,45 +90,115 @@ const Sidbar = () => {
     }
     return null;
   };
-const ContentHandler=(servisName)=>{
-switch(servisName){
-    case "بسته":
-      return(
-        datastore.Insurance.Product_value ? (
+  const ContentHandler = (servisName) => {
+    switch (servisName) {
+      case "بسته":
+        return datastore.Insurance.Product_value ? (
           <div className=" border-b-2 border-b-lime-500 p-2 text-txcolor">
             <p className="text-lg mb-3">نوع مرسوله:</p>
             <div className="flex justify-between">
               <span>{datastore.Insurance.Product_content}</span>
               <span className="text-sm px-2">با ارزش تقریبی</span>
-              <span>{(datastore.Insurance.Product_value)}</span>
+              <span>{datastore.Insurance.Product_value}</span>
             </div>
           </div>
         ) : (
           ""
-        )
-      ) 
-     case "پاکت":
-      return(
-        datastore.Insurance.Product_value ? (
+        );
+      case "پاکت":
+        return datastore.Insurance.Product_value ? (
           <div className=" border-b-2 border-b-lime-500 p-2 text-txcolor">
             <p className="text-lg mb-3">نوع مرسوله:</p>
             <div className="flex justify-between">
               <span>پاکت</span>
               <span className="text-sm px-2">با ارزش </span>
-              <span>{(datastore.Insurance.Product_value)}</span>
+              <span>{datastore.Insurance.Product_value}</span>
             </div>
           </div>
         ) : (
           ""
-        )
-      ) 
-}
-return null;
-}
+        );
+    }
+    return null;
+  };
+  const ButtenCountinueHandler = (path) => {
+    switch (path) {
+      case "requst":
+        return (
+          <Popover placement="bottom" showArrow={true}>
+            <PopoverTrigger>
+              <button
+                className={`btnoutline border-2 border-white bg-utils-300 py-2 px-2 rounded-md text-txcolor font-bold hover:bg-bgbtnhover
+hover:text-navbarrequst transition-all transition-500 ease-linear ${
+                  MethodFlagHandler(datastore) ? "bg-green-800" : ""
+                }`}
+                onClick={() => {
+                  if (MethodFlagHandler(datastore)) {
+                    if(islogin){
+
+                      router.push("/order/address");
+                    }else{
+
+                    router.push("/auth/login");
+
+                    }
+                  }
+                }}
+              >
+                ثبت درخواست{" "}
+                <AiFillBackward className="text-xl inline-block mr-2" />
+              </button>
+            </PopoverTrigger>
+            {MethodFlagHandler(datastore) ? (
+              ""
+            ) : (
+              <PopoverContent>
+                <div className="px-1 py-2">
+                  <div className="text-small font-bold">
+                    لطفا تمام فیلد ها را پر کنید!
+                  </div>
+                  <div className="text-tiny mt-5">سفارش شما ناقص است</div>
+                </div>
+              </PopoverContent>
+            )}
+          </Popover>
+        );
+      case "address":
+        return (
+          <Popover placement="bottom" showArrow={true}>
+          <PopoverTrigger>
+            <button
+              className={`btnoutline border-2 border-white bg-utils-300 py-2 px-2 rounded-md text-txcolor font-bold hover:bg-bgbtnhover hover:text-navbarrequst transition-all transition-500 ease-linear ${MethodFlagHandlerAddress(dataAddress)?"bg-[green]":""}`}
+              onClick={() => {
+                if (MethodFlagHandlerAddress(dataAddress)) {
+                  router.push("/order/OrderReview");
+                }
+              }}
+            >
+              ثبت آدرس{" "}
+              <AiFillBackward className="text-xl inline-block mr-2" />
+            </button>
+          </PopoverTrigger>
+          {MethodFlagHandlerAddress(dataAddress) ? (
+            ""
+          ) : (
+            <PopoverContent>
+              <div className="px-1 py-2">
+                <div className="text-small font-bold">
+                 لطفا مشخصات فرستنده و گیرنده را با دقت پر کنید!
+                </div>
+                
+              </div>
+            </PopoverContent>
+          )}
+        </Popover>
+        );
+    }
+  };
 
   return (
     <>
-      <aside className="bg-bgcolor p-2 fixed top-[60px] left-0 col-span-1 h-[calc(100vh_-_60px)] w-1/4">
+      <aside className="bg-bgcolor p-2 fixed top-[60px] left-0 w-1/4 h-[calc(100vh_-_60px)]">
         {/* شروع:عنوان */}
         <div className="text-txcolor text-center">
           <div className="text-center shadow-sm bg-white text-bgcolor mb-3 w-[200px] py-2 rounded font-bold mx-auto !important">
@@ -184,8 +238,8 @@ return null;
                 </div>
                 {/* تابع چک کننده اسم محصول*/}
                 <div className="mt-3  text-txcolor text-md">
-                  {ServiceNameHandler(datastore.service).map((item,index) => {
-                    return <div key={index}>{item}</div>
+                  {ServiceNameHandler(datastore.service).map((item, index) => {
+                    return <div key={index}>{item}</div>;
                   })}
                 </div>
               </div>
@@ -217,59 +271,29 @@ return null;
         {/* start:button  */}
         <div className="fixed bottom-10 flex justify-around w-1/4 p-4">
           {datastore.service ? (
-            urldata==="requst"?
-            <button
-              className="group border-2 border-white py-2 px-4 rounded-md text-txcolor bg-utils-300 hover:bg-white
-              hover:text-navbarrequst transition-all transition-500 ease-linear"
-              onClick={() => dispatch(MethodDeletOrder())}
-            >
-              حذف سفارش
-              <AiFillDelete className="inline-block text-xl mr-1 group-hover:text-[red]" />
-            </button>:
-             <button
-             className="border-2 border-white py-2 px-6 rounded-md bg-utils-300 text-txcolor hover:bg-white
-             hover:text-navbarrequst transition-all transition-500 ease-linear"
-             onClick={() => router.back()}
-           >
-             <AiOutlineForward className="inline-block text-xl ml-2" />
-             بازگشت
-           </button>
-
+            urldata === "requst" ? (
+              <button
+                className="group border-2 border-white py-2 px-4 rounded-md text-txcolor bg-utils-300 hover:bg-white
+              hover:text-navbarrequst transition-all transition-500 ease-linear font-bold"
+                onClick={() => dispatch(MethodDeletOrder())}
+              >
+                حذف سفارش
+                <AiFillDelete className="inline-block text-xl mr-1 group-hover:text-[red]" />
+              </button>
+            ) : (
+              <button
+                className="border-2 border-white py-2 px-6 rounded-md bg-utils-300 text-txcolor hover:bg-white
+             hover:text-navbarrequst transition-all transition-500 ease-linear font-bold"
+                onClick={() => router.push("/order/requst")}
+              >
+                <AiOutlineForward className="inline-block text-xl ml-2" />
+                بازگشت
+              </button>
+            )
           ) : null}
-          {
-            <Popover placement="bottom" showArrow={true}>
-              <PopoverTrigger>
-                <button
-                  className={`btnoutline border-2 border-white bg-utils-300 py-2 px-2 rounded-md text-txcolor hover:bg-bgbtnhover
-                  hover:text-navbarrequst transition-all transition-500 ease-linear ${
-                    MethodFlagHandler(datastore.service) ? "bg-green-800" : ""
-                  }`}
-                  onClick={()=>{
-                    if(MethodFlagHandler(datastore.service)){
-                      router.push("/order/address")
-                    }
-                  }}
-                >
-                    ادامه   <AiFillBackward className="text-xl inline-block mr-2" />
-                </button>
-              </PopoverTrigger>
-              {MethodFlagHandler(datastore.service) ? (
-                ""
-              ) : (
-                <PopoverContent>
-                  <div className="px-1 py-2">
-                    <div className="text-small font-bold">
-                      لطفا تمام فیلد ها را پر کنید!
-                    </div>
-                    <div className="text-tiny mt-5">سفارش شما ناقص است</div>
-                  </div>
-                </PopoverContent>
-              )}
-            </Popover>
-          }
+          {ButtenCountinueHandler(urldata)}
         </div>
         {/* end:button  */}
-        
       </aside>
     </>
   );

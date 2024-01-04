@@ -1,4 +1,4 @@
-"use client";
+
 import React from "react";
 import Navbar from "@/components/utilsDashboard/Navbar";
 import Sidbar from "@/components/utilsDashboard/Sydbar";
@@ -8,10 +8,25 @@ import { MdOutlineDateRange } from "react-icons/md";
 import { BiBarcode } from "react-icons/bi";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { FiTruck } from "react-icons/fi";
-const page = () => {
+import { IoIosArrowBack } from "react-icons/io";
+import { cookies } from 'next/headers'
+import { redirect } from "next/navigation";
+import {getData} from "@/components/utilsFunction/checklogin";
+const page =async () => {
+  const cookieStore = cookies()
+  const token = cookieStore.get('access_token')
+  const value_cooki=token&&token.value? token.value:undefined;
+  if(value_cooki){
+    var data=await getData(value_cooki)
+    if(!data.username){ 
+      redirect("/auth/login") 
+       }
+  }else{
+    redirect("/auth/login") 
+  }
   return (
     <div>
-      <Navbar />
+      <Navbar data={data} />
       <div className="grid grid-cols-12">
         <div className="col-start-1 col-end-2">
           <Sidbar />
@@ -21,13 +36,6 @@ const page = () => {
             مدیریت سفارش ها
           </span>
           <hr className="bg-bgcolor h-[2px]" />
-          {/* 
-          top: 0px;
-    left: 1px;
-    padding-top: 8px;
-    padding-bottom: 9px;
-    border-radius: 7px;
-          */}
           {/* start:Manage orders */}
          <div className="flex flex-row mt-10 justify-evenly">
          <div className=" inline-block relative">
@@ -55,7 +63,7 @@ const page = () => {
                 <AiOutlineArrowDown className="inline-block text-bgcolor" />
               </div>
               <div className="basis-40">
-                نام مشتری{" "}
+                نام گیرنده{" "}
                 <AiOutlineAlignCenter className="inline-block text-bgcolor" />
               </div>
               <div className="basis-40">
@@ -85,6 +93,10 @@ const page = () => {
                  در حال بررسی
                 <FiTruck  className="text-utils-300 inline-block mr-1" />
               </div>
+              <div className="text-bgcolor group cursor-pointer">
+                جزئیات سفارش
+                <IoIosArrowBack className="inline pr-1 text-2xl group-hover:pr-2" />
+              </div>
             </div>
             <hr />
             <div className="flex flex-row my-3 text-gray-800 text-sm">
@@ -99,6 +111,10 @@ const page = () => {
               <div className="basis-40 text-green-700">
                 تکمیل شده{" "}
                 <AiFillCheckCircle className="text-[green] inline-block" />
+              </div>
+              <div className="text-bgcolor group cursor-pointer">
+                جزئیات سفارش
+                <IoIosArrowBack className="inline pr-1 text-2xl group-hover:pr-2" />
               </div>
             </div>
             <hr />
