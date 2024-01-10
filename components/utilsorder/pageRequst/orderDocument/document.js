@@ -1,14 +1,12 @@
-"use client";
-
+"use client"; 
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MethodDocument_plus,
   MethodPrice,
   MethodInsurance_value,
-  MethodDate,
   MethodDocument_mines,
   MethodBackHomepage
 } from "../../../Redux/orderslice";
@@ -16,17 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaCertificate } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import useValuedefult from "@/components/TanstakQury/useValuedefult";
-// تقویم
-import DatePicker, { DateObject } from "react-multi-date-picker";
-import transition from "react-element-popper/animations/transition";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
-import DatePickerHeader from "react-multi-date-picker/plugins/date_picker_header";
-import "react-multi-date-picker/styles/colors/yellow.css";
 // module style
 import stylecard from "../../../../style/card.module.css";
 import styles from "../../../../style/neumorfism.module.css";
-import usecity_servise from "@/components/TanstakQury/useCity_servise"
+import usecity_servise from "@/components/TanstakQury/useCity_servise";
+import Datapicker from "@/components/utilsorder/Datapicker";
 const Package = () => {
   const {datacity, dataservise}=usecity_servise()
   // console.log(datacity.data,dataservise.data)
@@ -35,7 +27,6 @@ const Package = () => {
   console.log(dataorder)
   const [getprice, setGetprice] = useState("");
   const [isshow, setIsshow] = useState("");
-  const [value, setValue] = useState("");
   const content_value=useValuedefult();
 
   let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.document.afour.number}+${dataorder.document.athree.number}`;
@@ -91,19 +82,7 @@ const Package = () => {
       }
     }
   }, [refresh_price]);
-  // محدود کردن تقویم
-  const date = new DateObject({ calendar: persian, locale: persian_fa });
-  // خواندن دیتای تقویم
-  const [state, setState] = useState({ format: "MM/DD/YYYY", persian: "" });
-  const convert = (date, format = state.format) => {
-    let object = { date, format };
-    dispatch(MethodDate(new DateObject(object).format()));
-    setState({
-      jsDate: date.toDate(),
-      persian: new DateObject(object).format(),
-      ...object,
-    });
-  };
+ 
   return (
     <>
       <div className="text-center">
@@ -306,7 +285,7 @@ const Package = () => {
                       <div className="flex justify-start">
                         <div className="mx-10">
                           <p className="font-bold">نزدیک ترین زمان دریافت</p>
-                          <p>{`${item.earliest_pickup.split("_")[0]}`}</p>
+                          <p>{`${item.pickup_time.split("_")[0]}`}</p>
                         </div>
                         <div className="mx-10">
                           <p className="font-bold"> زمان تحویل</p>
@@ -355,33 +334,7 @@ const Package = () => {
               {/*  پایان نمایش هزینه ارسال */}
 
               {/* شروع تقویم */}
-              <div
-                className={`mt-8 w-1/2 bg-white mx-auto -translate-x-3 rounded-lg py-10 my-14 ${styles.numDatapicker}`}
-              >
-                <div className="w-full text-right mr-3 mb-3">
-                  <span className="text-red-600 text-xl font-bold">*</span>
-                  <span className="mx-2  py-2 px-1 rounded-md text-txcolor">
-                    تاریخ ارسال مرسوله را مشخص کنید؟
-                  </span>
-                </div>
-                <div className="w-full text-right mr-3">
-                  <DatePicker
-                    value={state.date}
-                    onChange={convert}
-                    plugins={[<DatePickerHeader />]}
-                    inputClass="border-gray-400 bg-gray-100 border-2 border-solid px-2 py-2 rounded-lg cursor-pointer w-[400px]"
-                    className="red"
-                    placeholder="انتخاب کن"
-                    calendar={persian}
-                    locale={persian_fa}
-                    animations={[transition()]}
-                    minDate={new DateObject({ calendar: persian }).set(
-                      "day",
-                      date.day
-                    )}
-                  />
-                </div>
-              </div>
+              <Datapicker getprice={getprice}/>
               {/* پایان تقویم */}
             </div>
           ) : (

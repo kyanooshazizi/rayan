@@ -3,6 +3,10 @@ export const getData=async(value_cooki)=>{
       cache:"no-store",
       headers:{Authorization:`Bearer ${value_cooki}`}
   });
+if(!data.ok){
+  return null
+}
+
   return data.json()
   }
  

@@ -7,6 +7,7 @@ const ThemeContext = createContext({})
 
 export const ThemeContextProvider = ({children,user}) => {
 const [userdata,setUserdata]=useState("")
+console.log("🚀 ~ file: store.js:10 ~ ThemeContextProvider ~ userdata:", userdata)
 const [islogin,setIslogin]=useState(false)
 const [isloading,setIsloading]=useState(true)
 const isCookie=getCookie('access_token')

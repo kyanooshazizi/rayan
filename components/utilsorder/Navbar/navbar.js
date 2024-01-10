@@ -13,6 +13,7 @@ import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
+import { FaHome } from "react-icons/fa";
  const Navbar = () => {
   const router=useRouter()
   const { islogin,isloading,setIslogin} = useThemeContext();
@@ -61,7 +62,9 @@ import { useRouter } from 'next/navigation';
           <li className="inline-block p-2">نهایی سازی سفارش</li>
         </ul>
       
-            {isloading?<Skeleton className="h-10 w-16 ml-4 mt-2 rounded-md"/>:(islogin? 
+        <div className='flex justify-between'>
+        
+        {isloading?<Skeleton className="h-10 w-16 ml-4 mt-2 rounded-md"/>:(islogin? 
             <Dropdown>
         <DropdownTrigger>
         <div  className="font-bold  md:text-base cursor-pointer ml-8 mt-3">
@@ -95,6 +98,10 @@ import { useRouter } from 'next/navigation';
           <span> ورود </span>
             <IoMdLogIn className="text-sm md:text-2xl " />
           </button> </Link>)}
+          <div className="cursor-pointer" onClick={()=>{router.push("/")}}>
+        <FaHome className="mx-6 mt-2 text-3xl text-utils-300"/>
+        </div>
+        </div>
           
        
       </nav>

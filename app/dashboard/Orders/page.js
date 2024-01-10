@@ -18,7 +18,7 @@ const page =async () => {
   const value_cooki=token&&token.value? token.value:undefined;
   if(value_cooki){
     var data=await getData(value_cooki)
-    if(!data.username){ 
+    if(!data){ 
       redirect("/auth/login") 
        }
   }else{

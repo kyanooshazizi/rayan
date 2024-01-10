@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import {deleteCookie } from 'cookies-next';
 import { useThemeContext } from '../../context/store';
+import { FaHome } from "react-icons/fa";
 const Navbar = ({data}) => {
    const { setIslogin} = useThemeContext();
   const router=useRouter();
@@ -56,10 +57,15 @@ const Navbar = ({data}) => {
        </Dropdown>
         </div>
         </div>
+        <div className="flex justify-between">
         <div className="relative cursor-pointer" onClick={()=>{router.push("/order/requst")}}>
-        <MdShoppingCart className="ml-6 mt-4 text-4xl text-bgcolor" />
+        <MdShoppingCart className="ml-10 mt-4 text-4xl text-bgcolor" />
         
-        {datastore.pick_up&&datastore.delivery&&datastore.service&&isClient? <span className="absolute bg-utils-300 text-txcolor p-1 rounded-full text-sm bottom-[33px] left-[55px]">1+</span>:"" }
+        {datastore.pick_up&&datastore.delivery&&datastore.service&&isClient? <span className="absolute bg-utils-300 text-txcolor p-1 rounded-full text-sm -top-[2px] left-[70px]">1+</span>:"" }
+        </div>
+        <div className="cursor-pointer" onClick={()=>{router.push("/")}}>
+        <FaHome className="ml-6 mt-4 text-4xl text-bgcolor"/>
+        </div>
         </div>
       </nav>
       {/* end nav */}

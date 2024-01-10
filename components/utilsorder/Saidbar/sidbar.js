@@ -16,17 +16,48 @@ import {
 import { MethodDeletOrder } from "../../Redux/orderslice";
 import { usePathname } from "next/navigation";
 import { useThemeContext } from '../../context/store';
+import { setCookie ,getCookie } from "cookies-next";
 const Sidbar = () => {
   const { islogin} = useThemeContext();
   const pathname = usePathname();
   const dispatch = useDispatch();
   const router = useRouter();
   const datastore = useSelector((state) => state.order.order);
-  const dataAddress = useSelector((state) => state.order.address);
   const [urldata, setUrldata] = useState("");
-
-  useEffect(() => {
-    const url = `${pathname}`;
+  const [delorder,setDelorder]=useState("")
+console.log(delorder)
+// start: send data order
+const dataAddress = useSelector((state) => state.order.address);
+// console.log(dataAddress, dataOrder, dataOrder.pickup_date);
+const size_order = datastore.id.size.filter((item) => item !== "");
+const count_order = datastore.id.count.filter((item) => item !== 0);
+// console.log(size_order,count_order)
+var faToEnDigits = function (input) {
+  if (input == undefined) return;
+  var returnModel = "",
+    symbolMap = {
+      "۱": "1",
+      "۲": "2",
+      "۳": "3",
+      "۴": "4",
+      "۵": "5",
+      "۶": "6",
+      "۷": "7",
+      "۸": "8",
+      "۹": "9",
+      "۰": "0",
+    };
+  input = input.toString();
+  for (var i = 0; i < input.length; i++)
+    if (symbolMap[input[i]]) returnModel += symbolMap[input[i]];
+    else returnModel += input[i];
+  return returnModel;
+};
+const pickup_date = faToEnDigits(datastore.pickup_date);
+// end:send data order
+const [tax,setTax]=useState("");
+useEffect(() => {
+  const url = `${pathname}`;
     setUrldata(() => {
       if (url.split("/")[2]) {
         return url.split("/")[2];
@@ -34,10 +65,22 @@ const Sidbar = () => {
         return null;
       }
     }, []);
+    if(datastore.Insurance.Product_value){
+      fetch("https://mohaddesepkz.pythonanywhere.com/prices/tax/",{
+        method:"POST",
+        body: JSON.stringify({
+          price: datastore.Price,
+          value: datastore.id.value
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(res=>res.json()).then((res)=>setTax(res)).catch(err=>console.log("🚀 ~ file: sidbar.js:70 ~ Sidbar ~ err:", err))
+    }
 
     // You can now use the current URL
     // ...
-  }, [pathname]);
+  }, [pathname,datastore.Insurance.Product_value,datastore.Price]);
   // شروع:مدیریت نوع مرسوله
   const ServiceNameHandler = (serveisName) => {
     switch (serveisName) {
@@ -135,7 +178,7 @@ hover:text-navbarrequst transition-all transition-500 ease-linear ${
                 onClick={() => {
                   if (MethodFlagHandler(datastore)) {
                     if(islogin){
-
+                       
                       router.push("/order/address");
                     }else{
 
@@ -170,12 +213,64 @@ hover:text-navbarrequst transition-all transition-500 ease-linear ${
             <button
               className={`btnoutline border-2 border-white bg-utils-300 py-2 px-2 rounded-md text-txcolor font-bold hover:bg-bgbtnhover hover:text-navbarrequst transition-all transition-500 ease-linear ${MethodFlagHandlerAddress(dataAddress)?"bg-[green]":""}`}
               onClick={() => {
+                
                 if (MethodFlagHandlerAddress(dataAddress)) {
-                  router.push("/order/OrderReview");
+                  fetch("https://mohaddesepkz.pythonanywhere.com/orders/delete/", {
+                  method: "DELETE",
+                  headers: {Authorization:`Bearer ${getCookie("access_token")}` },
+                }).then(res=>res.json()).then(res=>
+                  {
+                  size_order.map((item, index) => {
+                    fetch("https://mohaddesepkz.pythonanywhere.com/orders/new/", {
+                      method: "POST",
+                      body: JSON.stringify({
+                        count: count_order[index],
+                        size: size_order[index],
+                        package: datastore.id.package,
+                        content: datastore.id.content,
+                        service: datastore.id.service,
+                        value: datastore.id.value,
+                        pickup_date,
+                        sender_address: dataAddress.SenderAddress,
+                        sender_plaque: dataAddress.Senderpelak,
+                        sender_stage: dataAddress.Sendertabaghe,
+                        sender_unity: dataAddress.Sendervahed,
+                        sender_name: dataAddress.SenderName,
+                        sender_phone: dataAddress.SenderMobile,
+                        receiver_address: dataAddress.ReceiverAddress,
+                        receiver_plaque: dataAddress.Receiverpelak,
+                        receiver_stage: dataAddress.Receivertabaghe,
+                        receiver_unity: dataAddress.Receivervahed,
+                        receiver_name: dataAddress.ReceiverName,
+                        receiver_phone: dataAddress.ReceiverMobile,
+                        description: dataAddress.Additional_details,
+                      }),
+                      headers: {
+                        Authorization: `Bearer ${getCookie("access_token")}`,
+                        "Content-type": "application/json",
+                      },
+                    })
+                      .then((res) => res.json())
+                      .then((res) =>{
+                        // console.log(res);
+                        setCookie('code', res.tracking_code);
+                      })
+                      
+                      .catch((err) => console.error(err));
+                      
+                    })
+                  }
+                  );
+                
+                 
+                
+                  setTimeout(()=>{ router.push("/order/OrderReview")},1000)
+                  
+                 
                 }
               }}
             >
-              ثبت آدرس{" "}
+            ثبت آدرس
               <AiFillBackward className="text-xl inline-block mr-2" />
             </button>
           </PopoverTrigger>
@@ -245,10 +340,19 @@ hover:text-navbarrequst transition-all transition-500 ease-linear ${
               </div>
               {/*  پایان: با توجه به نوع مرسوله این قسمت متفاوت است */}
               {datastore.Price ? (
-                <div className="flex justify-around border-b-2 border-b-lime-500 p-2 text-txcolor">
+                <div className="border-b-2 border-b-lime-500">
+
+                <div className="flex justify-between py-1 mx-5 text-txcolor">
                   <span> هزینه ارسال:</span>
                   <span>{datastore.Price.toLocaleString()} تومان</span>
                 </div>
+                 
+                  <div className="flex justify-between py-1 mx-5 text-txcolor">
+                    <span>هزینه بابت جبران خسارت:</span>
+                    <span> {tax?`${tax.tax.toLocaleString()}`:""} تومان</span>
+                  </div>
+                </div>
+                 
               ) : (
                 ""
               )}

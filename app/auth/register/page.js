@@ -32,11 +32,11 @@ const Register = () => {
   const [error, setError] = useState({});
   const [focus, setFocus] = useState({});
   // start:checkregister user
-  const { setIslogin} = useThemeContext();
+  const { setIslogin,islogin} = useThemeContext();
 
   const CheckRegister = (res) => {
     if (res.token) {
-      setCookie("access_token", res.token.access);
+      setCookie("access_token", res.token.access,{maxAge:60*60*24*10 });
       setIslogin(true)
       if (MethodFlagHandler(datastore)) {
         router.push("/order/address");
@@ -136,6 +136,10 @@ const Register = () => {
     }
   };
   // end:color outline handler
+  if(islogin){
+    router.push("/");
+    
+  }
 
   return (
     <>

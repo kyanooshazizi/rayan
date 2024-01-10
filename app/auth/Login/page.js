@@ -11,8 +11,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { MethodFlagHandler } from "@/components/utilsorder/utils/MethodFlagHandler";
 import { useSelector } from "react-redux";
 import { useThemeContext } from "@/components/context/store";
+import error from "app/error";
 const login = () => {
-  const { setIslogin } = useThemeContext();
+  const { setIslogin,islogin } = useThemeContext();
   const router = useRouter();
   const datastore = useSelector((state) => state.order.order);
   const [data, setData] = useState({
@@ -38,19 +39,11 @@ const login = () => {
     }
   };
   const CheckLogin = (res) => {
-    if (res) {
-      setCookie("access_token", res.token.access);
-      // setCookie('refresh_token', res.token.refresh);
+    if (res.token) {
+      setCookie("access_token", res.token.access,{maxAge:60*60*24*10 });
       setIslogin(true);
       console.log(res)
-
-      // if (MethodFlagHandler(datastore)) {
-      //   router.push("/order/address");
-      // } else {
-      //   router.push("/");
-      // }
       router.push("/");
-      // notify("success","خوش آمدید");
     } else {
       notify("warn", "نام کاربری یا رمز عبور اشتباه است!");
     }
@@ -67,16 +60,14 @@ const login = () => {
         }),
         headers: { "Content-Type": "application/json" },
       })
-        .then((res) => {
-          if (!res.ok) {
-          
-            return null;
-          } else {
-            return res.json();
-          }
+        .then((res) => {    
+          return res.json(); 
         })
         .then((res) => CheckLogin(res))
-        .catch((error) => console.error(error));
+        .catch((error) =>{
+          console.log("error",error);
+          notify("warn", "نام کاربری یا رمز عبور اشتباه است!");
+        });
       }
       setFlagPost(false);
   }, [flagPost]);
@@ -99,6 +90,10 @@ const login = () => {
       setFlagPost(true);
     }
    
+  }
+  if(islogin){
+    router.push("/");
+    
   }
 
   return (

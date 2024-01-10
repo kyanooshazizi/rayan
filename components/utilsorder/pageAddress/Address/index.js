@@ -11,7 +11,10 @@ import {
   MethodSenderAddress_details,
   MethodReceiverAddress_details
 } from "@/components/Redux/orderslice";
+import { useRouter } from "next/navigation";
+import Link from 'next/link';
 const index = () => {
+  const router=useRouter();
   const dispatch = useDispatch();
   const dataAddress = useSelector((state) => state.order.address);
   console.log(dataAddress);
@@ -41,7 +44,7 @@ const index = () => {
                 />
               </div>
               <div className="mr-4 mt-4">
-                <label htmlFor="Fullname">آدرس فرستنده <span className="text-[red]">(لطفا آدرس را با جزئیات وارد کنید)</span></label>
+                <label htmlFor="Fullname">آدرس فرستنده <span className="text-[red] mr-2">(لطفا آدرس را با جزئیات وارد کنید)</span></label>
                 <input
                   value={dataAddress.SenderAddress}
                   placeholder="تهران،بلوار بریانک غربی،کوچه نیکفر،کوچه اسلامی"
@@ -110,6 +113,8 @@ const index = () => {
                   }}
                 />
               </div>
+              <Link href="/dashboard/Addres?type=sender" className="bg-utils-300 text-txcolor px-2 py-3 rounded w-[87%] mr-4 block text-center">افزودن از دفترچه آردس</Link>
+             
             </form>
           </div>
           {/* مشخصات گیرنده */}
@@ -133,7 +138,7 @@ const index = () => {
                 />
               </div>
               <div className="mr-4 mt-4">
-                <label htmlFor="Fullname">آدرس گیرنده<span className="text-[red]">(لطفا آدرس را با جزئیات وارد کنید)</span></label>
+                <label htmlFor="Fullname">آدرس گیرنده<span className="text-[red] mr-2">(لطفا آدرس را با جزئیات وارد کنید)</span></label>
                 <input
                 value={dataAddress.ReceiverAddress}
                 onChange={(event) => {
@@ -203,7 +208,10 @@ const index = () => {
                 />
               </div>
             </form>
+            <Link href="/dashboard/Addres?type=resiver" className="bg-utils-300 text-txcolor px-2 py-3 rounded w-[87%] mr-4 block text-center">افزودن از دفترچه آردس</Link>
           </div>
+        </div>
+        <div className="my-6 mr-10 w-1/2">
         </div>
         <div className="mr-[16%] mt-6 w-1/2 bg-txcolor pt-14 pb-6 relative rounded-lg">
           <span className="absolute top-[24px] right-[63px] font-bold">
