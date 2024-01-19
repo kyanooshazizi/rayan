@@ -7,35 +7,42 @@ import { PiPhoneCall } from "react-icons/pi";
 import { MdOutlineAddLocation } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useThemeContext } from '../../context/store';
 
-const index = ({data}) => {
+const index = () => {
+  const { userdata} = useThemeContext();
   const router=useRouter();
   const [order, setOrder] = useState("");
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState(false)
-  console.log("🚀 ~ file: Getlocalhost.js:13 ~ index ~ order:", order);
 
   useEffect(() => {
-    fetch(
-      `https://mohaddesepkz.pythonanywhere.com/orders/${getCookie("code")}/`,
-      {
-        headers: { Authorization: `Bearer ${getCookie("access_token")}` },
-      }
-    )
-      .then((res) =>
-      {
-        if(!res.ok){
-          setError(true)
-          setLoading(false)
-        }else{
-         return res.json()
+    try {
+      fetch(
+        `https://mohaddesepkz.pythonanywhere.com/orders/${getCookie("code")}/`,
+        {
+          headers: { Authorization: `Bearer ${getCookie("access_token")}` },
         }
-      }
       )
-      .then((res) =>{
-        setOrder(res);
-        setLoading(false)
-      }).catch(err=>console.log(err));
+        .then((res) =>
+        {
+          if(!res.ok){
+            setError(true)
+            setLoading(false)
+          }else{
+           return res.json()
+          }
+        }
+        )
+        .then((res) =>{
+          setOrder(res);
+          setLoading(false)
+        }).catch(err=>console.log(err));
+     
+    } catch (error) {
+      console.error(error);
+    }
+    
   }, []);
 
 
@@ -54,7 +61,9 @@ return(
   }
  if(error||order.length==0){
     return(
-<div className=" mt-[300px] text-center text-2xl bg-txcolor p-2">شما هنوز سفارشی را  ثبت نکرده اید!</div>
+      <>
+<div className=" mt-[300px] text-center text-2xl bg-txcolor p-2 w-2/3 mx-auto">شما هنوز سفارشی را  ثبت نکرده اید!</div>
+      </>
     )
   }
   
@@ -162,7 +171,7 @@ return(
           </div>
         </div>
         {/* start:butten */}
-        {data.flag?"":<Link
+        {userdata&&userdata.flag?"":<Link
           href="/dashboard/Profile"
           className="text-[blue] mx-auto text-center block mt-10"
         >
@@ -175,7 +184,7 @@ return(
               fetch("https://mohaddesepkz.pythonanywhere.com/orders/delete/", {
                 method: "DELETE",
                 headers: {Authorization:`Bearer ${getCookie("access_token")}` },
-              }).then(res=>res.json()).then(res=>console.log(res));
+              }).then(res=>res.json()).then(res=>res);
               router.push("/order/address")
             }}
             className="bg-bgcolor px-3 py-4 text-txcolor rounded hover:bg-txcolor hover:text-bgcolor transition-all transition-500 ease-linear border-bgcolor border-1 border-solid"

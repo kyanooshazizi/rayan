@@ -15,7 +15,6 @@ const page = () => {
       {/* start nav */}
       <Navbar/>
       {/* end nav */}
-
       <main className="grid grid-cols-6">
         {/* start section */}
         <Mainsection/>

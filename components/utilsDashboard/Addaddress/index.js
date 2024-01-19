@@ -21,23 +21,20 @@ import {
   MethodReceiverAddress_details
 } from "@/components/Redux/orderslice";
 import { useRouter } from "next/navigation";
-
+import {MethodFlagHandler} from "../../utilsorder/utils/MethodFlagHandler";
+import Link from 'next/link'
 // end:save in localhost
 const page = () => {
   const router=useRouter();
   const dispatch = useDispatch();
-  const dataAddress = useSelector((state) => state.order.address);
-  console.log("🚀 ~ file: index.js:28 ~ page ~ dataAddress:", dataAddress)
-  
+  const dataorder = useSelector((state) => state.order.order);
+  const [requstOrder_sender,setRequstOrder_sender]=useState(false);
+  const [requstOrder_reciver,setRequstOrder_reciver]=useState(false);
   const [datasender,setDatasender]=useState([]);
   const [datareciver,setDatareciver]=useState([]);
   const [togglesender,setTogglesender]=useState(false);
   const [toggleresiver,setToggleresiver]=useState(false);
-  console.log("🚀 ~ file: index.js:11 ~ page ~ reciver_data:", datareciver);
-  console.log("🚀 ~ file: index.js:11 ~ page ~ sender_data:", datasender);
-
   const searchParams = useSearchParams();
-  console.log(searchParams);
   const type = searchParams.get("type");
 
   if (type === "sender") {
@@ -46,15 +43,20 @@ const page = () => {
     var [toggle, setToggle] = useState(true);
   }
 useEffect(()=>{
-  fetch("https://mohaddesepkz.pythonanywhere.com/address/senders/",{
-    headers: { 
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getCookie('access_token')}`
-    },
-  }).then(res=>res.json()).then(res=>setDatasender(res)).catch(err=>
-    console.log("🚀 ~ file: index.js:32 ~ useEffect ~ err:", err)
-    );
-    // 
+  try {
+    fetch("https://mohaddesepkz.pythonanywhere.com/address/senders/",{
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie('access_token')}`
+      },
+    }).then(res=>res.json()).then(res=>setDatasender(res)).catch(err=>
+      console.log("🚀 ~ file: index.js:32 ~ useEffect ~ err:", err)
+      );
+  } catch (error) {
+    console.error(error);
+  }
+  
+  try {
     fetch("https://mohaddesepkz.pythonanywhere.com/address/receivers/",{
       headers: { 
         "Content-Type": "application/json",
@@ -63,6 +65,10 @@ useEffect(()=>{
     }).then(res=>res.json()).then(res=>setDatareciver(res)).catch(err=>
       console.log("🚀 ~ file: index.js:43 ~ useEffect ~ err:", err)
       )
+  } catch (error) {
+    console.error(error);
+  }
+    
 },[togglesender,toggleresiver])
 
 
@@ -70,6 +76,7 @@ useEffect(()=>{
     <>
       <div className="grid grid-cols-12 p-16 gap-14">
         <div className="col-start-1 col-end-4">
+        
           <div className="w-full h-[200px] bg-txcolor py-3 px-2">
             <div className="py-3">
               <FaAddressBook className="text-utils-300 inline-block ml-2 text-lg" />
@@ -108,6 +115,7 @@ useEffect(()=>{
         {
           toggle ? (
             <div className="col-start-4 col-end-13">
+              {requstOrder_reciver?<div className="text-center bg-green-300 pr-2 py-2 mb-3 block mx-auto rounded w-2/3">آدرس گیرنده افزوده شد اما هنوز سفارشی را ثبت نکرده اید! <Link href="/order/requst" className="px-2 text-[blue] py-1 rounded-sm bg-white mx-2">ثبت سفارش</Link></div>:""}
               <div className="w-full h-[600px] bg-txcolor py-3 px-2">
                 <div className="flex justify-between px-3">
                   <span className="bg-bgcolor relative px-3 py-2 text-txcolor rounded-md after:content-[''] after:border-t-transparent after:border-l-transparent after:border-b-transparent after:border-r-bgcolor after:border-solid after:border-[10px] after:right-[100%] after:absolute after:z-10 after:top-[28%]">
@@ -118,10 +126,11 @@ useEffect(()=>{
                 <hr className="my-4" />
                 <div className="mt-20 ">
                   {/* start:header table */}
-                  <div className="flex">
-                    <div className="mr-4">نام و نام خانوادگی</div>
-                    <div className="mr-14">شماره تلفن</div>
-                    <div className="mr-14">آدرس</div>
+                  <div className="flex text-sm">
+                    <div className="mr-2">نام و نام خانوادگی</div>
+                    <div className="mr-12">عنوان کسب و کار</div>
+                    <div className="mr-12">شماره تلفن</div>
+                    <div className="mr-[74px]">آدرس</div>
                   </div>
                   <hr className="bg-utils-300 h-[2px] w-[98%] mx-auto" />
                   {/* end:header table*/}
@@ -129,15 +138,17 @@ useEffect(()=>{
                   {datareciver.map((item, index) => {
                     return (
                       <div>
-                        <div className="flex justify-between text-sm my-3">
-                          <div className="flex">
-                            <div className="mr-4">{item.name}</div>
-                            <div className="mr-20">{item.phone}</div>
-                            <div className="mr-14">
+                        <div className="flex text-sm my-3">
+                          <div className="flex basis-2/3 text-sm">
+                            <div className=" basis-[30px]">{index+1} -</div>
+                            <div className="basis-[31%] truncate">{item.name}</div>
+                            <div className="basis-[31%] truncate">طلا فروشی جواهری</div>
+                            <div className="basis-[31%] truncate">{item.phone}</div>
+                            <div className="basis-[48%] truncate">
                               {`${item.address}، پلاک${item.plaque}، طبقه${item.stage}، واحد${item.unity}`}
                             </div>
                           </div>
-                          <div className="float-left flex ">
+                          <div className="float-left flex justify-end basis-1/3">
                             <div>
                               <MdDelete className="text-xl text-[red] mx-2 cursor-pointer" onClick={()=>{
                                 fetch(`https://mohaddesepkz.pythonanywhere.com/address/delete/${item.id}/`,{
@@ -159,8 +170,16 @@ useEffect(()=>{
                               dispatch(MethodReceiverAddress_details("طبقه**"+item.stage));
                               dispatch(MethodReceiverAddress_details("واحد**"+item.unity));
                               dispatch(MethodReceiverMobile(item.phone));
-                              router.push("/order/address")
-                            }} className="bg-utils-300 text-txcolor px-3 py-1 rounded-sm mx-4">
+                              if(MethodFlagHandler(dataorder)){
+
+                                router.push("/order/address")
+                              }else{
+                                setRequstOrder_reciver({
+                                  flag:true,
+                                  text:"آدرس گیرنده افزوده شد اما هنوز سفارشی را ثبت نکرده اید!"
+                                })
+                              }
+                            }} className="bg-utils-300 text-txcolor w-[60px] h-[30px] rounded-sm mx-4">
                               انتخاب
                             </button>
                           </div>
@@ -177,6 +196,7 @@ useEffect(()=>{
           ) : (
             // start sender
             <div className="col-start-4 col-end-13">
+              {requstOrder_sender?<div className="text-center bg-green-300 pr-2 py-2 mb-3 block mx-auto rounded w-2/3">آدرس فرستنده افزوده شد اما هنوز سفارشی را ثبت نکرده اید! <Link href="/order/requst" className="px-2 text-[blue] py-1 rounded-sm bg-white mx-2">ثبت سفارش</Link></div>:""}
               <div className="w-full h-[600px] bg-txcolor py-3 px-2">
                 <div className="flex justify-between px-3">
                   <span className="bg-bgcolor relative px-3 py-2 text-txcolor rounded-md after:content-[''] after:border-t-transparent after:border-l-transparent after:border-b-transparent after:border-r-bgcolor after:border-solid after:border-[10px] after:right-[100%] after:absolute after:z-10 after:top-[28%]">
@@ -187,10 +207,11 @@ useEffect(()=>{
                 <hr className="my-4" />
                 <div className="mt-20 ">
                   {/* start:header table */}
-                  <div className="flex">
-                    <div className="mr-4">نام و نام خانوادگی</div>
-                    <div className="mr-14">شماره تلفن</div>
-                    <div className="mr-14">آدرس</div>
+                  <div className="flex text-sm">
+                    <div className="mr-2">نام و نام خانوادگی</div>
+                    <div className="mr-12">عنوان کسب و کار</div>
+                    <div className="mr-12">شماره تلفن</div>
+                    <div className="mr-[74px]">آدرس</div>
                   </div>
                   <hr className="bg-utils-300 h-[2px] w-[98%] mx-auto" />
                   {/* end:header table*/}
@@ -199,14 +220,16 @@ useEffect(()=>{
                     return (
                       <div>
                         <div className="flex justify-between text-sm my-3">
-                          <div className="flex">
-                            <div className="mr-4">{item.name}</div>
-                            <div className="mr-20">{item.phone}</div>
-                            <div className="mr-14">
-                              {` ${item.address}، پلاک${item.plaque}، طبقه${item.stage}، واحد${item.unity}`}{" "}
+                        <div className="flex basis-2/3 text-sm">
+                            <div className=" basis-[30px]">{index+1} -</div>
+                            <div className="basis-[31%] truncate">{item.name}</div>
+                            <div className="basis-[31%] truncate">طلا فروشی جواهری</div>
+                            <div className="basis-[31%] truncate">{item.phone}</div>
+                            <div className="basis-[48%] truncate">
+                              {`${item.address}، پلاک${item.plaque}، طبقه${item.stage}، واحد${item.unity}`}
                             </div>
                           </div>
-                          <div className="float-left flex ">
+                          <div className="justify-end   flex basis-1/3 ">
                             <div>
                               <MdDelete className="text-xl text-[red] mx-2 cursor-pointer" onClick={()=>{
                                 fetch(`https://mohaddesepkz.pythonanywhere.com/address/delete/${item.id}/`,{
@@ -228,8 +251,13 @@ useEffect(()=>{
                               dispatch(MethodSenderAddress_details("طبقه**"+item.stage));
                               dispatch(MethodSenderAddress_details("واحد**"+item.unity));
                               dispatch(MethodSenderMobile(item.phone));
-                              router.push("/order/address")
-                            }} className="bg-utils-300 text-txcolor px-3 py-1 rounded-sm mx-4">
+                              if(MethodFlagHandler(dataorder)){
+
+                                router.push("/order/address")
+                              }else{
+                                setRequstOrder_sender(true)
+                              }
+                            }} className="bg-utils-300 text-txcolor w-[60px] h-[30px] rounded-sm mx-4">
                               انتخاب
                             </button>
                           </div>

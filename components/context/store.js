@@ -11,25 +11,31 @@ console.log("🚀 ~ file: store.js:10 ~ ThemeContextProvider ~ userdata:", userd
 const [islogin,setIslogin]=useState(false)
 const [isloading,setIsloading]=useState(true)
 const isCookie=getCookie('access_token')
+const [flagghange,setFlagchange]=useState(true)
 useEffect(()=>{
-    fetch("https://mohaddesepkz.pythonanywhere.com/users/verify/",{
-        headers:{Authorization:`Bearer ${isCookie}`}
-    }).then(res=>{
-        if(!res.ok){
-            setIsloading(false)
-            throw new Error("Token validation failed");
-          }else{
-            setIsloading(false)
-            setIslogin(true)
-            return res.json();
-          }
-    }).then(res=>{setUserdata(res)}).catch(error=>console.error(error));
-},[islogin,isCookie])
+    try {
+        fetch("https://mohaddesepkz.pythonanywhere.com/users/verify/",{
+            headers:{Authorization:`Bearer ${isCookie}`}
+        }).then(res=>{
+            if(!res.ok){
+                setIsloading(false)
+                return null;
+              }else{
+                setIsloading(false)
+                setIslogin(true)
+                return res.json();
+              }
+        }).then(res=>setUserdata(res)).catch(error=>console.error(error));
+      } catch (error) {
+        console.error(error);
+      }
+   
+},[islogin,isCookie,flagghange])
   
 
 
     return (
-        <ThemeContext.Provider value={{userdata,islogin,setIslogin,isloading}}>
+        <ThemeContext.Provider value={{userdata,islogin,setIslogin,isloading,setFlagchange}}>
             {children}
         </ThemeContext.Provider>
     )

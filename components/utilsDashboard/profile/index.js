@@ -1,15 +1,72 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPhone } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { getCookie } from "cookies-next";
 import swal from "sweetalert";
-
+import { useThemeContext } from "../../context/store";
+import { GrOrganization } from "react-icons/gr";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const index = ({ realdata,data }) => {
-  const [toggle, setToggle] = useState(true);
+import AgentProfile from "./agentProfile";
+const index = () => {
+  const [agentdata,setAgentdata]=useState([])
+const [realdata,setRealdata]=useState([]);
+  const [profile, setProfile] = useState({
+    flag:false,
+    Fristname:"",
+    Lastname:"",
+    codemeli:"",
+    mobile:"",
+    address:"",
+  });
+  useEffect(()=>{
+    try {
+      fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("access_token")}`,
+      },
+    }).then(res=>res.json()).then(res=>{
+      if(res.length){
+        return(
+          setProfile({
+           flag:true,
+           Fristname:res[0].first_name,
+           Lastname:res[0].last_name,
+           codemeli:res[0].national_code,
+           mobile:res[0].phone_number,
+           address:res[0].address,
+         })) 
+      }else{
+        setProfile({
+          flag:false,
+         ...profile
+        })
+      }
+    }
+    ).catch(err=>console.log("realdata",err))
+    } catch (error) {
+      console.error(error);
+    }
+    
+// legal profile
+try {
+  fetch("https://mohaddesepkz.pythonanywhere.com/profile/legal/",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("access_token")}`,
+      },
+    }).then(res=>res.json()).then(res=>setAgentdata(res)).catch(err=>console.log("agentdata",err))
+} catch (error) {
+  console.error(error);
+}
+  },[])
+  const { setIslogin, userdata, setFlagchange } = useThemeContext();
+  const [toggle, setToggle] = useState([1, 0, 0]);
   const [errorpass, setErrorpass] = useState({
     oldpass: "",
     newpass: "",
@@ -19,22 +76,15 @@ const index = ({ realdata,data }) => {
     mobile: "",
   });
   // check user complate profile:start
-  
-  const [profile, setProfile] = useState({
-    Fristname:realdata.length?realdata[0].first_name:"",
-    Lastname:realdata.length?realdata[0].last_name:"",
-    codemeli: realdata.length?realdata[0].national_code:"",
-    mobile:realdata.length?realdata[0].phone_number:"",
-    address: realdata.length?realdata[0].address:"",
-  });
+
+ 
+  console.log("🚀 ~ index ~ profile:", profile)
   // check user complate profile:end
-  console.log("🚀 ~ file: index.js:15 ~ index ~ profile:", profile);
   const [password, setPassword] = useState({
     Oldpassword: "",
     Newpassword: "",
     Repeatpassword: "",
   });
-  console.log("🚀 ~ file: index.js:21 ~ index ~ password:", password);
   const Passhandler = (event) => {
     setPassword({
       ...password,
@@ -48,7 +98,7 @@ const index = ({ realdata,data }) => {
       [event.target.name]: event.target.value,
     });
   };
-// start password
+  // start password
   const Submit_PassHandler = (event) => {
     event.preventDefault();
     if (
@@ -104,12 +154,13 @@ const index = ({ realdata,data }) => {
               newpass: "",
               newpass_repeat: "",
             });
+            setFlagchange((prev) => !prev);
           }
 
           return response.json();
         })
         .then((res) => {
-          console.log(res);
+          res;
         })
         .catch((error) => {
           console.log(error);
@@ -117,10 +168,9 @@ const index = ({ realdata,data }) => {
     }
   };
 
-// end password
+  // end password
 
-
-// statr person real
+  // statr person real
   const notify = () => {
     toast.error("لطفا تمام فیلد ها را پر کنید", {
       position: "top-center",
@@ -142,147 +192,106 @@ const index = ({ realdata,data }) => {
       profile.mobile &&
       profile.address
     ) {
-      if (!(/^0[0-9]{10}$/.test(profile.mobile))) {
+      if (!/^0[0-9]{10}$/.test(profile.mobile)) {
         setErrorPerson({
           mobile: "شماره موبایل وارد شده معتبر نیست!",
         });
-      }else{
-        if(realdata.length){
+      } else {
+        if (profile.flag) {
           fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/edit/", {
             method: "PATCH",
             body: JSON.stringify({
-             
               address: profile.address,
-              national_code:profile.codemeli,
+              national_code: profile.codemeli,
               first_name: profile.Fristname,
               last_name: profile.Lastname,
-              phone_number: profile.mobile
+              phone_number: profile.mobile,
             }),
-            headers: { 
+            headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${getCookie("access_token")}`
+              Authorization: `Bearer ${getCookie("access_token")}`,
             },
           })
             .then((res) => {
-              if (!res.ok) {       
-                  return null
-                } else {
-                  return res.json();
-                }
+              if (!res.ok) {
+                return null;
+              } else {
+                return res.json();
+              }
             })
-            .then((res) =>{
-             if(res){
-              swal({
-                text: "مشخصات شما با موفقیت تغییر پیدا کرد",
-                icon: "success",
-              });
-             }else{
-              swal({
-                text: "ویرایش موفقیت آمیز نبود!",
-                icon: "error",
-              });
-             }
-              setErrorPerson({
-                mobile:"",
-              });
-              console.log(res)
-            } )
-            .catch((error) =>{
-              console.log("error",error);
-            });
-        }
-        else{
-
-          fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/new/", {
-            method: "POST",
-            body: JSON.stringify({
-             
-              address: profile.address,
-              national_code:profile.codemeli,
-              first_name: profile.Fristname,
-              last_name: profile.Lastname,
-              phone_number: profile.mobile
-            }),
-            headers: { 
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${getCookie("access_token")}`
-            },
-          })
             .then((res) => {
-              if (!res.ok) {       
-                  return null
-                } else {
-                  return res.json();
-                }
-            })
-            .then((res) =>{
-              if(res){
+              if (res) {
                 swal({
-                  text: "مشخصات شما با موفقیت ثبت شد",
+                  text: "مشخصات شما با موفقیت تغییر پیدا کرد",
                   icon: "success",
                 });
-
-              }else{
+                setFlagchange((prev) => !prev);
+              } else {
                 swal({
-                  text: "خطایی رخ داده است!",
+                  text: "ویرایش موفقیت آمیز نبود!",
                   icon: "error",
                 });
               }
               setErrorPerson({
-                mobile:"",
+                mobile: "",
               });
-              console.log(res)
-            } )
-            .catch((error) =>{
-              console.log("error",error);
+            })
+            .catch((error) => {
+              console.log("error", error);
+            });
+        } else {
+          fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/new/", {
+            method: "POST",
+            body: JSON.stringify({
+              address: profile.address,
+              national_code: profile.codemeli,
+              first_name: profile.Fristname,
+              last_name: profile.Lastname,
+              phone_number: profile.mobile,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getCookie("access_token")}`,
+            },
+          })
+            .then((res) => {
+              if (!res.ok) {
+                return null;
+              } else {
+                return res.json();
+              }
+            })
+            .then((res) => {
+              if (res) {
+                swal({
+                  text: "مشخصات شما با موفقیت ثبت شد",
+                  icon: "success",
+                });
+                setFlagchange((prev) => !prev);
+              } else {
+                swal({
+                  text: "لطفا اطلاعات را به درستی وارد کنید!",
+                  icon: "error",
+                });
+              }
+              setErrorPerson({
+                mobile: "",
+              });
+            })
+            .catch((error) => {
+              console.log("error", error);
             });
         }
-        }
+      }
     } else {
       notify();
     }
   };
-// end person real
+  // end person real
 
-
-
-  return (
-    <>
-      {/* start:change preofile */}
-      <div className="w-1/3 ml-10 bg-txcolor h-[200px] rounded-lg py-3">
-        <div className="mr-6 mb-2 p-2">
-          <span className=" mb-3 font-bold text-bgcolor">نام کاربری</span>
-          <span className=" border-solid border-2 border-utils-300 px-2 py-1 mr-10">
-            {data.username}
-          </span>
-        </div>
-        <hr className="w-[95%] mx-auto my-3" />
-        <div>
-          {/* مشخصات شخصی */}
-          <div className="my-2">
-            <FaUser className="text-bgcolor inline pr-2 text-3xl" />
-            <button
-              onClick={() => setToggle(true)}
-              className={`${toggle ? "text-bgcolor font-bold" : ""} px-4`}
-            >
-              مشخصات شخصی
-            </button>
-          </div>
-          {/* تغییر رمز عبور */}
-          <div className="my-2">
-            <RiLockPasswordFill className="text-bgcolor inline pr-2 text-3xl" />
-            <button
-              onClick={() => setToggle(false)}
-              className={`${!toggle ? "text-bgcolor font-bold" : ""} px-4`}
-            >
-              تغییر رمز عبور
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* end:change preofile */}
-      {/* start:form */}
-      {toggle ? (
+  const MethodHandler = (taggle) => {
+    if (taggle[0]) {
+      return (
         <div className="w-2/5 bg-txcolor py-3 rounded-lg">
           <div className="flex justify-between">
             <div className="p-2 mb-2 mr-4">
@@ -361,7 +370,9 @@ const index = ({ realdata,data }) => {
                 value={profile.mobile}
                 onChange={(event) => Mhandler(event)}
               />
-              <span className="text-[red]">{errorPerson.mobile ? `${errorPerson.mobile}` : ""}</span>
+              <span className="text-[red]">
+                {errorPerson.mobile ? `${errorPerson.mobile}` : ""}
+              </span>
             </div>
             {/* Address */}
             <div className=" mb-4 relative">
@@ -382,11 +393,15 @@ const index = ({ realdata,data }) => {
               type="submit"
               className="px-2 py-3 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 bg-bgcolor text-txcolor"
             >
-      {realdata.length?"ویرایش اطلاعات":"ثبت اطلاعات"}
+              {profile.flag?"ویرایش اطلاعات": "ثبت اطلاعات"}
             </button>
           </form>
         </div>
-      ) : (
+      );
+    } else if (taggle[1]) {
+      return <AgentProfile agentdata={agentdata}/>;
+    } else {
+      return (
         <div className="w-2/5 bg-txcolor py-3 rounded-lg">
           <form
             action=""
@@ -447,7 +462,59 @@ const index = ({ realdata,data }) => {
             </button>
           </form>
         </div>
-      )}
+      );
+    }
+  };
+
+  return (
+    <>
+      {/* start:change preofile */}
+      <div className="w-1/3 ml-10 bg-txcolor h-[300px] rounded-lg py-3">
+        <div className="mr-6 mb-2 p-2">
+          <span className=" mb-3 font-bold text-bgcolor">نام کاربری</span>
+          <span className="text-txcolor bg-bgcolor px-2 py-2 rounded mr-10">
+            {userdata&&userdata.username}
+          </span>
+        </div>
+        {userdata&&(userdata.company_name||userdata.first_name)?"":<span className="my-2 bg-red-400 p-2 rounded inline-block">لطفا مشخصات شخصی یا سازمانی خود را تکمیل کنید</span>}
+        
+        <hr className="w-[95%] mx-auto my-3" />
+        <div>
+          {/* مشخصات شخصی */}
+          <div className="my-2">
+            <FaUser className="text-utils-300 inline pr-2 text-2xl" />
+            <button
+              onClick={() => setToggle([1, 0, 0])}
+              className={`${toggle[0] ? "text-bgcolor font-bold" : ""} px-4`}
+            >
+              اطلاعات حقیقی
+            </button>
+          </div>
+          {/* مشخصات حقوقی */}
+          <div className="my-2">
+            <GrOrganization className="text-utils-300 inline pr-2 text-2xl" />
+            <button
+              onClick={() => setToggle([0, 1, 0])}
+              className={`${toggle[1] ? "text-bgcolor font-bold" : ""} px-4`}
+            >
+              اطلاعات حقوقی
+            </button>
+          </div>
+          {/* تغییر رمز عبور */}
+          <div className="my-2">
+            <RiLockPasswordFill className="text-utils-300 inline pr-2 text-2xl" />
+            <button
+              onClick={() => setToggle([0, 0, 1])}
+              className={`${toggle[2] ? "text-bgcolor font-bold" : ""} px-4`}
+            >
+              تغییر رمز عبور
+            </button>
+          </div>
+        </div>
+      </div>
+      {/* end:change preofile */}
+      {/* start:form */}
+      {MethodHandler(toggle)}
       <ToastContainer />
       {/* end:form */}
     </>

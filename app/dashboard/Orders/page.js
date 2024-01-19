@@ -26,7 +26,7 @@ const page =async () => {
   }
   return (
     <div>
-      <Navbar data={data} />
+      <Navbar />
       <div className="grid grid-cols-12">
         <div className="col-start-1 col-end-2">
           <Sidbar />

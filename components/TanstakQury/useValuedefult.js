@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import getUrl from "../utilsFunction/getUrl";
 const Valuedefult = () => {
   const Valuedefult = useQuery({
     queryKey: ["Valuedefult"],

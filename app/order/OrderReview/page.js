@@ -21,7 +21,7 @@ const page = async() => {
       {/* start nav */}
       <Navbar/>
       {/* end nav */}
-      <Main data={data}/>
+      <Main/>
     </>
   )
 }

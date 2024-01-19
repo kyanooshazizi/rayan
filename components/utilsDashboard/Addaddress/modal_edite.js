@@ -4,18 +4,19 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDis
 import { FaEdit } from "react-icons/fa";
 import { getCookie } from "cookies-next";
 import swal from "sweetalert";
+import {Validate} from "./validate";
 export default function App({type,data,toggleresiver}) {
   const {isOpen, onOpen, onClose} = useDisclosure();
 const [address,setAddress]=useState({
   sender:false,
     name:data.name,
+    // Business:data.Business,
     address:data.address,
     plaque:data.plaque,
     stage:data.stage,
     unity:data.unity,
     phone:data.phone
 })
-console.log("🚀 ~ file: modal_edite.js:18 ~ App ~ address:", address)
 const ChangeHandler=(event)=>{
   setAddress(prev=>({
       ...prev,
@@ -24,33 +25,40 @@ const ChangeHandler=(event)=>{
   }
 const SubHandler=(event)=>{
   event.preventDefault();
-   fetch(`https://mohaddesepkz.pythonanywhere.com/address/edit/${data.id}/`,{
-        method:"PUT",
-            body: JSON.stringify({
-              ...address
-            }),
-            headers: {
-              Authorization: `Bearer ${getCookie("access_token")}`,
-              "Content-type": "application/json; charset=UTF-8",
-            },
-      }).then(res=>{
-        if(!res.ok){
-          swal({
-            text: "آدرس ویرایش نشد!",
-            icon: "error",
-          });
-          return null
-        }else{
-        return  res.json();
-        }
-      })
-      .then(res=>{
-        console.log(res);
-        toggleresiver();
-      }).catch(err=>{
-       console.log("🚀 ~ file: modal_edite.js:47 ~ .then ~ err:", err)   
-      }
-        )  
+  if(!Validate(address.phone)){
+
+    fetch(`https://mohaddesepkz.pythonanywhere.com/address/edit/${data.id}/`,{
+         method:"PUT",
+             body: JSON.stringify({
+               ...address
+             }),
+             headers: {
+               Authorization: `Bearer ${getCookie("access_token")}`,
+               "Content-type": "application/json; charset=UTF-8",
+             },
+       }).then(res=>{
+         if(!res.ok){
+           swal({
+             text: "آدرس ویرایش نشد!",
+             icon: "error",
+           });
+           return null
+         }else{
+         return  res.json();
+         }
+       })
+       .then(res=>{
+         toggleresiver();
+       }).catch(err=>{
+        console.log("🚀 ~ file: modal_edite.js:47 ~ .then ~ err:", err)   
+       }
+         )  
+  }else{
+    swal({
+      text: `لطفا تمام فیلد ها را پر کنید و شماره تماس معتبر وارد کنید!`,
+      icon: "error",
+    });
+  }
 }
 
   return (
@@ -62,7 +70,7 @@ const SubHandler=(event)=>{
         
       </div>
       <Modal 
-        size={"xl"} 
+        size={"lg"} 
         isOpen={isOpen} 
         onClose={onClose} 
       >
@@ -79,8 +87,20 @@ const SubHandler=(event)=>{
                   type="text"
                   name="name"
                   id="name"
-                  className="bg-[#F4F3F3] block rounded  px-2 py-3 w-[90%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
+                  className="bg-[#F4F3F3] block rounded  px-2 py-3 w-[95%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
                   placeholder="کیانوش عزیزی"
+                />
+              </div>
+              <div className="mr-4 mt-4">
+                <label htmlFor="Business">عنوان کسب و کار</label>
+                <input
+                  value={address.Business}
+                  onChange={(event) => ChangeHandler(event)}
+                  type="text"
+                  name="Business"
+                  id="Business"
+                  className="bg-[#F4F3F3] block rounded  px-2 py-3 w-[95%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
+                  placeholder=""
                 />
               </div>
               <div className="mr-4 mt-4">
@@ -92,7 +112,7 @@ const SubHandler=(event)=>{
                   type="text"
                   name="address"
                   id="address"
-                  className="bg-[#F4F3F3] block rounded  px-2 py-3 w-[90%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
+                  className="bg-[#F4F3F3] block rounded  px-2 py-3 w-[95%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
                 />
               </div>
                {/* پلاک ،واحد و طبقه */}
@@ -101,7 +121,7 @@ const SubHandler=(event)=>{
                 <label htmlFor="plaque">پلاک</label>
                 <input
                   value={address.plaque}
-                  type="text"
+                  type="number"
                   name="plaque"
                   id="plaque"
                   className="bg-[#F4F3F3] block rounded  px-2 py-2 w-[40%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
@@ -112,7 +132,7 @@ const SubHandler=(event)=>{
                 <label htmlFor="stage">طبقه</label>
                 <input
                   value={address.stage}
-                  type="text"
+                  type="number"
                   name="stage"
                   id="stage"
                   className="bg-[#F4F3F3] block rounded  px-2 py-2 w-[40%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
@@ -123,7 +143,7 @@ const SubHandler=(event)=>{
                 <label htmlFor="unity">واحد</label>
                 <input
                   value={address.unity}
-                  type="text"
+                  type="number"
                   name="unity"
                   id="unity"
                   className="bg-[#F4F3F3] block rounded  px-2 py-2 w-[40%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
@@ -140,7 +160,7 @@ const SubHandler=(event)=>{
                   type="number"
                   name="phone"
                   id="phone"
-                  className="bg-[#F4F3F3] block rounded  px-2 py-3 w-[90%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
+                  className="bg-[#F4F3F3] block rounded  px-2 py-3 w-[95%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
                 />
               </div>
               <div className="flex justify-around">

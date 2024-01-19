@@ -21,10 +21,9 @@ import usecity_servise from "@/components/TanstakQury/useCity_servise";
 import Datapicker from "@/components/utilsorder/Datapicker";
 const Package = () => {
   const {datacity, dataservise}=usecity_servise()
-  // console.log(datacity.data,dataservise.data)
+ 
   const dispatch = useDispatch();
   const dataorder = useSelector((state) => state.order.order);
-  console.log(dataorder)
   const [getprice, setGetprice] = useState("");
   const [isshow, setIsshow] = useState("");
   const content_value=useValuedefult();
@@ -44,7 +43,7 @@ const Package = () => {
       theme: "light",
     });
 
-  // console.log(dataorder);
+
 // const {data,isPending}=useMutation({mutationFn:})
   // send requst for back:end
   useEffect(() => {
@@ -72,7 +71,7 @@ const Package = () => {
         })
           .then((response) => response.json())
           .then((res) => {
-            console.log("hhhhhhhhh",res);
+          
             setGetprice(res);
             setIsshow(new Array([...res].length).fill(0));
           })
@@ -309,7 +308,7 @@ const Package = () => {
                             className="w-1/2 border-solid border-2 py-2 px-3 rounded-tl-md rounded-bl-md outline-0 text-black absolute right-[193px] bottom-2 cursor-pointer"
                             onClick={(event) => {
                               const item1=content_value.data.Value_data.find((item)=>item.min_value==event.target.value.split("-")[0])
-                              console.log("ddd",item1)
+                            
                                 return(
                                   dispatch(MethodInsurance_value(`${event.target.value}*${item1.id}`))
                                 )

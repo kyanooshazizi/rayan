@@ -17,7 +17,6 @@ const index = () => {
   const router=useRouter();
   const dispatch = useDispatch();
   const dataAddress = useSelector((state) => state.order.address);
-  console.log(dataAddress);
 
   return (
     <>

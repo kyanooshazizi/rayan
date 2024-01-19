@@ -25,13 +25,12 @@ const Sidbar = () => {
   const datastore = useSelector((state) => state.order.order);
   const [urldata, setUrldata] = useState("");
   const [delorder,setDelorder]=useState("")
-console.log(delorder)
 // start: send data order
 const dataAddress = useSelector((state) => state.order.address);
-// console.log(dataAddress, dataOrder, dataOrder.pickup_date);
+
 const size_order = datastore.id.size.filter((item) => item !== "");
 const count_order = datastore.id.count.filter((item) => item !== 0);
-// console.log(size_order,count_order)
+
 var faToEnDigits = function (input) {
   if (input == undefined) return;
   var returnModel = "",
@@ -177,7 +176,7 @@ hover:text-navbarrequst transition-all transition-500 ease-linear ${
                 }`}
                 onClick={() => {
                   if (MethodFlagHandler(datastore)) {
-                    if(islogin){
+                    if(getCookie('access_token')){
                        
                       router.push("/order/address");
                     }else{
@@ -252,7 +251,7 @@ hover:text-navbarrequst transition-all transition-500 ease-linear ${
                     })
                       .then((res) => res.json())
                       .then((res) =>{
-                        // console.log(res);
+                        
                         setCookie('code', res.tracking_code);
                       })
                       

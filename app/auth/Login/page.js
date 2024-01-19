@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { MethodFlagHandler } from "@/components/utilsorder/utils/MethodFlagHandler";
 import { useSelector } from "react-redux";
 import { useThemeContext } from "@/components/context/store";
-import error from "app/error";
+import { AiFillHome } from "react-icons/ai";
 const login = () => {
   const { setIslogin,islogin } = useThemeContext();
   const router = useRouter();
@@ -42,8 +42,6 @@ const login = () => {
     if (res.token) {
       setCookie("access_token", res.token.access,{maxAge:60*60*24*10 });
       setIslogin(true);
-      console.log(res)
-      router.push("/");
     } else {
       notify("warn", "نام کاربری یا رمز عبور اشتباه است!");
     }
@@ -92,17 +90,25 @@ const login = () => {
    
   }
   if(islogin){
-    router.push("/");
+    if(MethodFlagHandler(datastore)){
+      router.push("/order/address");
+    }else{
+
+      router.push("/");
+    }
     
   }
 
   return (
     <>
      <div className="flex justify-center">
-     <div className="md:w-1/2 lg:w-[430px] w-[92%] sm:w-[80%] relative bg-transparent">
+     <div className="md:w-2/3 lg:w-1/3 w-[92%] sm:w-[80%] relative bg-transparent">
         <div className="absolute w-full top-0 rounded-xl shadow-[0_2px_5px_rgba(0,0,0,0.4)] backdrop-blur-5 p-5 mt-[100px]">
+          <Link href="/">
+            <div className=" my-3 text-[blue] text-2xl" > <AiFillHome className="inline ml-2" />صفحه اصلی </div>
+          </Link>
           <p className="text-center md:text-xl sm:text-lg text-sm font-bold bg-bgcolor text-white py-4 rounded-md">
-             ورود
+             ورود به سایت
           </p>
           <form action="" className="mt-5" onSubmit={formHandler}>
             <div className="relative">
@@ -137,9 +143,15 @@ const login = () => {
             </p>
             <hr className="my-2"/>
           </form>
-            {/* <Link href="/auth/login/email"> 
-             <span className=" mr-8 text-utils-300 font-bold">ورود با ایمیل</span>  
-            </Link> */}
+           <div className="flex justify-between my-3">
+           <Link href="/auth/login/email"> 
+             <span className=" mr-8 text-[blue] ">ورود با ایمیل</span>  
+            </Link>
+            <Link href="/auth/ForgetPassword"> 
+             <span className=" mr-8 text-[red] ">فراموشی رمز عبور</span>  
+            </Link>
+           </div>
+         
         </div>
         <ToastContainer />
       </div>

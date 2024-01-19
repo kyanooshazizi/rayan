@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import axios from "axios";
 import { setCookie } from "cookies-next";
 import React, { useState, useEffect, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 // icon
 import { FaUserAlt } from "react-icons/fa";
-
+import { AiFillHome } from "react-icons/ai";
 import { Validate } from "./Validate";
 import { IoEyeSharp } from "react-icons/io5";
 import { BsEyeSlashFill } from "react-icons/bs";
@@ -38,12 +37,8 @@ const Register = () => {
     if (res.token) {
       setCookie("access_token", res.token.access,{maxAge:60*60*24*10 });
       setIslogin(true)
-      if (MethodFlagHandler(datastore)) {
-        router.push("/order/address");
-      } else {
-        router.push("/");
-      }
       notify("success", "ثبت نام با موفقیت انجام شد");
+
     } else if(res.phone||res.email) {
       notify("warn", "کاربری با این اطلاعات وجود دارد");
     }else if(res.non_field_errors){
@@ -69,12 +64,12 @@ const Register = () => {
         .then((res) => {
             return res.json();
         })
-        .then((res) => {
-          CheckRegister(res)})
+        .then((res) =>CheckRegister(res))
         .catch((error) => {
           notify("warn", "خطایی رخ داده است");
           console.error(error)});
       setFlagPost(false);
+
     }
   }, [data, flagPost]);
 
@@ -137,15 +132,23 @@ const Register = () => {
   };
   // end:color outline handler
   if(islogin){
-    router.push("/");
+    if(MethodFlagHandler(datastore)){
+      router.push("/order/address");
+    }else{
+
+      router.push("/");
+    }
     
   }
 
   return (
     <>
       <div className="flex justify-center">
-        <div className="md:w-1/2 lg:w-[430px] w-[92%] sm:w-[80%] relative bg-transparent">
+        <div className="md:w-1/2 lg:w-1/3 w-[92%] sm:w-[80%] relative bg-transparent">
           <div className="absolute w-full top-0 rounded-xl shadow-[0_2px_5px_rgba(0,0,0,0.4)] backdrop-blur-5 p-5 mt-[100px]">
+          <Link href="/">
+            <div className=" my-3 text-[blue] text-2xl" > <AiFillHome className="inline ml-2" />صفحه اصلی </div>
+          </Link>
             <p className="text-center md:text-xl sm:text-lg text-sm font-bold bg-bgcolor text-white py-4 rounded-md">
               عضویت
             </p>
@@ -239,7 +242,7 @@ const Register = () => {
                 type="submit"
                 className="text-center font-bold bg-bgcolor text-white py-3 rounded-md inline-block w-1/3 mt-6 mr-5"
               >
-                ادامه
+                ثبت نام
               </button>
               <p className="inline mr-2">
                 قبلا ثبت نام کرده اید؟{" "}

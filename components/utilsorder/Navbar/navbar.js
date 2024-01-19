@@ -14,12 +14,16 @@ import { TbLogout } from "react-icons/tb";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
 import { FaHome } from "react-icons/fa";
- const Navbar = () => {
+import {getPersianDate} from "../utils/ShowTime";
+import { AiFillCaretDown } from "react-icons/ai";
+import { FaRegClock } from "react-icons/fa";
+import Clock from 'react-live-clock';
+const Navbar = () => {
   const router=useRouter()
-  const { islogin,isloading,setIslogin} = useThemeContext();
+  const { islogin,isloading,setIslogin,userdata} = useThemeContext();
   const pathname = usePathname()
   const [urldata,setUrldata]=useState("");
-  const [flagnav,setFlagnav]=useState({freqest:false,faddress:false})
+  const [flagnav,setFlagnav]=useState({freqest:false,faddress:false,freviow:false})
   useEffect(() => {
     const url = `${pathname}`;
     setUrldata(()=>{
@@ -39,7 +43,6 @@ import { FaHome } from "react-icons/fa";
       }
     }
     );
-    console.log(urldata,flagnav);
   }, [pathname])
   return (
     <div>
@@ -61,15 +64,17 @@ import { FaHome } from "react-icons/fa";
           <li className="inline-block p-2">پرداخت <FaAngleLeft className="inline-block" /></li>
           <li className="inline-block p-2">نهایی سازی سفارش</li>
         </ul>
-      
+      {/* start:clock */}
+      <span className="ml-10 mt-2 px-3 py-2 rounded-sm  w-[270px] h-[40px] bg-[#EA0034] text-white"><FaRegClock className='inline-block ml-2' />{getPersianDate()} -<Clock className='mr-2' format={'HH:mm:ss'} ticking={true}/></span>
+      {/* end:clock */}
         <div className='flex justify-between'>
-        
-        {isloading?<Skeleton className="h-10 w-16 ml-4 mt-2 rounded-md"/>:(islogin? 
-            <Dropdown>
+        {isloading?<Skeleton className="h-10 w-16 ml-4 mt-2 rounded-md"/>:(islogin?<Dropdown>
         <DropdownTrigger>
-        <div  className="font-bold  md:text-base cursor-pointer ml-8 mt-3">
+      {userdata&&userdata.flag?  <div  className="font-bold  md:text-base cursor-pointer ml-4 mt-2 bg-utils-300 text-txcolor px-3 py-1 rounded h-[40px] ">
+         {`${userdata.first_name||userdata.company_name} ${userdata.last_name}`} <AiFillCaretDown className='inline-block' />
+        </div>:<div  className="font-bold  md:text-base cursor-pointer ml-8 mt-3">
           <FaUserAlt className="text-utils-300 text-2xl " />
-        </div>
+        </div>}
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions" className="">
           <DropdownItem>
@@ -92,7 +97,7 @@ import { FaHome } from "react-icons/fa";
          
           </DropdownItem> 
         </DropdownMenu>
-      </Dropdown>:
+      </Dropdown>: 
         <Link href="/auth/login">
        <button className="p-2 bg-utils-300 text-txcolor shadow-[-4px_3px_5px_1px_#utils-300] rounded-md hover:bg-utils-300 hover:transition-all hover:duration-300 font-bold flex text-md md:text-base mt-2 ml-4">
           <span> ورود </span>

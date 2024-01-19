@@ -25,14 +25,12 @@ import stylecard from  "../../../../style/card.module.css";
 const Package = () => {
   const dispatch = useDispatch();
   const dataorder = useSelector((state) => state.order.order);
-  console.log(dataorder)
   const [getprice, setGetprice] = useState("");
   const [isshow, setIsshow] = useState("");
  
   const content_value=useValuedefult();
-  // console.log(content_value.data)
+
   const {datacity, dataservise}=usecity_servise()
-// console.log(datacity.data,dataservise.data)
   
 
   let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.package.packB.number}+${dataorder.package.packM.number}+${dataorder.package.packS.number}`;
@@ -76,7 +74,7 @@ const Package = () => {
     
         // Log FormData key-value pairs
         formData.forEach((value, key) => {
-          console.log(key, value,typeof(value));
+         
         });
     
         try {
@@ -86,7 +84,7 @@ const Package = () => {
           })
             .then((response) => response.json())
             .then((res) => {
-              console.log(res);
+            
               setGetprice(res);
               setIsshow(new Array([...res].length).fill(0));
             })
@@ -347,7 +345,7 @@ const Package = () => {
                         <select className="w-2/5  py-3 px-4 rounded-l-md  outline-none inline-block text-black cursor-pointer text-sm"
                         onClick={(event)=>{ 
                           const item=content_value.data.Content_data.find((item)=>item.title===event.target.value)
-                          // console.log("fff",item)
+                          
                           return(
                             dispatch(MethodInsurance_content(`${event.target.value}*${item.id}`))
                           )
@@ -368,7 +366,7 @@ const Package = () => {
                         <select className="border-solid text-black  py-3 px-4 rounded-l-md  outline-none w-3/5 text-sm cursor-pointer"
                           onClick={(event)=>{
                             const item1=content_value.data.Value_data.find((item)=>item.min_value==event.target.value.split("-")[0])
-                          // console.log("ddd",item1)
+                          
                             return(
                               dispatch(MethodInsurance_value(`${event.target.value}*${item1.id}`))
                             )

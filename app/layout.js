@@ -2,7 +2,6 @@
 import Nextui from "@/components/nextui/nextprovider";
 import QeuryProvider from "@/components/TanstakQury/Quryprovider";
 import "./globals.css";
-
 // redux
 import { Providers } from "@/components/Redux/provider";
 import { ThemeContextProvider } from "@/components/context/store";
@@ -22,7 +21,9 @@ export default function RootLayout({ children }) {
         <Nextui>
           <QeuryProvider>
             <ThemeContextProvider>
-              <Providers>{children}</Providers>
+              <Providers>
+                {children}
+                </Providers>
             </ThemeContextProvider>
           </QeuryProvider>
         </Nextui>

@@ -13,12 +13,13 @@ import { TbLogout } from "react-icons/tb";
 import {deleteCookie } from 'cookies-next';
 import React from "react";
 import {Skeleton} from "@nextui-org/react";
+import { AiFillCaretDown } from "react-icons/ai";
 // nav mobile
 import Nav_mobile from "../navbar_mobile";
 import { useThemeContext } from '../../context/store';
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 const Resnav = () => {
-  const { username, islogin,setIslogin,isloading} = useThemeContext();
+  const { username, islogin,setIslogin,isloading,userdata} = useThemeContext();
   const [iconstate, setIconstate] = useState("true");
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
   const Navmobile = () => {
@@ -79,18 +80,16 @@ const Resnav = () => {
             </ul>
           </div>
         </div>
-        {isloading?<Skeleton className="h-12 w-32 ml-3 rounded-md"/> :(islogin?
-        
-        <Dropdown>
+        {isloading?<Skeleton className="h-12 w-32 ml-3 rounded-md"/> :(islogin?<Dropdown>
         <DropdownTrigger>
-        <div  className="group p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-full hover:bg-txcolor hover:transition-all hover:duration-300 font-bold  md:text-base cursor-pointer ml-10 ">
+          {userdata&&userdata.flag? <div className="ml-6 text-base border-1 border-utils-300 py-2 px-3 border-solid rounded-sm hover:text-bgcolor hover:bg-white cursor-pointer transition-all">{`${userdata.first_name||userdata.company_name} ${userdata.last_name}`} <AiFillCaretDown className="inline-block "/></div>:<div  className="group p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-full hover:bg-txcolor hover:transition-all duration-500 hover:duration-300 font-bold  md:text-base cursor-pointer ml-10 ">
           <FaUserAlt className="text-txcolor group-hover:text-utils-300 text-2xl " />
-        </div>
+        </div>}
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions" className="">
-          <DropdownItem className="py-5 ">
+          <DropdownItem >
           <Link href="/dashboard">
-            <div className="text-bgcolor ">
+            <div className="text-bgcolor py-4 ">
               <span className="pr-2"><FaUserAlt className="inline text-md ml-3 text-bgcolor"/>مشاهده حساب کاربری</span>
               <MdOutlineKeyboardDoubleArrowLeft  className="inline mr-4 font-bold text-lg"/>
             </div>
@@ -105,9 +104,7 @@ const Resnav = () => {
          
           </DropdownItem>
         </DropdownMenu>
-      </Dropdown>
-        
-        :<div className="p-3">       
+      </Dropdown>:<div className="p-3">       
             <button className="p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-md hover:bg-utils-300 text-txcolor hover:transition-all hover:duration-300 font-bold flex text-xs md:text-base">
               <span><Link href="/auth/login" className="hover:text-[blue]">ورود</Link>|<Link href="/auth/register" className="hover:text-[blue]">عضویت</Link></span>
               <IoMdLogIn className="text-sm md:text-2xl " />
