@@ -19,7 +19,7 @@ const page = async () => {
   } else {
     redirect("/auth/login");
   }
-  const waletTotal = 50000;
+  const waletTotal=500000;
   return (
     <div>
       <Navbar />

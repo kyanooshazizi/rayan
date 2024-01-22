@@ -46,8 +46,10 @@ const index = () => {
             <span className="text-[18px] font-bold text-[#858d9f] pt-2 inline-block">سفارش جدید</span>
           </Link>
         </div>
-        <div>
-          <Link href="/dashboard/Orders" className="block my-10 mr-5">
+        <div className={`pt-[32px] pr-[24px] pl-[16px]  ${
+           pathflag[2] === "Orders" ? "border-r-[5px] border-solid border-[blue]":""
+          }`}>
+          <Link href="/dashboard/Orders" className="block">
             <span>
               <MdShoppingCart
                 className={`mr-1 text-xl ${
@@ -55,19 +57,25 @@ const index = () => {
                 }`}
               />
             </span>
-            <span>سفارش ها</span>
+            <span className="text-[18px] font-bold text-[#858d9f] pt-2 inline-block">سفارش ها</span>
           </Link>
         </div>
-        <div>
-          <Link href="/" className="block my-10 mr-5">
+
+        <div className={`pt-[32px] pr-[24px] pl-[16px]  ${
+           pathflag[2] === "Orders" ? "border-r-[5px] border-solid border-[blue]":""
+          }`}>
+          <Link href="/" className="block">
             <span>
               <FaWallet className="mr-1" />
             </span>
-            <span>کیف پول</span>
+            <span className="text-[18px] font-bold text-[#858d9f] pt-2 inline-block">کیف پول</span>
           </Link>
         </div>
-        <div>
-          <Link href="/dashboard/Profile" className="block my-10 mr-5 relative">
+
+        <div className={`pt-[32px] pr-[24px] pl-[16px]  ${
+           pathflag[2] === "Profile" ? "border-r-[5px] border-solid border-[blue]":""
+          }`}>
+          <Link href="/dashboard/Profile" className="block">
             <span>
               <FaUserAlt
                 className={`mr-1 text-xl ${
@@ -75,12 +83,14 @@ const index = () => {
                 }`}
               />
             </span>
-            <span>پروفایل</span>
+            <span  className="text-[18px] font-bold text-[#858d9f] pt-2 inline-block">پروفایل</span>
           </Link>
         </div>
 
-        <div>
-          <Link href="/dashboard/Addres" className="block my-10 mr-5">
+        <div className={`pt-[32px] pr-[24px] pl-[16px]  ${
+           pathflag[2] === "Addres" ? "border-r-[5px] border-solid border-[blue]":""
+          }`}>
+          <Link href="/dashboard/Addres" className="block">
             <span>
               <ImAddressBook
                 className={`mr-1 text-xl ${
@@ -88,7 +98,7 @@ const index = () => {
                 }`}
               />
             </span>
-            <span>آدرس ها</span>
+            <span className="text-[18px] font-bold text-[#858d9f] pt-2 inline-block">آدرس ها</span>
           </Link>
         </div>
       </div>

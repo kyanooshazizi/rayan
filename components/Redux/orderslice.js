@@ -49,15 +49,12 @@ ReceiverMobile:"",
 Additional_details:""
 }
 
-  const initialState = {
+const initialState = {
     order:typeof window !== "undefined"?(localStorage.getItem("order")
     ? decryptData("order")
     :detailsOrder):detailsOrder,
    address:typeof window !== "undefined"?(decryptData("address")?JSON.parse(decryptData("address")):detailsAddress):detailsAddress
   };
-
-  
-
 
 export const orderSlice = createSlice({
   name: "order",
@@ -65,7 +62,7 @@ export const orderSlice = createSlice({
   reducers: {
     // start:detais order
     
-    MethodBackHomepage:(state) => {
+MethodBackHomepage:(state) => {
       state.order={...state.order,
       Price: "",
       Insurance: {

@@ -7,7 +7,10 @@ export const getPersianDate = (format) => {
     let month = today.getMonth() + 1;
     let year = today.getYear();
     let y;
-    year = (window.navigator.userAgent.indexOf('MSIE') > 0) ? year : 1900 + year;
+    if (typeof window !== "undefined") {
+        
+        year = (window.navigator.userAgent.indexOf('MSIE') > 0) ? year : 1900 + year;
+      }
     if (year == 0) {
         year = 2000;
     }

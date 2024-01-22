@@ -17,8 +17,15 @@ import { FaHome } from "react-icons/fa";
 import {getPersianDate} from "../utils/ShowTime";
 import { AiFillCaretDown } from "react-icons/ai";
 import { FaRegClock } from "react-icons/fa";
-import Clock from 'react-live-clock';
+import dynamic from 'next/dynamic';
+const Clock = dynamic(() => import('react-live-clock'), { ssr: false })
+
 const Navbar = () => {
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
   const router=useRouter()
   const { islogin,isloading,setIslogin,userdata} = useThemeContext();
   const pathname = usePathname()
@@ -65,7 +72,7 @@ const Navbar = () => {
           <li className="inline-block p-2">نهایی سازی سفارش</li>
         </ul>
       {/* start:clock */}
-      <span className="ml-10 mt-2 px-3 py-2 rounded-sm  w-[270px] h-[40px] bg-[#EA0034] text-white"><FaRegClock className='inline-block ml-2' />{getPersianDate()} -<Clock className='mr-2' format={'HH:mm:ss'} ticking={true}/></span>
+      <time  className="ml-10 mt-2 px-3 py-2 rounded-sm  w-[270px] h-[40px] bg-[#EA0034] text-white"><FaRegClock className='inline-block ml-2' />{isClient?getPersianDate():""} -<Clock className='mr-2' format={'HH:mm:ss'} ticking={true}/></time>
       {/* end:clock */}
         <div className='flex justify-between'>
         {isloading?<Skeleton className="h-10 w-16 ml-4 mt-2 rounded-md"/>:(islogin?<Dropdown>

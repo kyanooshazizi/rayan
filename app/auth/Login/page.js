@@ -147,7 +147,7 @@ const login = () => {
            <Link href="/auth/login/email"> 
              <span className=" mr-8 text-[blue] ">ورود با ایمیل</span>  
             </Link>
-            <Link href="/auth/ForgetPassword"> 
+            <Link href="/auth/register?type=ForgetPassword"> 
              <span className=" mr-8 text-[red] ">فراموشی رمز عبور</span>  
             </Link>
            </div>

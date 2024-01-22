@@ -132,11 +132,11 @@ const Package = () => {
            {/* ثبت سفارش */}
           <div className="flex justify-around mt-8">
            
-            {(dataservise.data[1].size).map((item)=>{
+            {(dataservise.data[1].size).map((item,index)=>{
               switch(item.title){
                 case "بزرگ":
                    {/* start packB */}
-              return <div className="bg-utils-300 w-40 h-36 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
+              return <div key={index} className="bg-utils-300 w-40 h-36 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
               {/* start badge */}
               {dataorder.package.packB.number ? (
                 <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-4 left-[128px]">
@@ -184,7 +184,7 @@ const Package = () => {
             {/* end packB */}
              case "متوسط":
           {/* start packM */}
-          return <div className="bg-utils-300 w-36 h-32 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
+          return <div key={index} className="bg-utils-300 w-36 h-32 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
           {/* start badge */}
           {dataorder.package.packM.number ? (
             <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-4 left-[115px]">
@@ -232,7 +232,7 @@ const Package = () => {
         {/* end packM */}
         case "کوچک":
  {/* start packS */}
- return <div className="bg-utils-300 w-32 h-28 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
+ return <div key={index} className="bg-utils-300 w-32 h-28 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
  {/* start badge */}
  {dataorder.package.packS.number ? (
    <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-5 left-[100px]">

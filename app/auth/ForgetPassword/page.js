@@ -4,21 +4,29 @@ import Link from "next/link";
 import { AiFillHome } from "react-icons/ai";
 import { FaUserAlt } from "react-icons/fa";
 import swal from 'sweetalert';
-
+import { useRouter } from 'next/navigation';
+import { setCookie } from "cookies-next";
 const page = () => {
-// const [email,setEmail]=useState("");
-// const [phone,setPhone]=useState("");
+  const router = useRouter();
+
 const [data,setData]=useState("");
 const changeHandler=(event)=>{
-    event.preventDefault();
     setData(
      event.target.value
     )
 }
+
+const checkRouter=(res)=>{
+  if(res){
+    setCookie("username",data,{maxAge:60*60*24*1 })
+    swal({text:"کد یکبار مصرف با موفقیت ارسال شد", icon:"success"});
+    router.push( '/auth/register/checkCode?type=ForgetPassword')
+  }else{
+    swal({text:"کاربری با این مشخصات یافت نشد",  icon: "error"});
+  }
+}
 const formHandler=(event)=>{
     event.preventDefault();
-    // if (data.includes("@")) {
-        // setEmail(data);
       fetch("https://mohaddesepkz.pythonanywhere.com/users/forgot-password/", {
       method: "POST",
       headers: {
@@ -27,27 +35,13 @@ const formHandler=(event)=>{
       body: JSON.stringify({username:data}),
     }).then(res=>
       {if(!res.ok){
-        console.log(res)
-        swal({text:"کاربری با این مشخصات یافت نشد!",  icon: "error"});
+       console.log(res.json())
         return null
       }else{
-        swal({text:"کد یکبار مصرف با موفقیت ارسال شد", icon:"success"});
-        console.log(res)
         return res.json();
       }
       }
-      ).then(res=>res).catch(err=>console.log(err))
-      // }
-      //  else {
-      //   // setPhone(data);
-      //   fetch("https://mohaddesepkz.pythonanywhere.com/users/forgot-password/", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({username:data}),
-      //   }).then(res=>res.json()).then(res=>console.log(res)).catch(err=>console.log(err))
-      // }
+      ).then(res=>checkRouter(res)).catch(err=>console.log(err))
 }
   return (
    <>
