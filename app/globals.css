@@ -18,12 +18,17 @@
   }
 
 @font-face {
-    /* font-family: Iransans;
-    src: url(/font/Iranian\ Sans.woff2); */
-    font-family: Sahel;
-    src: url(/font/Sahel-FD.woff2) format("woff2");
-    font-weight: normal;
-    font-display: swap;
+    font-family: AbarLowFaNum;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../public/font/AbarLowFaNum-Regular.woff') format('woff'),   
+	url('../public/font/AbarLowFaNum-Regular.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: sahel;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../public/font/Sahel-FD.woff2') format('woff2');
   }
   
   
@@ -34,7 +39,7 @@
  margin: 0px;
  text-decoration: none;
  direction: rtl;
- font-family:Sahel,sans-serif;
+ font-family:AbarLowFaNum,sahel,sans-serif;
  
 }
 /* leaflet */

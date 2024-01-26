@@ -25,7 +25,7 @@ const page = async () => {
         <div className="col-start-1 col-end-2">
           <Sidbar />
         </div>
-        <div className="col-start-2 col-end-13 mt-28 flex">
+        <div className="col-start-2 col-end-13 mt-4 flex">
           <Main/>
         </div>
       </div>

@@ -40,7 +40,7 @@ const Navbar = () => {
          <div className="mt-1">
         <Dropdown>
       <DropdownTrigger>
-        {userdata&&userdata.flag? <div className="mr-10 border-2 border-bgcolor border-solid px-2 py-2 mt-1 rounded-sm text-bgcolor cursor-pointer">{`${userdata.first_name||userdata.company_name} ${userdata.last_name}`} <AiFillCaretDown className="inline-block"/></div>:<Avatar showFallback className="mr-10" />}
+        {userdata&&userdata.flag? <div className="mr-10 border-2 border-bgcolor border-solid px-2 py-2 mt-1 rounded-sm text-bgcolor cursor-pointer">{`${userdata.first_name|| userdata.company_name} ${userdata.last_name}`} <AiFillCaretDown className="inline-block"/></div>:<Avatar showFallback className="mr-10" />}
       </DropdownTrigger>
       <DropdownMenu>
           <DropdownItem className="py-3">

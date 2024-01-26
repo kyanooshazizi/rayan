@@ -10,63 +10,12 @@ import { GrOrganization } from "react-icons/gr";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AgentProfile from "./agentProfile";
+import { MdEdit } from "react-icons/md";
+import Image from "next/image";
 const index = () => {
-  const [agentdata,setAgentdata]=useState([])
-const [realdata,setRealdata]=useState([]);
-  const [profile, setProfile] = useState({
-    flag:false,
-    Fristname:"",
-    Lastname:"",
-    codemeli:"",
-    mobile:"",
-    address:"",
-  });
-  useEffect(()=>{
-    try {
-      fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/",
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getCookie("access_token")}`,
-      },
-    }).then(res=>res.json()).then(res=>{
-      if(res.length){
-        return(
-          setProfile({
-           flag:true,
-           Fristname:res[0].first_name,
-           Lastname:res[0].last_name,
-           codemeli:res[0].national_code,
-           mobile:res[0].phone_number,
-           address:res[0].address,
-         })) 
-      }else{
-        setProfile({
-          flag:false,
-         ...profile
-        })
-      }
-    }
-    ).catch(err=>console.log("realdata",err))
-    } catch (error) {
-      console.error(error);
-    }
-    
-// legal profile
-try {
-  fetch("https://mohaddesepkz.pythonanywhere.com/profile/legal/",
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getCookie("access_token")}`,
-      },
-    }).then(res=>res.json()).then(res=>setAgentdata(res)).catch(err=>console.log("agentdata",err))
-} catch (error) {
-  console.error(error);
-}
-  },[])
   const { setIslogin, userdata, setFlagchange } = useThemeContext();
   const [toggle, setToggle] = useState([1, 0, 0]);
+  const [flagubdate,setFlagubdate]=useState(false)
   const [errorpass, setErrorpass] = useState({
     oldpass: "",
     newpass: "",
@@ -75,10 +24,74 @@ try {
   const [errorPerson, setErrorPerson] = useState({
     mobile: "",
   });
+  const [agentdata, setAgentdata] = useState([]);
+  const [profile, setProfile] = useState({
+    flag: false,
+    Fristname: "",
+    Lastname: "",
+    image: "",
+    mobile: "",
+    address: "",
+  });
+  // start choose file
+  const [selectedFile, setSelectedFile] = useState("");
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
+  // end choose file
+  useEffect(() => {
+    console.log("🚀 ~ index ~ selectedFile:", selectedFile)
+    console.log("🚀 ~ index ~ selectedFile:", selectedFile)
+    try {
+      fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("access_token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.length) {
+            return setProfile({
+              flag: true,
+              Fristname: res[0].first_name,
+              Lastname: res[0].last_name,
+              image: res[0].image,
+              mobile: res[0].phone_number,
+              address: res[0].address,
+            });
+          } else {
+            setProfile({
+              flag: false,
+              ...profile,
+            });
+          }
+        })
+        .catch((err) => console.log("realdata", err));
+    } catch (error) {
+      console.error(error);
+    }
+
+    // legal profile
+    try {
+      fetch("https://mohaddesepkz.pythonanywhere.com/profile/legal/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("access_token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => setAgentdata(res))
+        .catch((err) => console.log("agentdata", err));
+    } catch (error) {
+      console.error(error);
+    }
+  }, [flagubdate]);
+
   // check user complate profile:start
 
- 
-  console.log("🚀 ~ index ~ profile:", profile)
+  console.log("🚀 ~ index ~ profile:", profile);
   // check user complate profile:end
   const [password, setPassword] = useState({
     Oldpassword: "",
@@ -185,10 +198,31 @@ try {
   };
   const PersonHandler = (event) => {
     event.preventDefault();
+    const formData = new FormData();
+    if(selectedFile){
+      var Data = {
+        address: profile.address,
+        image: selectedFile,
+        first_name: profile.Fristname,
+        last_name: profile.Lastname,
+        phone_number: profile.mobile,
+      };      
+    }else{
+      var Data = {
+        address: profile.address,
+        first_name: profile.Fristname,
+        last_name: profile.Lastname,
+        phone_number: profile.mobile,
+      };  
+    }
+    Object.keys(Data).forEach((key) => {
+      var value = Data[key];
+      formData.append(key, value);
+    });
+    
     if (
       profile.Fristname &&
       profile.Lastname &&
-      profile.codemeli &&
       profile.mobile &&
       profile.address
     ) {
@@ -200,15 +234,8 @@ try {
         if (profile.flag) {
           fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/edit/", {
             method: "PATCH",
-            body: JSON.stringify({
-              address: profile.address,
-              national_code: profile.codemeli,
-              first_name: profile.Fristname,
-              last_name: profile.Lastname,
-              phone_number: profile.mobile,
-            }),
+            body: formData,
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${getCookie("access_token")}`,
             },
           })
@@ -226,6 +253,7 @@ try {
                   icon: "success",
                 });
                 setFlagchange((prev) => !prev);
+                setFlagubdate((prev)=>!prev)
               } else {
                 swal({
                   text: "ویرایش موفقیت آمیز نبود!",
@@ -242,21 +270,14 @@ try {
         } else {
           fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/new/", {
             method: "POST",
-            body: JSON.stringify({
-              address: profile.address,
-              national_code: profile.codemeli,
-              first_name: profile.Fristname,
-              last_name: profile.Lastname,
-              phone_number: profile.mobile,
-            }),
+            body:formData,
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${getCookie("access_token")}`,
             },
           })
             .then((res) => {
               if (!res.ok) {
-                return null;
+                return res.json();
               } else {
                 return res.json();
               }
@@ -268,11 +289,13 @@ try {
                   icon: "success",
                 });
                 setFlagchange((prev) => !prev);
+               
               } else {
                 swal({
                   text: "لطفا اطلاعات را به درستی وارد کنید!",
                   icon: "error",
                 });
+              
               }
               setErrorPerson({
                 mobile: "",
@@ -287,6 +310,7 @@ try {
       notify();
     }
   };
+
   // end person real
 
   const MethodHandler = (taggle) => {
@@ -309,6 +333,48 @@ try {
             className="p-2 w-4/5 mx-auto"
             onSubmit={PersonHandler}
           >
+            {/* image user */}
+            <div className=" mb-4">
+              <label
+                htmlFor="image"
+                className="text-center cursor-pointer flex justify-center "
+              >
+                {profile.image ? (
+                  <div className="mb-3 relative">
+                    <div className="absolute bg-green-400 p-3 rounded-full top-[1px] right-[94px]">
+                      <MdEdit className=" text-txcolor" />
+                    </div>
+                    <Image
+                      className="rounded-full"
+                      src={`${profile.image}`}
+                      width={100}
+                      height={100}
+                      alt="تصویر"
+                      priority
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-bgcolor">تصویر</div>
+                    <div className="w-20 h-20 rounded bg-slate-300 flex justify-center items-center border-solid border-4 border-slate-100 relative mx-10">
+                      <FaUser className="text-txcolor text-6xl" />
+                      <div className="absolute bg-slate-400 p-3 rounded-full top-[-15px] right-[48px]">
+                        <MdEdit className=" text-txcolor" />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </label>
+
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
             {/* Fristname */}
             <div className=" mb-4">
               <label htmlFor="Fristname" className="text-sm">
@@ -340,7 +406,7 @@ try {
                 onChange={(event) => Mhandler(event)}
               />
             </div>
-            {/*  code meli */}
+            {/* code meli
             <div className=" mb-4">
               <label htmlFor="codemeli" className="text-sm">
                 {" "}
@@ -354,7 +420,7 @@ try {
                 value={profile.codemeli}
                 onChange={(event) => Mhandler(event)}
               />
-            </div>
+            </div> */}
             {/* Mobile */}
             <div className=" mb-4 relative">
               <label htmlFor="Mobile" className="text-sm">
@@ -393,16 +459,16 @@ try {
               type="submit"
               className="px-2 py-3 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 bg-bgcolor text-txcolor"
             >
-              {profile.flag?"ویرایش اطلاعات": "ثبت اطلاعات"}
+              {profile.flag ? "ویرایش اطلاعات" : "ثبت اطلاعات"}
             </button>
           </form>
         </div>
       );
     } else if (taggle[1]) {
-      return <AgentProfile agentdata={agentdata}/>;
+      return <AgentProfile agentdata={agentdata} setFlagubdate={setFlagubdate} />;
     } else {
       return (
-        <div className="w-2/5 bg-txcolor py-3 rounded-lg">
+        <div className="w-2/5 bg-txcolor py-3 rounded-lg h-[400px]">
           <form
             action=""
             className="p-2 w-4/5 mx-auto"
@@ -473,11 +539,17 @@ try {
         <div className="mr-6 mb-2 p-2">
           <span className=" mb-3 font-bold text-bgcolor">نام کاربری</span>
           <span className="text-txcolor bg-bgcolor px-2 py-2 rounded mr-10">
-            {userdata&&userdata.username}
+            {userdata && userdata.username}
           </span>
         </div>
-        {userdata&&(userdata.company_name||userdata.first_name)?"":<span className="my-2 bg-red-400 p-2 rounded inline-block">لطفا مشخصات شخصی یا سازمانی خود را تکمیل کنید</span>}
-        
+        {userdata && (userdata.company_name || userdata.first_name) ? (
+          ""
+        ) : (
+          <span className="my-2 bg-red-400 p-2 rounded inline-block mr-2">
+            لطفا مشخصات شخصی یا سازمانی خود را تکمیل کنید
+          </span>
+        )}
+
         <hr className="w-[95%] mx-auto my-3" />
         <div>
           {/* مشخصات شخصی */}

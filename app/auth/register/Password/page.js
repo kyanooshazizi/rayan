@@ -35,7 +35,7 @@ const Register = () => {
   const { setIslogin, islogin } = useThemeContext();
 
   const CheckRegister = (res) => {
-    console.log(res);
+    // console.log(res);
     if (res.token) {
       setCookie("access_token", res.token.access, {
         maxAge: 60 * 60 * 24 * 10,
@@ -47,6 +47,11 @@ const Register = () => {
       notify("warn", "کاربری با این اطلاعات وجود دارد");
     } else if (res.non_field_errors) {
       notify("warn", "لطفا پسورد قویتری را وارد کنید");
+    }else{
+      if(typeurl==="ForgetPassword"){
+        deleteCookie("username")
+        notify("success","رمز عبور با موفقیت تغییر کرد");
+      }
     }
   };
   // end:checkregister user
@@ -111,18 +116,27 @@ const Register = () => {
       });
       notify("", "لطفا یک پسورد معتبر را وارد کنید");
     } else {
-      if (getCookie("username").includes("@")) {
+      if(typeurl==="ForgetPassword"){
         setSenddata({
-          email: getCookie("username"),
+          username: getCookie("username"),
           password: data.password,
           password2: data.confirm_password,
         });
-      } else {
-        setSenddata({
-          phone: getCookie("username"),
-          password: data.password,
-          password2: data.confirm_password,
-        });
+      }else{
+
+        if (getCookie("username").includes("@")) {
+          setSenddata({
+            email: getCookie("username"),
+            password: data.password,
+            password2: data.confirm_password,
+          });
+        } else {
+          setSenddata({
+            phone: getCookie("username"),
+            password: data.password,
+            password2: data.confirm_password,
+          });
+        }
       }
       setFlagPost(true);
     }
@@ -231,14 +245,19 @@ const Register = () => {
                 type="submit"
                 className="text-center font-bold bg-bgcolor text-white py-3 rounded-md inline-block w-1/3 mt-6 mr-5"
               >
-                ثبت نام
+                 {typeurl==="ForgetPassword"?"تغییر رمز عبور":"ثبت نام"}
               </button>
-              <p className="inline mr-2">
-                قبلا ثبت نام کرده اید؟{" "}
+              {typeurl==="ForgetPassword"?<p className="inline mr-2">    
                 <Link className="text-[blue] cursor-pointer" href="/auth/login">
                   وارد شوید
                 </Link>
-              </p>
+              </p>:<p className="inline mr-2">    
+                قبلا ثبت نام کرده اید؟
+                <Link className="text-[blue] cursor-pointer" href="/auth/login">
+                  وارد شوید
+                </Link>
+              </p>}
+              
             </form>
           </div>
           <ToastContainer />

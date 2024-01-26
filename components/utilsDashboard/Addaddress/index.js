@@ -142,7 +142,7 @@ useEffect(()=>{
                           <div className="flex basis-2/3 text-sm">
                             <div className=" basis-[30px]">{index+1} -</div>
                             <div className="basis-[31%] truncate">{item.name}</div>
-                            <div className="basis-[31%] truncate">طلا فروشی جواهری</div>
+                            <div className="basis-[31%] truncate">{item.title}</div>
                             <div className="basis-[31%] truncate">{item.phone}</div>
                             <div className="basis-[48%] truncate">
                               {`${item.address}، پلاک${item.plaque}، طبقه${item.stage}، واحد${item.unity}`}
@@ -223,7 +223,7 @@ useEffect(()=>{
                         <div className="flex basis-2/3 text-sm">
                             <div className=" basis-[30px]">{index+1} -</div>
                             <div className="basis-[31%] truncate">{item.name}</div>
-                            <div className="basis-[31%] truncate">طلا فروشی جواهری</div>
+                            <div className="basis-[31%] truncate">{item.title}</div>
                             <div className="basis-[31%] truncate">{item.phone}</div>
                             <div className="basis-[48%] truncate">
                               {`${item.address}، پلاک${item.plaque}، طبقه${item.stage}، واحد${item.unity}`}

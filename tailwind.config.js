@@ -24,6 +24,7 @@ module.exports = {
         bgboxprice: "BBFBDA",
         navbarrequst: "#000b76",
         bgbtnhover: "#ffffff",
+        dashboard:"#f3f6fb"
       },
     },
   },

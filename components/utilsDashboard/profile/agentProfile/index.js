@@ -8,23 +8,18 @@ import { FaUser } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import Image from "next/image";
 import { getCookie } from "cookies-next";
-const index = ({ agentdata }) => {
+import { useThemeContext } from "../../../context/store";
+const index = ({ agentdata,setFlagubdate }) => {
+  const { setFlagchange } = useThemeContext();
   const [errorPerson, setErrorPerson] = useState({
     mobile: "",
   });
-  const [selectedFile, setSelectedFile] = useState(
-    agentdata.length ? agentdata[0].logo : null
-  );
-  console.log("🚀 ~ index ~ selectedFile:", selectedFile);
+  const [selectedFile, setSelectedFile] = useState('');
   const [profile, setProfile] = useState({
     company_name: agentdata.length ? agentdata[0].company_name : "",
-    national_company_id: agentdata.length
-      ? agentdata[0].national_company_id
-      : "",
     phone: agentdata.length ? agentdata[0].phone : "",
     company_address: agentdata.length ? agentdata[0].company_address : "",
   });
-  console.log("🚀 ~ index ~ profile:", profile);
   const notify = () => {
     toast.error("لطفا تمام فیلد ها را پر کنید", {
       position: "top-center",
@@ -51,20 +46,26 @@ const index = ({ agentdata }) => {
   const AgentHandlerSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    var Data = {
-      company_name: profile.company_name,
-      national_company_id: profile.national_company_id,
-      phone: profile.phone,
-      company_address: profile.company_address,
-      logo: selectedFile,
-    };
+    if(selectedFile){
+      var Data = {
+        company_name: profile.company_name,
+        phone: profile.phone,
+        company_address: profile.company_address,
+        logo: selectedFile,
+      };
+    }else{
+      var Data = {
+        company_name: profile.company_name,
+        phone: profile.phone,
+        company_address: profile.company_address,
+      };
+    }
     Object.keys(Data).forEach((key) => {
       var value = Data[key];
       formData.append(key, value);
     });
     if (
       profile.company_name &&
-      profile.national_company_id &&
       profile.phone &&
       profile.company_address
     ) {
@@ -85,30 +86,29 @@ const index = ({ agentdata }) => {
             }
           )
             .then((res) => {
-              // if (!res.ok) {
-              //   return null;
-              // } else {
-              //   return res.json();
-              // }
-              return res.json();
+              if (!res.ok) {
+                return null;
+              } else {
+                return res.json();
+              }
             })
             .then((res) => {
-              console.log(res);
-              // if (res) {
-              //   swal({
-              //     text: "مشخصات شما با موفقیت تغییر پیدا کرد",
-              //     icon: "success",
-              //   });
-              //   setFlagchange((prev) => !prev);
-              // } else {
-              //   swal({
-              //     text: "ویرایش موفقیت آمیز نبود!",
-              //     icon: "error",
-              //   });
-              // }
-              // setErrorPerson({
-              //   mobile: "",
-              // });
+              if (res) {
+                swal({
+                  text: "مشخصات شما با موفقیت تغییر پیدا کرد",
+                  icon: "success",
+                });
+                setFlagubdate((prev)=>!prev);
+                setFlagchange((prev)=>!prev);
+              } else {
+                swal({
+                  text: "ویرایش موفقیت آمیز نبود!",
+                  icon: "error",
+                });
+              }
+              setErrorPerson({
+                mobile: "",
+              });
             })
             .catch((error) => {
               console.log("error", error);
@@ -189,15 +189,14 @@ const index = ({ agentdata }) => {
                 <Image
                   className="rounded-full"
                   src={`${agentdata[0].logo}`}
-                  width={120}
-                  height={120}
-                  alt="Picture of the author"
-                  priority
+                  width={100}
+                  height={100}
+                  alt="لوگو"
                 />
               </div>
             ) : (
               <>
-                <div className="text-bgcolor">تصویر</div>
+                <div className="text-bgcolor">لوگو</div>
                 <div className="w-20 h-20 rounded bg-slate-300 flex justify-center items-center border-solid border-4 border-slate-100 relative mx-10">
                   <FaUser className="text-txcolor text-6xl" />
                   <div className="absolute bg-slate-400 p-3 rounded-full top-[-15px] right-[48px]">
@@ -218,7 +217,7 @@ const index = ({ agentdata }) => {
           />
         </div>
 
-        {/* Fristname */}
+        {/* company nanme */}
         <div className=" mb-4">
           <label htmlFor="company_name" className="text-sm text-bgcolor">
             <span className="text-[red]">*</span> اسم شرکت
@@ -229,21 +228,6 @@ const index = ({ agentdata }) => {
             id="company_name"
             className="outline-none p-2 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 placeholder:opacity-40"
             value={profile.company_name}
-            onChange={(event) => AgentHandler(event)}
-          />
-        </div>
-        {/* Lastname */}
-        <div className=" mb-4">
-          <label htmlFor="national_company_id" className="text-sm text-bgcolor">
-            {" "}
-            <span className="text-[red]">*</span> شناسه ملی شرکت
-          </label>
-          <input
-            type="text"
-            name="national_company_id"
-            id="national_company_id"
-            className="outline-none p-2 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 placeholder:opacity-40"
-            value={profile.national_company_id}
             onChange={(event) => AgentHandler(event)}
           />
         </div>

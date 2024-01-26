@@ -41,7 +41,7 @@ const checkRouter=(res)=>{
     if(typeurl==="ForgetPassword"){
       swal({text:"کاربری با این مشخصات وجود ندارد",  icon: "error"});
     }else{
-      swal({title: "دوباره تلاش کنید",text:"کد یکبار مصرف ارسال نشد",  icon: "error"});
+      swal({text:"کاربری با این مشخصات قبلا وجود دارد",  icon: "error"});
 
     }
   }

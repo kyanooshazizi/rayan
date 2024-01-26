@@ -8,6 +8,7 @@ import { FaWallet } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { ImAddressBook } from "react-icons/im";
+import { IoBusiness } from "react-icons/io5";
 const index = () => {
   const path = usePathname();
   const pathflag = path.split("/");
@@ -84,6 +85,20 @@ const index = () => {
               />
             </span>
             <span  className="text-[18px] font-bold text-[#858d9f] pt-2 inline-block">پروفایل</span>
+          </Link>
+        </div>
+        <div className={`pt-[32px] pr-[24px] pl-[16px]  ${
+           pathflag[2] === "ProfileBusiness" ? "border-r-[5px] border-solid border-[blue]":""
+          }`}>
+          <Link href="/dashboard/ProfileBusiness" className="block">
+            <span>
+              <IoBusiness
+                className={`mr-1 text-xl ${
+                  pathflag[2] === "ProfileBusiness" ? "text-utils-300" : ""
+                }`}
+              />
+            </span>
+            <span  className="text-[18px] font-bold text-[#858d9f] pt-2 inline-block">پروفایل کسب و کاری</span>
           </Link>
         </div>
 

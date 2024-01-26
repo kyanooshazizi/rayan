@@ -10,7 +10,7 @@ export default function App({type,data,togglesender}) {
 const [address,setAddress]=useState({
   sender:true,
     name:data.name,
-    // Business:data.Business,
+    title:data.title,
     address:data.address,
     plaque:data.plaque,
     stage:data.stage,
@@ -92,13 +92,13 @@ const SubHandler=(event)=>{
                 />
               </div>
               <div className="mr-4 mt-4">
-                <label htmlFor="Business">عنوان کسب و کار</label>
+                <label htmlFor="title">عنوان کسب و کار</label>
                 <input
-                  value={address.Business}
+                  value={address.title}
                   onChange={(event) => ChangeHandler(event)}
                   type="text"
-                  name="Business"
-                  id="Business"
+                  name="title"
+                  id="title"
                   className="bg-[#F4F3F3] block rounded  px-2 py-3 w-[95%] outline-utils-300 mt-1 border-1 border-solid border-gray-200"
                   placeholder=""
                 />
