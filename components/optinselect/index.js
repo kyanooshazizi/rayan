@@ -3,7 +3,7 @@ import Option_city from "./optin_city";
 import Option_servic from "./optin-service";
 import "animate.css";
 import { FaAnglesLeft } from "react-icons/fa6"
-
+import { TfiSearch } from "react-icons/tfi";
 import { useState } from "react";
 import useCity_servise from "../TanstakQury/useCity_servise";
 import { useRouter } from "next/navigation";
@@ -17,13 +17,13 @@ const Alloptien = ({btncolor}) => {
   const [city1, setCity] = useState([
     {
       id:1,
-      stylex: "rounded-r-lg bg-white",
+      stylex: "lg:rounded-r-lg lg:rounded-none rounded-t-lg bg-white lg:border-b-0 border-b-2 border-solid border-b-gray-200",
       placholder: "شهر مبدا",
       slug:"pick"  
     },
     {
       id:2,
-      stylex: "bg-white",
+      stylex: "bg-white lg:rounded-none rounded-b-lg",
       placholder: "شهر مقصد",
       slug:"deliv" 
     },
@@ -35,7 +35,7 @@ const Alloptien = ({btncolor}) => {
 </div>
  }
   return (
-    <section className="grid md:grid-cols-4 mt-10">
+    <section className="lg:flex lg:justify-center lg:items-center mt-3 lg:flex-wrap">
       {city1.map((item) => {
         return <Option_city  key={uuidv4()} {...item} data={datacity.data} />;
       })}
@@ -46,15 +46,17 @@ const Alloptien = ({btncolor}) => {
         data={dataservise.data}
       />
      
-        <button className={`mt-5 rounded-l-lg md:mt-0 p-3 md:p-7 ${btncolor?`bg-${btncolor} text-txcolor`:"bg-utils-300"} hover:bg-utils-400 hover:transition-all hover:duration-300 font-bold flex align-middle justify-center md:justify-between text-xs md:text-base text-txcolor}`}
+       <div className="h-12">
+       <button className={`lg:w-[190px] sm:w-full w-5/6 mx-auto lg:rounded-l-lg lg:rounded-none rounded-lg p-4 lg:p-7 ${btncolor?`bg-${btncolor} text-txcolor`:"bg-colorgray"} hover:bg-utils-400 hover:transition-all hover:duration-300 font-bold flex align-middle justify-center lg:justify-between text-xs md:text-base text-txcolor} lg:mt-0 md:mt-7 mt-6`}
         onClick={()=>{
           dispatch(MethodBackHomepage())
           router.push("/order/requst");
         }}
         >
-          <span>ثبت درخواست </span>
-          <FaAnglesLeft className="text-sm md:text-2xl mr-3" />
+          <span className="pl-2">ثبت درخواست </span>
+          <TfiSearch className="rotate-90 text-[24px] align-middle font-thin"/>
         </button>
+       </div>
      
     </section>
   );

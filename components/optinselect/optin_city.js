@@ -25,12 +25,12 @@ const Option = ({ stylex, placholder, data, slug }) => {
   // Hydration error:end
 
   return (
-    <div className={` font-medium h-10 cursor-pointer relative`}>
+    <div className={` font-medium h-12 cursor-pointer relative lg:w-[240px] sm:w-full w-5/6 mx-auto lg:mt-0 mt-[21px]`}>
       <div suppressHydrationWarning 
         onClick={() => {
           return setOpen(!open);
         }}
-        className={`${stylex} border-l-2 text-txnotcolor border-gray-200 p-3 md:p-7 text-sm md:text-base w-full flex items-center justify-between ${
+        className={`${stylex} border-l-2  text-txnotcolor border-gray-200 p-6 lg:p-7  text-sm md:text-base w-full flex items-center justify-between ${
           !selected && "text-gray-700"
         }`}
       >
@@ -46,22 +46,21 @@ const Option = ({ stylex, placholder, data, slug }) => {
         } `}
       >
         <div className={`flex items-center px-2 sticky top-0 bg-white`}>
-          <AiOutlineSearch size={18} className="text-gray-700" />
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value.toLowerCase())}
             placeholder="جستجو..."
-            className="placeholder:text-gray-500 p-2 my-3 outline-utils-300 bg-orange-100 text-sm w-40"
+            className="placeholder:text-gray-500 px-2 py-3 my-3 outline-[blue] bg-green-50 rounded-sm text-sm w-full text-black"
           />
         </div>
         {data?.map((city) => (
           <li
             key={city.id}
-            className={`p-2 pr-5 text-sm text-txnotcolor hover:bg-utils-300 hover:text-txcolor
+            className={`px-2 py-3 pr-5 text-sm text-txnotcolor hover:bg-[blue] hover:text-txcolor
             ${
-              city.name.toLowerCase() === selected.toLowerCase() &&
-              "bg-utils-300 text-txcolor"
+              city.name.toLowerCase() === selected.toLowerCase()?
+              "text-white bg-[blue]":""
             }
             ${
               city.name.toLowerCase().startsWith(inputValue)

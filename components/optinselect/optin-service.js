@@ -22,7 +22,7 @@ useEffect(() => {
 }, [])
 // Hydration error:end
   return (
-    <div className={` font-medium h-10 cursor-pointer relative`}>
+    <div className={` font-medium h-12 cursor-pointer relative w-[240px] lg:block hidden`}>
       <div 
         onClick={() => {
           return setOpen(!open);
@@ -43,19 +43,18 @@ useEffect(() => {
         }`}
       >
         <div className={`flex items-center px-2 sticky top-0 bg-white`}>
-          <AiOutlineSearch size={18} className="text-gray-700" />
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value.toLowerCase())}
             placeholder="جستجو..."
-            className="placeholder:text-gray-500 p-2 my-3 outline-utils-300 bg-orange-100 text-sm w-40"
+            className="placeholder:text-gray-500 px-2 py-3 my-3 outline-[blue] bg-green-50 text-sm w-full"
           />
         </div>
         {data?.map((item) => (
           <li
             key={item.id}
-            className={`group p-2 pr-5 text-sm text-txnotcolor hover:bg-utils-300 bg-white
+            className={`group p-2 pr-5 text-sm text-txnotcolor hover:bg-[blue] bg-white
             ${
               item.title.toLowerCase().startsWith(inputValue)
                 ? "block"
@@ -69,7 +68,7 @@ useEffect(() => {
             }}
           >
             <div
-              className={`border-b-2 border-gray-400 group-hover:bg-utils-300 group-hover:text-txcolor`}
+              className={`border-b-2 border-gray-400 group-hover:bg-[blue] group-hover:text-txcolor`}
             >
               <span className={`block`}>
                 <Image

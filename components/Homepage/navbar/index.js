@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { IoMdLogIn } from "react-icons/io";
+import { FaUserCircle } from "react-icons/fa";
 import { GoChevronDown } from "react-icons/go";
 import { TiThMenu } from "react-icons/ti";
 import { MdOutlineClose } from "react-icons/md";
@@ -10,16 +10,25 @@ import { useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
-import {deleteCookie } from 'cookies-next';
+import { deleteCookie } from "cookies-next";
 import React from "react";
-import {Skeleton} from "@nextui-org/react";
+import { Skeleton } from "@nextui-org/react";
 import { AiFillCaretDown } from "react-icons/ai";
+import { CiGlobe } from "react-icons/ci";
+import { PiShoppingCart } from "react-icons/pi";
 // nav mobile
 import Nav_mobile from "../navbar_mobile";
-import { useThemeContext } from '../../context/store';
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
+import { useThemeContext } from "../../context/store";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+} from "@nextui-org/react";
 const Resnav = () => {
-  const { username, islogin,setIslogin,isloading,userdata} = useThemeContext();
+  const { username, islogin, setIslogin, isloading, userdata } =
+    useThemeContext();
   const [iconstate, setIconstate] = useState("true");
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
   const Navmobile = () => {
@@ -33,33 +42,116 @@ const Resnav = () => {
     // console.log(clientWindowHeight)
   };
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll); 
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   });
 
   return (
     <>
       <Nav_mobile isOpen={iconstate} toggle={Navmobile} />
-      <nav className={`${styles.nav_header} ${clientWindowHeight>0? "bg-white text-txnotcolor mt-0 z-50":"text-txcolor mt-5"}`} id="nav_menu">
-        <div className={styles.nav_right}>
-          <div className="p-3">
+      <nav
+        className={`h-[80px] ${styles.nav_header} ${
+          clientWindowHeight > 0
+            ? "bg-bgcolor_hover text-white z-50"
+            : "text-txcolor mt-5"
+        }`}
+        id="nav_menu"
+      >
+        {/* start:show size for mobile  */}
+     
+       <div className="flex justify-around items-center lg:hidden">
+          <div className="  text-2xl sm:px-6 pr-3 pl-2" onClick={Navmobile}>
+            {iconstate ? <TiThMenu /> : <MdOutlineClose />}
+          </div>
+          <div className="sm:px-1">
+            {isloading ? (
+              <Skeleton className="h-[36px] w-28 ml-3 rounded hidden md:block" />
+            ) : islogin ? (
+              <Dropdown>
+                <DropdownTrigger>
+                  {userdata && userdata.flag ? (
+                    <div className="ml-6 lg:text-base sm:text-[14px] text-[12px] border-1 border-utils-300 py-[5px] px-2 border-solid rounded-sm hover:text-bgcolor hover:bg-white cursor-pointer transition-all hidden md:block">
+                      {`${userdata.first_name || userdata.company_name} ${
+                        userdata.last_name
+                      }`}{" "}
+                      <AiFillCaretDown className="inline-block " />
+                    </div>
+                  ) : (
+                    <div className="group p-2 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-full hover:bg-txcolor hover:transition-all duration-500 hover:duration-300 font-bold  md:text-base cursor-pointer ml-10 md:block hidden">
+                      <FaUserAlt className="text-txcolor group-hover:text-utils-300 lg:text-2xl tetx-xl " />
+                    </div>
+                  )}
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Static Actions" className="">
+                  <DropdownItem>
+                    <Link href="/dashboard">
+                      <div className="text-bgcolor md:py-4 py-2">
+                        <span className="pr-2">
+                          <FaUserAlt className="inline lg:text-md md:text-[16px] text-[12px] ml-3 text-bgcolor" />
+                          مشاهده حساب کاربری
+                        </span>
+                        <MdOutlineKeyboardDoubleArrowLeft className="inline mr-4 font-bold lg:text-lg text-base" />
+                      </div>
+                    </Link>
+                  </DropdownItem>
+                  <DropdownItem className="text-danger">
+                    <button
+                      onClick={() => {
+                        deleteCookie("access_token");
+                        setIslogin(false);
+                      }}
+                      className="text-[red] md:py-4 py-2"
+                    >
+                      <span className="pr-2 lg:text-md md:text-[16px] text-[12px]">
+                        <TbLogout className="inline lg:text-lg text-base ml-3" />
+                        خروج از حساب کاربری
+                      </span>
+                    </button>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            ) : (
+              <div className="sm:p-3 p-0">
+                <button className="text-[16px] hover:bg-bgcolor_hover py-2 px-3 rounded bg-bgcolor_hover sm:bg-none">
+                  <FaUserCircle className="sm:inline-block text-2xl hidden" />
+                  <span >
+                    <Link href="/auth/login" className="px-2">
+                      ورود
+                    </Link>
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="lg:hidden px-4">
+          <Image
+            src="/imag_homepage/logoRayan.svg"
+            alt="logo"
+            width={90}
+            height={24}
+            className="mr-[40px]"
+            priority={true}
+          />
+        </div>
+      
+        {/* end:show size for mobile  */}
+
+        <div className={`${styles.nav_right} lg:flex hidden`}>
+          <div>
             <Image
-              src="/logoRayan.png"
+              src="/imag_homepage/logoRayan.svg"
               alt="logo"
-              width={100}
-              height={100}
-              className="rounded-xl hidden md:block"
+              width={120}
+              height={24}
+              className="mr-[40px]  hidden md:block"
               priority={true}
             />
           </div>
-          {/* icon for mobile start */}
-          <div className="blok md:hidden text-2xl" onClick={Navmobile}>
-            {iconstate ? <TiThMenu /> : <MdOutlineClose />}
-          </div>
-          {/* icon for mobil end */}
+
           <div className="hidden md:block">
-            <ul className={`${styles.nav_header_ul}`}>
-              <li>
+            <ul className={`${styles.nav_header_ul} px-4 mt-2`}>
+              <li className="mr-4">
                 <Link href={"/service"}>
                   {" "}
                   <span>خدمات</span>
@@ -80,37 +172,86 @@ const Resnav = () => {
             </ul>
           </div>
         </div>
-        {isloading?<Skeleton className="h-12 w-32 ml-3 rounded-md"/> :(islogin?<Dropdown>
-        <DropdownTrigger>
-          {userdata&&userdata.flag? <div className="ml-6 text-base border-1 border-utils-300 py-2 px-3 border-solid rounded-sm hover:text-bgcolor hover:bg-white cursor-pointer transition-all">{`${userdata.first_name||userdata.company_name} ${userdata.last_name}`} <AiFillCaretDown className="inline-block "/></div>:<div  className="group p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-full hover:bg-txcolor hover:transition-all duration-500 hover:duration-300 font-bold  md:text-base cursor-pointer ml-10 ">
-          <FaUserAlt className="text-txcolor group-hover:text-utils-300 text-2xl " />
-        </div>}
-        </DropdownTrigger>
-        <DropdownMenu aria-label="Static Actions" className="">
-          <DropdownItem >
-          <Link href="/dashboard">
-            <div className="text-bgcolor py-4 ">
-              <span className="pr-2"><FaUserAlt className="inline text-md ml-3 text-bgcolor"/>مشاهده حساب کاربری</span>
-              <MdOutlineKeyboardDoubleArrowLeft  className="inline mr-4 font-bold text-lg"/>
+
+        <div className="lg:flex lg:justify-center lg:align-middle lg:items-center hidden">
+          {isloading ? (
+            <Skeleton className="h-[36px] w-28 ml-3 rounded" />
+          ) : islogin ? (
+            <Dropdown>
+              <DropdownTrigger>
+                {userdata && userdata.flag ? (
+                  <div className="ml-6 text-base border-1 border-utils-300 py-[5px] px-2 border-solid rounded-sm hover:text-bgcolor hover:bg-white cursor-pointer transition-all">
+                    {`${userdata.first_name || userdata.company_name} ${
+                      userdata.last_name
+                    }`}{" "}
+                    <AiFillCaretDown className="inline-block " />
+                  </div>
+                ) : (
+                  <div className="group p-2 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-full hover:bg-txcolor hover:transition-all duration-500 hover:duration-300 font-bold  md:text-base cursor-pointer ml-10 ">
+                    <FaUserAlt className="text-txcolor group-hover:text-utils-300 text-2xl " />
+                  </div>
+                )}
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Static Actions" className="">
+                <DropdownItem>
+                  <Link href="/dashboard">
+                    <div className="text-bgcolor py-4 ">
+                      <span className="pr-2">
+                        <FaUserAlt className="inline text-md ml-3 text-bgcolor" />
+                        مشاهده حساب کاربری
+                      </span>
+                      <MdOutlineKeyboardDoubleArrowLeft className="inline mr-4 font-bold text-lg" />
+                    </div>
+                  </Link>
+                </DropdownItem>
+                <DropdownItem className="text-danger">
+                  <button
+                    onClick={() => {
+                      deleteCookie("access_token");
+                      setIslogin(false);
+                    }}
+                    className="text-[red] py-4"
+                  >
+                    <span className="pr-2">
+                      <TbLogout className="inline text-lg ml-3" />
+                      خروج از حساب کاربری
+                    </span>
+                  </button>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          ) : (
+            <div className="p-3">
+              <button className="text-[16px] hover:bg-bgcolor_hover py-2 px-3 rounded">
+                <FaUserCircle className="inline-block text-2xl " />
+                <span>
+                  <Link href="/auth/login" className="px-2">
+                    ورود
+                  </Link>
+                </span>
+              </button>
             </div>
-          </Link>
-          </DropdownItem>
-          <DropdownItem className="text-danger">
-          <button onClick={()=>
-            {deleteCookie("access_token");
-            setIslogin(false)}} className="text-[red] py-4">
-              <span className="pr-2"><TbLogout className="inline text-lg ml-3"/>خروج از حساب کاربری</span>
-            </button>
-         
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>:<div className="p-3">       
-            <button className="p-3 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-md hover:bg-utils-300 text-txcolor hover:transition-all hover:duration-300 font-bold flex text-xs md:text-base">
-              <span><Link href="/auth/login" className="hover:text-[blue]">ورود</Link>|<Link href="/auth/register" className="hover:text-[blue]">عضویت</Link></span>
-              <IoMdLogIn className="text-sm md:text-2xl " />
-            </button>
-        </div>)}
-        
+          )}
+
+          <div>
+            <Link
+              href={"/order/requst"}
+              className="bg-colorgreen px-6 text-[14px] py-[6px] rounded"
+            >
+              شروع کنیم
+            </Link>
+          </div>
+          <div className="pr-8 pl-4">
+            <CiGlobe className="text-2xl mx-2 inline-block" />
+            <Image
+              src={"/imag_homepage/shopping.svg"}
+              alt="shopping"
+              width={25}
+              height={25}
+              className="inline-block mx-2"
+            />
+          </div>
+        </div>
       </nav>
     </>
   );
