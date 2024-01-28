@@ -11,13 +11,13 @@ import { FaUserAlt } from "react-icons/fa";
 import { ImAddressBook } from "react-icons/im";
 import { IoBusiness } from "react-icons/io5";
 import { TbLogout2 } from "react-icons/tb";
-import { useThemeContext } from "../../context/store";
+import { useThemeContext } from "../../../context/store";
 import { deleteCookie } from "cookies-next";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 const index = () => {
   const { setIslogin, userdata } = useThemeContext();
-  const router=useRouter()
+  const router = useRouter();
   console.log(userdata);
   return (
     <>

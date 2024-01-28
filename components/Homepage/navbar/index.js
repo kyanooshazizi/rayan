@@ -15,9 +15,6 @@ import React from "react";
 import { Skeleton } from "@nextui-org/react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { CiGlobe } from "react-icons/ci";
-import { PiShoppingCart } from "react-icons/pi";
-// nav mobile
-import Nav_mobile from "../navbar_mobile";
 import { useThemeContext } from "../../context/store";
 import {
   Dropdown,
@@ -27,16 +24,8 @@ import {
   Button,
 } from "@nextui-org/react";
 const Resnav = () => {
-  const { username, islogin, setIslogin, isloading, userdata } =
-    useThemeContext();
-  const [iconstate, setIconstate] = useState("true");
+  const { username, islogin, setIslogin, isloading, userdata,toggle,setToggle }= useThemeContext();
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
-  const Navmobile = () => {
-    setIconstate((prevstate) => {
-      return !prevstate;
-    });
-  };
-
   const handleScroll = () => {
     setClientWindowHeight(window.scrollY);
     // console.log(clientWindowHeight)
@@ -48,25 +37,25 @@ const Resnav = () => {
 
   return (
     <>
-      <Nav_mobile isOpen={iconstate} toggle={Navmobile} />
+ 
       <nav
         className={`h-[80px] ${styles.nav_header} ${
           clientWindowHeight > 0
             ? "bg-bgcolor_hover text-white z-50"
             : "text-txcolor mt-5"
-        }`}
+        } ${toggle?"text-txcolor":"text-txnotcolor bg-dashboard"} `}
         id="nav_menu"
       >
         {/* start:show size for mobile  */}
      
-       <div className="flex justify-around items-center lg:hidden">
-          <div className="  text-2xl sm:px-6 pr-3 pl-2" onClick={Navmobile}>
-            {iconstate ? <TiThMenu /> : <MdOutlineClose />}
+       <div className={`flex justify-around items-center lg:hidden`}>
+          <div className="  text-2xl sm:px-6 px-4" onClick={()=>{setToggle(prev=>!prev)}}>
+            {toggle ? <TiThMenu /> : <MdOutlineClose />}
           </div>
           <div className="sm:px-1">
             {isloading ? (
               <Skeleton className="h-[36px] w-28 ml-3 rounded hidden md:block" />
-            ) : islogin ? (
+            ) :( islogin ? (
               <Dropdown>
                 <DropdownTrigger>
                   {userdata && userdata.flag ? (
@@ -112,7 +101,7 @@ const Resnav = () => {
               </Dropdown>
             ) : (
               <div className="sm:p-3 p-0">
-                <button className="text-[16px] hover:bg-bgcolor_hover py-2 px-3 rounded bg-bgcolor_hover sm:bg-none">
+                <button className={`text-[16px] hover:bg-bgcolor_hover py-2 px-3 rounded ${toggle?"bg-bgcolor_hover":"bg-slate-200"}  sm:bg-none`}>
                   <FaUserCircle className="sm:inline-block text-2xl hidden" />
                   <span >
                     <Link href="/auth/login" className="px-2">
@@ -121,12 +110,12 @@ const Resnav = () => {
                   </span>
                 </button>
               </div>
-            )}
+            ))}
           </div>
         </div>
         <div className="lg:hidden px-4">
           <Image
-            src="/imag_homepage/logoRayan.svg"
+            src={`${toggle?"/imag_homepage/logoRayan.svg":"/imag_homepage/logoRayan1.svg"}`}
             alt="logo"
             width={90}
             height={24}
@@ -134,7 +123,6 @@ const Resnav = () => {
             priority={true}
           />
         </div>
-      
         {/* end:show size for mobile  */}
 
         <div className={`${styles.nav_right} lg:flex hidden`}>

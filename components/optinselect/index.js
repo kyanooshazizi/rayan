@@ -17,7 +17,7 @@ const Alloptien = ({btncolor}) => {
   const [city1, setCity] = useState([
     {
       id:1,
-      stylex: "lg:rounded-r-lg lg:rounded-none rounded-t-lg bg-white lg:border-b-0 border-b-2 border-solid border-b-gray-200",
+      stylex: "lg:rounded-r-lg lg:rounded-none rounded-t-lg bg-white lg:border-b-0 border-b-2 border-solid border-b-gray-300",
       placholder: "شهر مبدا",
       slug:"pick"  
     },

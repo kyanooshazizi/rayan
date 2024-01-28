@@ -22,9 +22,9 @@ import {
 } from "../../utilsorder/utils/MethodFlagHandler";
 import { IoMdMenu } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
+import Link from "next/link";
 
-
-const Navbar = ({setMobile,mobile}) => {
+const Navbar = ({ setMobile, mobile }) => {
   const dataAddress = useSelector((state) => state.order.address);
   const datastore = useSelector((state) => state.order.order);
   const { setIslogin, userdata } = useThemeContext();
@@ -36,111 +36,119 @@ const Navbar = ({setMobile,mobile}) => {
   return (
     <div className="fixed top-0 w-full z-50">
       {/* start nav */}
-      <nav className="shadow-md  bg-white w-full px-[24px] py-[8px] flex justify-between align-middle min-h-[48px] ">
-        <div className="mr-4 lg:flex lg:justify-between lg:align-middle hidden">
-          <div>
+      <nav className="shadow-sm h-[75px]  bg-white w-full  flex justify-stretch align-middle items-center">
+        {/* start:navbar right */}
+        <div className="mr-4 lg:flex lg:justify-between lg:align-middle hidden basis-1/2">
+          <div className="pt-[26px]  px-[39px] flex-shrink-0">
             <Image
-              src="/logoRayan.png"
-              width={80}
-              height={80}
-              alt="Picture of the author"
+              src="/image_dashboard/rayanlogo.svg"
+              width={124}
+              height={24}
+              alt="logo"
               priority
+              className="xl:w-[124px] w-[110px]"
             />
-          </div>
-          <div className="mt-1">
-            <Dropdown>
-              <DropdownTrigger>
-                {userdata && userdata.flag ? (
-                  <div className="mr-10 border-2 border-bgcolor border-solid px-2 py-2 mt-1 rounded-sm text-bgcolor cursor-pointer">
-                    {`${userdata.first_name || userdata.company_name} ${
-                      userdata.last_name
-                    }`}{" "}
-                    <AiFillCaretDown className="inline-block" />
-                  </div>
-                ) : (
-                  <Avatar showFallback className="mr-10" />
-                )}
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem className="py-3">
-                  {userdata && userdata.username}
-                </DropdownItem>
-                <DropdownItem
-                  className="text-[red] py-2"
-                  onClick={() => {
-                    deleteCookie("access_token");
-                    router.push("/");
-                    setIslogin(false);
-                  }}
-                >
-                  خروج <MdLogout className="inline-block text-2xl mr-4" />
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <span className="text-[#283764] text-[12px] font-[400] ">
+              داشبورد
+            </span>
           </div>
         </div>
-        {/* start:icon home&requste */}
-        <div className="lg:flex lg:justify-between lg:align-middle hidden">
-          <div
-            className="relative cursor-pointer"
-            onClick={() => {
-              if (
-                MethodFlagHandler(datastore) &&
-                !MethodFlagHandlerAddress(dataAddress)
-              ) {
-                router.push("/order/requst");
-              } else if (
-                MethodFlagHandler(datastore) &&
-                MethodFlagHandlerAddress(dataAddress)
-              ) {
-                router.push("/order/address");
-              } else {
-                router.push("/order/requst");
-              }
-            }}
-          >
-            <MdShoppingCart className="ml-10 mt-4 text-3xl text-bgcolor" />
+           {/* end:navbar right */}
+        {/* start: navbar left  */}
+        <div className="lg:flex lg:items-center lg:justify-between basis-1/2 hidden">
+          <div className="basis-1/2">
+            <div className="xl:w-[198px] xl:text-[16px] text-[14px] w-[158px] h-[47px] text-center p-3 bg-colorgreen text-txcolor rounded-[5px] mx-auto">
+              <Link href="/dashboard/NewOrder" className="">
+                سفارش جدید
+              </Link>
+            </div>
+          </div>
 
-            {datastore.pick_up &&
-            datastore.delivery &&
-            datastore.service &&
-            isClient ? (
-              <span className="absolute bg-utils-300 text-txcolor p-1 rounded-full text-sm -top-[2px] left-[65px]">
-                1+
-              </span>
-            ) : (
-              ""
-            )}
-          </div>
-          <div
-            className="cursor-pointer"
-            onClick={() => {
-              router.push("/");
-            }}
-          >
-            <FaHome className="ml-6 mt-4 text-3xl text-bgcolor" />
+          <div className="lg:flex lg:align-middle justify-center items-center basis-1/2">
+            <div className="mx-4">
+              <Image
+                src="/image_dashboard/news.svg"
+                width={30}
+                height={23}
+                alt="logo"
+                priority
+              />
+            </div>
+            <div className="mx-4">
+              <Image
+                src="/image_dashboard/qustion.svg"
+                width={30}
+                height={23}
+                alt="logo"
+                priority
+              />
+            </div>
+            <div className="mx-4">
+              <Image
+                src="/image_dashboard/setting.svg"
+                width={30}
+                height={23}
+                alt="logo"
+                priority
+              />
+            </div>
+            <div className="mr-4 ml-4">
+                <Dropdown>
+                  <DropdownTrigger>
+                    {userdata && userdata.flag ? (
+                      <div className="xl:text-[16px] text-[12px] border-2 border-bgcolor border-solid px-2 py-2 rounded-[5px] text-bgcolor cursor-pointer">
+                        {`${userdata.first_name || userdata.company_name}`}{" "}
+                        <AiFillCaretDown className="inline-block" />
+                      </div>
+                    ) : (
+                      <Image
+                        src="/image_dashboard/user.svg"
+                        width={30}
+                        height={23}
+                        alt="logo"
+                        priority
+                      />
+                    )}
+                  </DropdownTrigger>
+                  <DropdownMenu>
+                    <DropdownItem className="py-3">
+                      {userdata && userdata.username}
+                    </DropdownItem>
+                    <DropdownItem
+                      className="text-[red] py-2"
+                      onClick={() => {
+                        deleteCookie("access_token");
+                        router.push("/");
+                        setIslogin(false);
+                      }}
+                    >
+                      خروج <MdLogout className="inline-block text-2xl mr-4" />
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
           </div>
         </div>
-        {/* start:icon home&requste */}
+        {/* start: navbar left  */}
+
         {/* start nav Mobile */}
-        <div className="lg:hidden flex justify-between align-middle w-full">
+        <div className="lg:hidden flex justify-between items-center align-middle w-full">
           {/* start: menu icon hambarger */}
           <div>
             <button
-              className="absolute right-0 py-3 px-4 text-3xl font-bold"
+              className=" pr-[20px] text-3xl font-bold"
               onClick={() => {
                 setMobile((prev) => !prev);
               }}
             >
-              {mobile? <IoMdClose />:<IoMdMenu />}
-             
+              {mobile ? <IoMdClose /> : <IoMdMenu />}
             </button>
           </div>
           {/*end: menu icon hambarger  */}
           {/* start: logo rayanpost */}
-          <div>
+          <div className="pl-[20px]">
             <Image
-              src="/logoRayan.png"
+              src="/image_dashboard/rayanlogo.svg"
               width={80}
               height={80}
               alt="Picture of the author"

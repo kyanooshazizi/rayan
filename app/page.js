@@ -1,13 +1,8 @@
-import Headerpage from "@/components/Homepage/Header";
-import Footer from "@/components/Homepage/Footer";
-import Maincomponent from "@/components/Homepage/mainpage";
-
+import Totalpage from "@/components/Homepage/totalpage"
 const Homepage = () => {
   return (
     <>
-     <Headerpage/> 
-      <Maincomponent/>
-     <Footer/>
+     <Totalpage/>
     </>
     
   )
