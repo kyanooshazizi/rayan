@@ -27,7 +27,7 @@ useEffect(() => {
         onClick={() => {
           return setOpen(!open);
         }}
-        className={`${stylex} reletive border-l-2 border-gray-200 text-txnotcolor p-3 md:p-7 text-sm md:text-base bg-white w-full flex items-center justify-between ${
+        className={`${stylex} reletive border-l-2 border-gray-200 text-txnotcolor p-6 lg:p-7 text-sm md:text-base bg-white w-full flex items-center justify-between ${
           !selected && "text-gray-700"
         }`}
       >

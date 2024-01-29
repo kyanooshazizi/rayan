@@ -7,6 +7,13 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      'sm':'640px',
+      'md':'768px',
+      'lg': '992px',
+      'xl':'1200px',
+      '2xl':'1536px'
+    },
     extend: {
       backdropBlur: {
         5: "5px",
@@ -17,7 +24,7 @@ module.exports = {
           300: "#FFC300",
         },
         colorgray:"#5B6271",
-        colorgreen:"#46C86E",
+        colorgreen:"#32934D",
         iconbox: "#ffffff",
         bgcolor: "#283764",
         bgcolor_hover: "#30437a",

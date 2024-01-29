@@ -24,7 +24,15 @@ import {
   Button,
 } from "@nextui-org/react";
 const Resnav = () => {
-  const { username, islogin, setIslogin, isloading, userdata,toggle,setToggle }= useThemeContext();
+  const {
+    username,
+    islogin,
+    setIslogin,
+    isloading,
+    userdata,
+    toggle,
+    setToggle,
+  } = useThemeContext();
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
   const handleScroll = () => {
     setClientWindowHeight(window.scrollY);
@@ -37,25 +45,29 @@ const Resnav = () => {
 
   return (
     <>
- 
       <nav
         className={`h-[80px] ${styles.nav_header} ${
           clientWindowHeight > 0
             ? "bg-bgcolor_hover text-white z-50"
             : "text-txcolor mt-5"
-        } ${toggle?"text-txcolor":"text-txnotcolor bg-dashboard"} `}
+        } ${toggle ? "text-txcolor" : "text-txnotcolor bg-dashboard"} `}
         id="nav_menu"
       >
         {/* start:show size for mobile  */}
-     
-       <div className={`flex justify-around items-center lg:hidden`}>
-          <div className="  text-2xl sm:px-6 px-4" onClick={()=>{setToggle(prev=>!prev)}}>
+
+        <div className={`flex justify-around items-center lg:hidden`}>
+          <div
+            className="  text-2xl sm:px-6 px-4"
+            onClick={() => {
+              setToggle((prev) => !prev);
+            }}
+          >
             {toggle ? <TiThMenu /> : <MdOutlineClose />}
           </div>
           <div className="sm:px-1">
             {isloading ? (
               <Skeleton className="h-[36px] w-28 ml-3 rounded hidden md:block" />
-            ) :( islogin ? (
+            ) : islogin ? (
               <Dropdown>
                 <DropdownTrigger>
                   {userdata && userdata.flag ? (
@@ -101,21 +113,29 @@ const Resnav = () => {
               </Dropdown>
             ) : (
               <div className="sm:p-3 p-0">
-                <button className={`text-[16px] hover:bg-bgcolor_hover py-2 px-3 rounded ${toggle?"bg-bgcolor_hover":"bg-slate-200"}  sm:bg-none`}>
+                <button
+                  className={`text-[16px] hover:bg-bgcolor_hover py-2 px-3 rounded ${
+                    toggle ? "bg-bgcolor_hover" : "bg-slate-200"
+                  }  sm:bg-none`}
+                >
                   <FaUserCircle className="sm:inline-block text-2xl hidden" />
-                  <span >
+                  <span>
                     <Link href="/auth/login" className="px-2">
                       ورود
                     </Link>
                   </span>
                 </button>
               </div>
-            ))}
+            )}
           </div>
         </div>
         <div className="lg:hidden px-4">
           <Image
-            src={`${toggle?"/imag_homepage/logoRayan.svg":"/imag_homepage/logoRayan1.svg"}`}
+            src={`${
+              toggle
+                ? "/imag_homepage/logoRayan.svg"
+                : "/imag_homepage/logoRayan1.svg"
+            }`}
             alt="logo"
             width={90}
             height={24}
@@ -124,7 +144,7 @@ const Resnav = () => {
           />
         </div>
         {/* end:show size for mobile  */}
-
+        {/* start:nav  right */}
         <div className={`${styles.nav_right} lg:flex hidden`}>
           <div>
             <Image
@@ -132,12 +152,12 @@ const Resnav = () => {
               alt="logo"
               width={120}
               height={24}
-              className="mr-[40px]  hidden md:block"
+              className="mr-[40px]"
               priority={true}
             />
           </div>
 
-          <div className="hidden md:block">
+          <div>
             <ul className={`${styles.nav_header_ul} px-4 mt-2`}>
               <li className="mr-4">
                 <Link href={"/service"}>
@@ -160,7 +180,8 @@ const Resnav = () => {
             </ul>
           </div>
         </div>
-
+        {/* end:nav  right */}
+        {/* start:nav left */}
         <div className="lg:flex lg:justify-center lg:align-middle lg:items-center hidden">
           {isloading ? (
             <Skeleton className="h-[36px] w-28 ml-3 rounded" />
@@ -224,22 +245,23 @@ const Resnav = () => {
           <div>
             <Link
               href={"/order/requst"}
-              className="bg-colorgreen px-6 text-[14px] py-[6px] rounded"
+              className="bg-colorgreen px-7 text-[16px] py-[6px] rounded"
             >
               شروع کنیم
             </Link>
           </div>
-          <div className="pr-8 pl-4">
-            <CiGlobe className="text-2xl mx-2 inline-block" />
+          <div className="pr-6 pl-4">
+            <CiGlobe className="text-2xl mx-3 inline-block" />
             <Image
               src={"/imag_homepage/shopping.svg"}
               alt="shopping"
               width={25}
               height={25}
-              className="inline-block mx-2"
+              className="inline-block mx-3"
             />
           </div>
         </div>
+        {/* end:nav left */}
       </nav>
     </>
   );

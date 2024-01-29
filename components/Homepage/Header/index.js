@@ -9,9 +9,9 @@ const Headerpage = () => {
       >
         <Navbar />
         <div className="text-txcolor">
-          <div className="mt-16 sm:w-full w-4/5 mx-auto">
-            <h1 className="text-center md:text-[24px]  font-bold sm:text-[20px] text-[20px] mx-auto">
-              <span className="px-1 md:text-[36px] sm:text-[24px] text-[24px] md:font-extrabold ">
+          <div className="mt-10 sm:w-full w-4/5 mx-auto pb-3">
+            <h1 className="text-center md:text-[26px]  font-bold sm:text-[24px] text-[24px] mx-auto">
+              <span className="px-1 md:text-[38px] sm:text-[32px] text-[28px] md:font-extrabold ">
                 رایان
               </span>{" "}
               راه حل های هوشمندانه برای کسب و کار های آنلاین
