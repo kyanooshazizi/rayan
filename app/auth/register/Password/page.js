@@ -6,7 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 // icon
-import { AiFillHome } from "react-icons/ai";
 import { Validate } from "../Validate";
 import { IoEyeSharp } from "react-icons/io5";
 import { BsEyeSlashFill } from "react-icons/bs";
@@ -15,6 +14,7 @@ import { useSelector } from "react-redux";
 import { MethodFlagHandler } from "@/components/utilsorder/utils/MethodFlagHandler";
 import { getCookie ,deleteCookie} from "cookies-next";
 import { useSearchParams } from 'next/navigation';
+import Image from "next/image";
 const Register = () => {
   const searchParams = useSearchParams();
   const typeurl = searchParams.get('type')
@@ -161,31 +161,36 @@ const Register = () => {
 
   return (
     <>
-      <div className="flex justify-center">
-        <div className="md:w-1/2 lg:w-1/3 w-[92%] sm:w-[80%] relative bg-transparent">
-          <div className="absolute w-full top-0 rounded-xl shadow-[0_2px_5px_rgba(0,0,0,0.4)] backdrop-blur-5 p-5 mt-[100px]">
-            <Link href="/">
-              <div className=" my-3 text-[blue] text-2xl">
-                {" "}
-                <AiFillHome className="inline ml-2" />
-                صفحه اصلی{" "}
-              </div>
-            </Link>
-            <p className="text-center md:text-base sm:text-sm text-sm  bg-bgcolor text-white py-4 rounded-md">
+      <div className="flex justify-center w-full min-h-screen bg-white">
+        <div className="lg:block hidden basis-[33%] w-full bg-dashboard">
+        <Image
+          src="/imag_auth/logo_blue.svg"
+          width={137}
+          height={47}
+          alt="logo"
+          className="mt-[80px] mr-[90px]"
+        />
+        <div className="mr-[90px] mt-[300px]">
+          <span className="text-bgcolor text-[36px] font-[800] block">رایان</span>
+          <span className="text-[#636363] text-[18px]">بهینه مدیریت کنید</span>
+        </div>
+        </div>
+        <div className="lg:basis-[67%] md:basis-[80%] basis-full  w-full bg-white lg:mt-[180px] mt-[140px]">
+            <form action="" className="mt-5 lg:w-[45%] w-[90%] mx-auto  " onSubmit={formHandler}>
+            <p className="lg:text-[30px] text-[24px] font-[600] text-gray-600">
               {typeurl==="ForgetPassword"?"رمز عبور جدید خود را وارد کنید":" تکمیل عضویت"}
              
             </p>
-            <form action="" className="mt-5" onSubmit={formHandler}>
               {/* start:password */}
               <div className="relative">
                 {flagicon ? (
                   <IoEyeSharp
-                    className="absolute top-8 left-10 text-bgcolor cursor-pointe"
+                    className="absolute top-8 left-6 text-bgcolor cursor-pointe"
                     onClick={iconHandler}
                   />
                 ) : (
                   <BsEyeSlashFill
-                    className="absolute top-8 left-10 text-bgcolor cursor-pointe"
+                    className="absolute top-8 left-6 text-bgcolor cursor-pointe"
                     onClick={iconHandler}
                   />
                 )}
@@ -193,7 +198,7 @@ const Register = () => {
                 <input
                   name="password"
                   type={!flagicon ? "password" : "text"}
-                  className={`mt-4 px-2 py-3 rounded-md  w-[90%]  mr-5 cursor-pointer ${ColorinputHandler(
+                  className={`mt-6 px-2 py-3 rounded-[5px] bg-dashboard  w-full   cursor-pointer ${ColorinputHandler(
                     error.password,
                     focus.password
                   )}`}
@@ -213,12 +218,12 @@ const Register = () => {
               <div className="relative">
                 {flagicon ? (
                   <IoEyeSharp
-                    className="absolute top-8 left-10 text-bgcolor cursor-pointer"
+                    className="absolute top-8 left-6 text-bgcolor cursor-pointer"
                     onClick={iconHandler}
                   />
                 ) : (
                   <BsEyeSlashFill
-                    className="absolute top-8 left-10 text-bgcolor cursor-pointe"
+                    className="absolute top-8 left-6 text-bgcolor cursor-pointe"
                     onClick={iconHandler}
                   />
                 )}
@@ -228,7 +233,7 @@ const Register = () => {
                   onFocus={changeFocuse}
                   name="confirm_password"
                   type={!flagicon ? "password" : "text"}
-                  className={`mt-4 px-2 py-3 rounded-md  w-[90%]  mr-5 cursor-pointer ${ColorinputHandler(
+                  className={`mt-3 px-2 py-3 rounded-[5px] bg-dashboard  w-full  cursor-pointer ${ColorinputHandler(
                     error.confirm_password,
                     focus.confirm_password
                   )}`}
@@ -243,17 +248,17 @@ const Register = () => {
               {/* end:confirm_password */}
               <button
                 type="submit"
-                className="text-center font-bold bg-bgcolor text-white py-3 rounded-md inline-block w-1/3 mt-6 mr-5"
+                className="text-center font-bold bg-bgcolor text-white py-[10px] rounded-[5px] inline-block w-full mt-6"
               >
                  {typeurl==="ForgetPassword"?"تغییر رمز عبور":"ثبت نام"}
               </button>
-              {typeurl==="ForgetPassword"?<p className="inline mr-2">    
-                <Link className="text-[blue] cursor-pointer" href="/auth/login">
+              {typeurl==="ForgetPassword"?<p className="inline ">    
+                <Link className="text-center font-bold bg-[#515E83] text-white py-[10px] rounded-[5px] inline-block w-full mt-6 cursor-pointer" href="/auth/login">
                   وارد شوید
                 </Link>
-              </p>:<p className="inline mr-2">    
+              </p>:<p className="block mt-6 text-[16px] text-gray-600">    
                 قبلا ثبت نام کرده اید؟
-                <Link className="text-[blue] cursor-pointer" href="/auth/login">
+                <Link className="text-center font-bold bg-[#515E83] text-white py-[10px] rounded-[5px] inline-block w-full mt-2 cursor-pointer" href="/auth/login">
                   وارد شوید
                 </Link>
               </p>}
@@ -261,7 +266,6 @@ const Register = () => {
             </form>
           </div>
           <ToastContainer />
-        </div>
       </div>
     </>
   );

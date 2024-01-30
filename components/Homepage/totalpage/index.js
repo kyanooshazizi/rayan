@@ -13,7 +13,7 @@ const index = () => {
       <div>
       <Headerpage/> 
         <Maincomponent/>
-      <Footer/>
+      {/* <Footer/> */}
       </div>:<Mobilepage/>
     }
      

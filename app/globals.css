@@ -433,7 +433,7 @@
 }
 
 @font-face {
-  font-family: AbarLowFaNum;
+  font-family: AbarMidFaNum;
   font-style: normal;
   font-weight: normal;
   src: url("../public/font/AbarMidFaNum-Regular.woff") format("woff"),
@@ -453,6 +453,6 @@ body {
   margin: 0px;
   text-decoration: none;
   direction: rtl;
-  font-family: AbarLowFaNum, sahel, sans-serif;
+  font-family: AbarMidFaNum, sahel, sans-serif;
 }
 /* leaflet */

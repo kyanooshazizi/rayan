@@ -119,14 +119,14 @@ const login = () => {
             {/* end:titr form */}
             {/* start: form */}
             <div className="">
-              <form action="" className="mt-5" onSubmit={formHandler}>
+              <form action="" className="mt-5 w-[90%]" onSubmit={formHandler}>
                 <div className="relative">
                   <Image
-                    src="/imag_auth/user_icon.svg"
+                    src="/imag_auth/user.svg"
                     width={22}
                     height={22}
                     alt="image"
-                    className="absolute top-[36px] left-[55px]"
+                    className="absolute top-[36px] left-[3px]"
                     priority
                   />
                   <label htmlFor="user" className="mt-4 block mr-5">
@@ -135,7 +135,7 @@ const login = () => {
                   <input
                     name="user"
                     type="text"
-                    className=" px-2 py-3 rounded-md outline-gray-300 w-[90%]  mr-5 cursor-pointer bg-[#F3F6FB]"
+                    className=" px-2 py-3 rounded-md outline-gray-300 w-full  mr-5 cursor-pointer bg-[#F3F6FB]"
                     placeholder="ایمیل/ شماره موبایل"
                     onChange={(event) => changeHandler(event)}
                   />
@@ -148,7 +148,7 @@ const login = () => {
                     width={22}
                     height={22}
                     alt="image"
-                    className="absolute top-[36px] left-[55px]"
+                    className="absolute top-[36px] left-[3px]"
                     priority
                   />
                   <label htmlFor="password" className="mt-3 block mr-5">
@@ -157,19 +157,19 @@ const login = () => {
                   <input
                     name="password"
                     type="password"
-                    className=" px-2 py-3 rounded-md outline-gray-300 w-[90%]  mr-5 cursor-pointer bg-[#F3F6FB]"
+                    className=" px-2 py-3 rounded-md outline-gray-300 w-full  mr-5 cursor-pointer bg-[#F3F6FB]"
                     placeholder="کلمه عبور"
                     onChange={(event) => changeHandler(event)}
                   />
                   <Link href="/auth/register?type=ForgetPassword">
-                    <span className="float-left mt-[10px] ml-12 text-gray-600 ">
+                    <span className="float-left mt-[10px] ml-1 text-gray-600 md:text-[14px] text-[13px] ">
                       فراموشی رمز عبور
                     </span>
                   </Link>
                 </div>
                 <button
                   type="submit"
-                  className="text-center font-bold bg-bgcolor text-white py-3 rounded-md inline-block w-[90%] mt-6 mr-5"
+                  className="text-center font-bold bg-bgcolor text-white py-3 rounded-md inline-block w-full mt-6 mr-5"
                 >
                   ورود
                 </button>

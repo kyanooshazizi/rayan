@@ -2,10 +2,8 @@ import React from 'react'
 
 const Maincomponent = () => {
   return (
-    <div>
-      <h4 className='bg-white w-full h-[1000px] flex items-center justify-center text-[40px]'>
-        main page
-      </h4>
+    <div className='bg-dashboard pt-[30px] text-center text-[16px] font-[700] text-[#5B6271] w-full h-[calc(100vh_-_500px)]'>
+      مورد اعتماد شما در تهران و البرز
     </div>
   )
 }

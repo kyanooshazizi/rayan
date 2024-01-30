@@ -165,14 +165,14 @@ const Register = () => {
               <p>کسب و کار های اینترنتی</p>
             </div>
           </div>
-          <div className="lg:basis-[67%] basis-full h-[100vh] relative flex justify-center items-center ">
+          <div className="lg:basis-[67%] basis-full h-[100vh] relative flex justify-center lg:items-center lg:mt-0 mt-[120px] ">
             <form
               action=""
               className=" lg:basis-[50%] sm:basis-[70%] basis-[90%]"
               onSubmit={formHandler}
             >
               <span className="md:text-[27px] text-[24px] md:font-[500] font-[600] mb-2 block">
-                ایجاد حساب کاربری
+                  {typeurl === "ForgetPassword"?"فراموشی رمز عبور":"ایجاد حساب کاربری"}
               </span>
               {/* start:user */}
               <div className="relative w-full">
@@ -210,7 +210,7 @@ const Register = () => {
               </button>
               <Link
                 href="/"
-                className="text-center font-[500] bg-white text-gray-800 py-3 rounded-md inline-block w-full mt-3"
+                className="text-center font-[500] bg-white text-gray-500 py-3 rounded-md inline-block w-full mt-3"
               >
                 بازگشت به صفحه اصلی
               </Link>

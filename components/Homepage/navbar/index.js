@@ -66,7 +66,7 @@ const Resnav = () => {
           </div>
           <div className="sm:px-1">
             {isloading ? (
-              <Skeleton className="h-[36px] w-28 ml-3 rounded hidden md:block" />
+              <Skeleton className="h-[38px] w-28 ml-3 rounded hidden md:block" />
             ) : islogin ? (
               <Dropdown>
                 <DropdownTrigger>
@@ -78,8 +78,8 @@ const Resnav = () => {
                       <AiFillCaretDown className="inline-block " />
                     </div>
                   ) : (
-                    <div className="group p-2 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-full hover:bg-txcolor hover:transition-all duration-500 hover:duration-300 font-bold  md:text-base cursor-pointer ml-10 md:block hidden">
-                      <FaUserAlt className="text-txcolor group-hover:text-utils-300 lg:text-2xl tetx-xl " />
+                    <div>
+                      <FaUserCircle className="text-3xl hidden md:block" />
                     </div>
                   )}
                 </DropdownTrigger>
@@ -196,8 +196,8 @@ const Resnav = () => {
                     <AiFillCaretDown className="inline-block " />
                   </div>
                 ) : (
-                  <div className="group p-2 bg-utils-300 shadow-[-4px_3px_5px_1px_bgcolor] rounded-full hover:bg-txcolor hover:transition-all duration-500 hover:duration-300 font-bold  md:text-base cursor-pointer ml-10 ">
-                    <FaUserAlt className="text-txcolor group-hover:text-utils-300 text-2xl " />
+                  <div>
+                    <FaUserCircle className=" text-4xl mx-8" />
                   </div>
                 )}
               </DropdownTrigger>
