@@ -23,7 +23,7 @@ const index = () => {
       <section className="col-start-1 col-end-6 mt-[70px] ">
         <div className="flex flex-wrap">
           {/* مشخصات فرستنده */}
-          <div className="w-[35%] bg-white mt-4 py-4 rounded-md mx-14">
+          <div className="w-[35%] bg-white mt-16 py-4 rounded-md mx-14">
             <span className="text-center mx-auto block text-xl font-bold">
               مشخصات فرستنده
             </span>
@@ -117,7 +117,7 @@ const index = () => {
             </form>
           </div>
           {/* مشخصات گیرنده */}
-          <div className="w-[35%] bg-white rounded-md mt-4 py-4">
+          <div className="w-[35%] bg-white rounded-md mt-16 py-4">
             <span className="text-center mx-auto block text-xl font-bold">
               مشخصات گیرنده
             </span>

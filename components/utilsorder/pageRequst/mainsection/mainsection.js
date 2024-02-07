@@ -56,7 +56,7 @@ const Main_section = () => {
             </span>
           </div>
         ) : (
-          <div className="flex align-middle justify-center mt-4 w-full">
+          <div className="flex align-middle justify-center mt-20 w-full">
             <div className=" mx-4 basis-52">
               <Selectpick_delivery
                 stylex="rounded-xl bg-white !important"

@@ -219,6 +219,7 @@ hover:text-navbarrequst transition-all transition-500 ease-linear ${
                   headers: {Authorization:`Bearer ${getCookie("access_token")}` },
                 }).then(res=>res.json()).then(res=>
                   {
+                    console.log(res)
                   size_order.map((item, index) => {
                     fetch("https://mohaddesepkz.pythonanywhere.com/orders/new/", {
                       method: "POST",
@@ -251,7 +252,7 @@ hover:text-navbarrequst transition-all transition-500 ease-linear ${
                     })
                       .then((res) => res.json())
                       .then((res) =>{
-                        
+                        console.log(res)
                         setCookie('code', res.tracking_code);
                       })
                       
@@ -259,11 +260,11 @@ hover:text-navbarrequst transition-all transition-500 ease-linear ${
                       
                     })
                   }
-                  );
+                  ).catch(err=>console.log("error delet",err))
                 
                  
                 
-                  setTimeout(()=>{ router.push("/order/OrderReview")},1000)
+                  setTimeout(()=>{ router.push("/order/OrderReview")},2000)
                   
                  
                 }

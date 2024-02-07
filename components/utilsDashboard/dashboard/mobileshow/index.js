@@ -129,7 +129,7 @@ const index = () => {
         </div>
         <Link
           href="/dashboard/NewOrder"
-          className="w-full bg-[#0061ff] text-white py-4 px-2 text-center p-2 rounded fixed bottom-0 font-bold"
+          className="w-full bg-colorgreen text-white py-4 px-2 text-center p-2 rounded fixed bottom-0 font-bold"
         >
           ثبت سفارش جدید
         </Link>

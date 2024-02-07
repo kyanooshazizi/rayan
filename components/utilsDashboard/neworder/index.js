@@ -13,16 +13,17 @@ const index = () => {
       {mobile ? (
         <Mobile />
       ) : (
-        <div className="grid grid-cols-12">
-          <div className="col-start-1 col-end-2 mt-[72px]">
+        <main className="pt-[90px] min-h-screen">
+          <div className="lg:flex hidden fixed w-[140px] mt-[20px]">
             <Sidbar />
           </div>
-          <div className="col-start-2 col-end-13 mt-28">
-            <div className="w-3/5 mx-auto">
-              <Neworder btncolor={"bgcolor"} />
+          <div className="lg:pr-[160px] pr-[14px]">
+            <div className="md:text-[24px] font-bold text-[20px]">سفارش جدید</div>
+            <div className=" mt-10 w-full flex">
+            <Neworder btncolor={"bgcolor"} />
             </div>
           </div>
-        </div>
+        </main>
       )}
     </div>
   );

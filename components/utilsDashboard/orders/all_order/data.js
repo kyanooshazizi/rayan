@@ -1,0 +1,101 @@
+import React from "react";
+const columns = [
+  {name: "شماره سفارش", uid: "id", sortable: true},
+  {name: "نام گیرنده", uid: "name", sortable: true},
+  {name: "تاریخ ثبت", uid: "RecordDate", sortable: true},
+  {name: "تعداد کالا", uid: "numberOrder", sortable: true},
+  {name: "تاریخ جمع آوری", uid: "CollectDate"},
+  {name: "هزینه ارسال", uid: "price"},
+  {name: "وضعیت", uid: "status"},
+  {name: "جزئیات سفارش", uid: "details"},
+  {name: "مشاهده فاکتور", uid: "factor"},
+];
+
+const statusOptions = [
+  {name: "تکمیل شد", uid: "successful"},
+  {name: "در حال بررسی", uid: "Pending"},
+  {name: "ناموفق", uid: "Unsuccessful"},
+];
+
+const users = [
+    {
+        id: 112,
+        name: "کریم رضایی",
+        RecordDate: "02/12/1402",
+        numberOrder: "2",
+        status: "Pending",
+        CollectDate: "1402/05/03",
+        price: "250000",
+        details:"جزئیات سفارش",
+        factor: "نمایش فاکتور",
+      },
+      {
+        id: 112,
+        name: "علی رضایی",
+        RecordDate: "02/12/1402",
+        numberOrder: "2",
+        status: "successful",
+        CollectDate: "1402/05/03",
+        price: "50000",
+        details:"جزئیات سفارش",
+        factor: "نمایش فاکتور",
+      },
+      {
+        id: 112,
+        name: "علی رضایی",
+        RecordDate: "02/12/1402",
+        numberOrder: "2",
+        status: "successful",
+        CollectDate: "1402/05/03",
+        price: "50000",
+        details:"جزئیات سفارش",
+        factor: "نمایش فاکتور",
+      },
+      {
+        id: 112,
+        name: "علی رضایی",
+        RecordDate: "02/12/1402",
+        numberOrder: "2",
+        status: "Unsuccessful",
+        CollectDate: "1402/05/03",
+        price: "50000",
+        details:"جزئیات سفارش",
+        factor: "نمایش فاکتور",
+      },
+      {
+        id: 112,
+        name: "علی رضایی",
+        RecordDate: "02/12/1402",
+        numberOrder: "2",
+        status: "Unsuccessful",
+        CollectDate: "1402/05/03",
+        price: "50000",
+        details:"جزئیات سفارش",
+        factor: "نمایش فاکتور",
+      },
+      {
+        id: 112,
+        name: "علی رضایی",
+        RecordDate: "02/12/1402",
+        numberOrder: "2",
+        status: "successful",
+        CollectDate: "1402/05/03",
+        price: "50000",
+        details:"جزئیات سفارش",
+        factor: "نمایش فاکتور",
+      },
+      {
+        id: 112,
+        name: "علی رضایی",
+        RecordDate: "02/12/1402",
+        numberOrder: "2",
+        status: "successful",
+        CollectDate: "1402/05/03",
+        price: "50000",
+        details:"جزئیات سفارش",
+        factor: "نمایش فاکتور",
+      },
+];
+
+
+export {columns, users, statusOptions};

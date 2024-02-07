@@ -404,6 +404,7 @@
   [class^="col"] {
     float: right;
     padding: 8px;
+    margin: 8px;
   }
 
   .row::after {

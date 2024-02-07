@@ -184,7 +184,7 @@ const Resnav = () => {
         {/* start:nav left */}
         <div className="lg:flex lg:justify-center lg:align-middle lg:items-center hidden">
           {isloading ? (
-            <Skeleton className="h-[36px] w-28 ml-3 rounded" />
+            <Skeleton className="h-[39px] w-[110px] ml-3 rounded" />
           ) : islogin ? (
             <Dropdown>
               <DropdownTrigger>
@@ -197,7 +197,7 @@ const Resnav = () => {
                   </div>
                 ) : (
                   <div>
-                    <FaUserCircle className=" text-4xl mx-8" />
+                    <FaUserCircle className=" text-3xl mx-8 cursor-pointer" />
                   </div>
                 )}
               </DropdownTrigger>
@@ -245,7 +245,7 @@ const Resnav = () => {
           <div>
             <Link
               href={"/order/requst"}
-              className="bg-colorgreen px-7 text-[16px] py-[6px] rounded"
+              className="bg-colorgreen px-9 text-[16px] py-[8px] rounded"
             >
               شروع کنیم
             </Link>

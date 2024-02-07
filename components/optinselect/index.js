@@ -29,13 +29,13 @@ const Alloptien = ({btncolor}) => {
     },
   ]);
  if(datacity.isError||dataservise.isError){
-  return <div role="alert" className="alert alert-error w-1/2">
+  return <div role="alert" className="alert alert-error w-1/2 mx-auto">
   <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-  <span >{datacity.error.message}</span>
+  <span className="text-center">{datacity.error.message}</span>
 </div>
  }
   return (
-    <section className="lg:flex lg:justify-center lg:items-center mt-3 lg:flex-wrap">
+    <section className="mt-3 lg:flex-wrap w-full lg:flex justify-center items-center">
       {city1.map((item) => {
         return <Option_city  key={uuidv4()} {...item} data={datacity.data} />;
       })}
@@ -46,8 +46,8 @@ const Alloptien = ({btncolor}) => {
         data={dataservise.data}
       />
      
-       <div className="h-12">
-       <button className={`lg:w-[190px] sm:w-full w-5/6 mx-auto lg:rounded-l-lg lg:rounded-none rounded-lg p-4 lg:p-7 ${btncolor?`bg-${btncolor} text-txcolor`:"bg-colorgray"} hover:bg-utils-400 hover:transition-all hover:duration-300 font-bold flex align-middle justify-center lg:justify-between text-xs md:text-[16px] text-txcolor} lg:mt-0 md:mt-7 mt-6`}
+       <div className="h-16 lg:w-[225px]">
+       <button className={` w-[80%] lg:mx-0 mx-auto lg:rounded-l-lg lg:rounded-none rounded-lg p-4 lg:p-7 ${btncolor?`bg-${btncolor} text-txcolor`:"bg-colorgray"} hover:bg-utils-400 hover:transition-all hover:duration-300 font-bold flex align-middle justify-center lg:justify-between text-xs md:text-[16px] text-txcolor} lg:mt-0 md:mt-[20px] mt-6`}
         onClick={()=>{
           dispatch(MethodBackHomepage())
           router.push("/order/requst");

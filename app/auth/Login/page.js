@@ -189,7 +189,7 @@ const login = () => {
           />
           <div className="absolute top-[80%] lg:left-[60%] left-[40%] z-10">
             <Image
-              src="/imag_auth/logo.svg"
+              src="/imag_homepage/logoRayan.svg"
               width={196}
               height={38}
               alt="logo"

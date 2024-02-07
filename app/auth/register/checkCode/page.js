@@ -88,6 +88,47 @@ const page = () => {
       .catch((err) => console.log(err));
   };
 
+// ارسال مجدد کد اعتبار سنجی:شروع
+const SendCoge=()=>{
+  fetch(
+    `https://mohaddesepkz.pythonanywhere.com/users/${
+      typeurl === "ForgetPassword" ? "forgot-password" : "register/code"
+    }/`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        username: getCookie("username"),
+      }),
+      headers: { "Content-Type": "application/json" },
+    }
+  )
+    .then((res) => {
+      if (!res.ok) {
+        return null;
+      } else {
+        return res.json();
+      }
+    })
+    .then((res) => {
+     if(res){
+      swal({ text: "کد یکبار مصرف مجدد ارسال شد", icon: "success" });
+     }else{
+      swal({
+        text: "ارسال کد اعتبار سنجی با خطا مواجه شده است",
+        icon: "error",
+      });
+     }
+    })
+    .catch((error) => {
+      swal({
+        text: "ارسال کد اعتبار سنجی با خطا مواجه شده است",
+        icon: "error",
+      });
+      console.error(error);
+    });
+}
+// ارسال مجدد کد اعتبار سنجی:پایان
+
   return (
     <div className="flex justify-center w-full min-h-screen bg-dashboard">
       <div className="">
@@ -134,16 +175,13 @@ const page = () => {
 
           <button
             type="submit"
-            className="mx-auto text-center block font-bold bg-green-500 text-white py-3 rounded-md w-[300px] mt-8"
+            className="mx-auto text-center block font-bold bg-colorgreen text-white py-3 rounded-md w-[300px] mt-8"
           >
             تایید
           </button>
-          {/* <p className="inline mr-2">
-              قبلا ثبت نام کرده اید؟{" "}
-              <Link className="text-[blue] cursor-pointer" href="/auth/login">
-                وارد شوید
-              </Link>
-            </p> */}
+          <p onClick={SendCoge} className="text-center mt-5 cursor-pointer text-gray-500">
+              ارسال مجدد کد 
+            </p>
         </form>
       </div>
       <ToastContainer />

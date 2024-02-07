@@ -185,12 +185,12 @@ const Register = () => {
               <div className="relative">
                 {flagicon ? (
                   <IoEyeSharp
-                    className="absolute top-8 left-6 text-bgcolor cursor-pointe"
+                    className="absolute top-[40px] left-[18px] text-bgcolor cursor-pointe"
                     onClick={iconHandler}
                   />
                 ) : (
                   <BsEyeSlashFill
-                    className="absolute top-8 left-6 text-bgcolor cursor-pointe"
+                    className="absolute top-[40px] left-[18px] text-bgcolor cursor-pointe"
                     onClick={iconHandler}
                   />
                 )}
@@ -218,12 +218,12 @@ const Register = () => {
               <div className="relative">
                 {flagicon ? (
                   <IoEyeSharp
-                    className="absolute top-8 left-6 text-bgcolor cursor-pointer"
+                    className="absolute top-[27px] left-[18px] text-bgcolor cursor-pointer"
                     onClick={iconHandler}
                   />
                 ) : (
                   <BsEyeSlashFill
-                    className="absolute top-8 left-6 text-bgcolor cursor-pointe"
+                    className="absolute top-[27px] left-[18px] text-bgcolor cursor-pointe"
                     onClick={iconHandler}
                   />
                 )}

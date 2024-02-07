@@ -25,23 +25,23 @@ const Option = ({ stylex, placholder, data, slug }) => {
   // Hydration error:end
 
   return (
-    <div className={` font-medium h-12 cursor-pointer relative lg:w-[240px] sm:w-full w-5/6 mx-auto lg:mt-0 mt-[21px]`}>
+    <div className={` font-medium h-16 cursor-pointer relative lg:basis-[17%] lg:mx-0 mx-auto  w-[80%] lg:mt-0 md:mt-[18px] mt-[13px]`}>
       <div suppressHydrationWarning 
         onClick={() => {
           return setOpen(!open);
         }}
-        className={`${stylex} border-l-2  text-txnotcolor border-gray-200 p-6 lg:p-7  text-sm md:text-base w-full flex items-center justify-between ${
+        className={`${stylex} border-l-2  text-txnotcolor border-gray-200 px-6 pt-10 pb-4  text-sm md:text-base w-full flex items-center justify-between ${
           !selected && "text-gray-700"
         }`}
       >
         {slug === "pick" ? (dataorder.pick_up?dataorder.pick_up:placholder) : (dataorder.delivery?dataorder.delivery:placholder)}
         {/* {selected?selected:placholder} */}
         <BiChevronDown size={20} className={`${open && "rotate-180"}`} />
-        {slug === "pick" ? (isClient&&dataorder.pick_up?<span className={`absolute top-0 opacity-60 `}>مبدا</span>:"") : (isClient&&dataorder.delivery?<span className={`absolute top-0 opacity-60 `}>مقصد</span>:"")}
+        {slug === "pick" ? (isClient&&dataorder.pick_up?<span className={`absolute top-2 font-bold text-bgcolor `}>مبدا</span>:"") : (isClient&&dataorder.delivery?<span className={`absolute top-2 font-bold text-bgcolor `}>مقصد</span>:"")}
          
       </div>
       <ul
-        className={`z-10 bg-white shadow-xl mt-0 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
+        className={`z-10 bg-white shadow-xl mt-2 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
           open ? "max-h-60" : "hidden"
         } `}
       >

@@ -13,7 +13,7 @@ export default function App({children}) {
       // Provide the client to your App
       <QueryClientProvider client={queryClient}>
         {children}
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     )
   } 

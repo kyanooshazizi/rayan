@@ -77,7 +77,6 @@ const Register = () => {
           }
         })
         .then((res) => {
-          console.log(res);
           return checkRouter(res);
         })
         .catch((error) => {
