@@ -126,7 +126,8 @@ const index = () => {
                 }`}
               />
             </span>
-            <span  className={`text-[14px] font-bold ${pathflag[2] === "ProfileBusiness" ? "text-black":" text-[#636363]"} inline-block`}>پروفایل کسب و کاری</span>
+            <span  className={`text-[14px] font-bold ${pathflag[2] === "ProfileBusiness" ? "text-black":" text-[#636363]"} inline-block`}>پروفایل</span>
+            <span className={`text-[14px] font-bold ${pathflag[2] === "ProfileBusiness" ? "text-black":" text-[#636363]"} inline-block`}>کسب و کاری</span>
           </Link>
         </div>
 
@@ -139,7 +140,7 @@ const index = () => {
                 }`}
               />
             </span>
-            <span  className={`text-[14px] font-bold ${pathflag[2] === "Addres" ? "text-black":" text-[#636363]"} inline-block`}>آدرس ها</span>
+            <span  className={`text-[14px] font-bold ${pathflag[2] === "Addres" ? "text-black":" text-[#636363]"} inline-block`}>دفترچه آدرس</span>
           </Link>
         </div>
       </div>

@@ -1,7 +1,5 @@
 import React from "react";
-import Navbar from "@/components/utilsDashboard/Navbar";
-import Sidbar from "@/components/utilsDashboard/Sydbar";
-import Main from "@/components/utilsDashboard/profile";
+import Main from "@/components/utilsDashboard/profile/main";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getData } from "@/components/utilsFunction/checklogin";
@@ -19,17 +17,9 @@ const page = async () => {
     redirect("/auth/login");
   }
   return (
-    <div>
-      <Navbar />
-      <div className="grid grid-cols-12">
-        <div className="col-start-1 col-end-2">
-          <Sidbar />
-        </div>
-        <div className="col-start-2 col-end-13 mt-4 flex">
-          <Main/>
-        </div>
-      </div>
-    </div>
+   <>
+   <Main/>
+   </>
   );
 };
 

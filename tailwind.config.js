@@ -25,6 +25,8 @@ module.exports = {
         },
         colorgray:"#5B6271",
         colorgreen:"#32934D",
+        colortext:"#404040",
+        coloryellow:"#FFCB05",
         iconbox: "#ffffff",
         bgcolor: "#283764",
         bgcolor_hover: "#30437a",
@@ -35,6 +37,7 @@ module.exports = {
         navbarrequst: "#000b76",
         bgbtnhover: "#ffffff",
         dashboard:"#f3f6fb"
+
       },
     },
   },

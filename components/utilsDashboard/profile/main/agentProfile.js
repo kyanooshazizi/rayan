@@ -1,26 +1,60 @@
+"use client"
 import React from "react";
 import swal from "sweetalert";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { FaPhone } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import Image from "next/image";
 import { getCookie } from "cookies-next";
 import { useThemeContext } from "../../../context/store";
-const index = ({ agentdata,setFlagubdate }) => {
+const index = () => {
+    const [flagubdate,setFlagubdate]=useState(false)
   const { setFlagchange } = useThemeContext();
   const [errorPerson, setErrorPerson] = useState({
     mobile: "",
   });
   const [selectedFile, setSelectedFile] = useState('');
   const [profile, setProfile] = useState({
-    company_name: agentdata.length ? agentdata[0].company_name : "",
-    phone: agentdata.length ? agentdata[0].phone : "",
-    company_address: agentdata.length ? agentdata[0].company_address : "",
+    company_name:"",
+    phone:"",
+    company_address: "",
+    logo:"",
+    id:""
   });
-  const notify = () => {
+  useEffect(() => {
+    // legal profile
+    try {
+      fetch("https://mohaddesepkz.pythonanywhere.com/profile/legal/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("access_token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) =>{
+            if (res.length) {
+                return setProfile({
+                    company_name:res[0].company_name,
+                    phone:res[0].phone,
+                    logo:res[0].logo,
+                  company_address:res[0].company_address ,
+                  id:res[0].id,
+                });
+              } else {
+                setProfile({
+                  ...profile,
+                });
+              }
+        })
+        .catch((err) => console.log("agentdata", err));
+    } catch (error) {
+      console.error(error);
+    }
+  }, [flagubdate]);
+  const notify = () =>   
     toast.error("لطفا تمام فیلد ها را پر کنید", {
       position: "top-center",
       autoClose: 2000,
@@ -31,7 +65,6 @@ const index = ({ agentdata,setFlagubdate }) => {
       progress: undefined,
       theme: "colored",
     });
-  };
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
@@ -74,9 +107,9 @@ const index = ({ agentdata,setFlagubdate }) => {
           mobile: "شماره موبایل وارد شده معتبر نیست!",
         });
       } else {
-        if (agentdata.length) {
+        if (profile.id) {
           fetch(
-            `https://mohaddesepkz.pythonanywhere.com/profile/legal/edit/${agentdata[0].id}/`,
+            `https://mohaddesepkz.pythonanywhere.com/profile/legal/edit/${profile.id}/`,
             {
               method: "PATCH",
               body: formData,
@@ -102,7 +135,7 @@ const index = ({ agentdata,setFlagubdate }) => {
                 setFlagchange((prev)=>!prev);
               } else {
                 swal({
-                  text: "ویرایش موفقیت آمیز نبود!",
+                  text: "ویرایش موفقیت آمیز نبود",
                   icon: "error",
                 });
               }
@@ -157,21 +190,10 @@ const index = ({ agentdata,setFlagubdate }) => {
   };
 
   return (
-    <div className="w-2/5 bg-txcolor py-3 rounded-lg">
-      <div className="flex justify-between">
-        <div className="p-2 mb-2 mr-4">
-          <span className="font-bold mb-1 inline-block text-bgcolor">
-            مشخصات سازمان
-          </span>
-          <p className="text-[0.8rem] text-gray-400">
-            مشخصات حقوقی خود را تکمیل کنید
-          </p>
-        </div>
-      </div>
-      <hr className="my-2" />
+    <div className="lg:w-[33%] md:w-[80%] w-full lg:mx-0 mx-auto bg-txcolor py-3 rounded-lg mt-[30px] text-[#404040]">
       <form
         action=""
-        className="p-2 w-4/5 mx-auto"
+        className="p-2 w-[90%] mx-auto"
         onSubmit={AgentHandlerSubmit}
       >
         {/* logo company */}
@@ -181,14 +203,14 @@ const index = ({ agentdata,setFlagubdate }) => {
             htmlFor="image"
             className="text-center cursor-pointer flex justify-center "
           >
-            {agentdata.length ? (
+            {profile.logo ? (
               <div className="mb-3 relative">
-                <div className="absolute bg-green-400 p-3 rounded-full top-[1px] right-[94px]">
+                <div className="absolute bg-colorgreen p-3 rounded-full top-[1px] right-[94px]">
                   <MdEdit className=" text-txcolor" />
                 </div>
                 <Image
                   className="rounded-full"
-                  src={`${agentdata[0].logo}`}
+                  src={`${profile.logo}`}
                   width={100}
                   height={100}
                   alt="لوگو"
@@ -196,12 +218,13 @@ const index = ({ agentdata,setFlagubdate }) => {
               </div>
             ) : (
               <>
-                <div className="text-bgcolor">لوگو</div>
+                
                 <div className="w-20 h-20 rounded bg-slate-300 flex justify-center items-center border-solid border-4 border-slate-100 relative mx-10">
                   <FaUser className="text-txcolor text-6xl" />
                   <div className="absolute bg-slate-400 p-3 rounded-full top-[-15px] right-[48px]">
                     <MdEdit className=" text-txcolor" />
                   </div>
+                  <div className="text-colorgray text-[12px] absolute top-[45px]">لوگو</div>
                 </div>
               </>
             )}
@@ -220,7 +243,7 @@ const index = ({ agentdata,setFlagubdate }) => {
         {/* company nanme */}
         <div className=" mb-4">
           <label htmlFor="company_name" className="text-sm text-bgcolor">
-            <span className="text-[red]">*</span> اسم شرکت
+             اسم شرکت
           </label>
           <input
             type="text"
@@ -235,7 +258,7 @@ const index = ({ agentdata,setFlagubdate }) => {
         <div className=" mb-4 relative">
           <label htmlFor="phone" className="text-sm text-bgcolor">
             <FaPhone className="absolute top-[40px] left-[24px]" />
-            <span className="text-[red]">*</span> تلفن
+             تلفن
           </label>
           <input
             type="number"
@@ -249,8 +272,7 @@ const index = ({ agentdata,setFlagubdate }) => {
         {/* company_address */}
         <div className=" mb-4 ">
           <label htmlFor="company_address" className="text-sm text-bgcolor">
-            {" "}
-            <span className="text-[red]">*</span> آدرس
+            آدرس
           </label>
 
           <input
@@ -269,7 +291,7 @@ const index = ({ agentdata,setFlagubdate }) => {
           type="submit"
           className="px-2 py-3 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 bg-bgcolor text-txcolor"
         >
-          {agentdata.length ? "ویرایش اطلاعات" : "ثبت اطلاعات"}
+          {profile.id ? "ویرایش اطلاعات" : "ثبت اطلاعات"}
         </button>
       </form>
       <ToastContainer />

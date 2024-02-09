@@ -35,21 +35,22 @@ const Resnav = () => {
   } = useThemeContext();
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
   const handleScroll = () => {
-    setClientWindowHeight(window.scrollY);
+    setClientWindowHeight(document.documentElement.scrollTop);
     // console.log(clientWindowHeight)
   };
+ 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   });
-
+  
   return (
     <>
       <nav
         className={`h-[80px] ${styles.nav_header} ${
           clientWindowHeight > 0
             ? "bg-bgcolor_hover text-white z-50"
-            : "text-txcolor mt-5"
+            : "bg-bgcolor text-txcolor mt-5"
         } ${toggle ? "text-txcolor" : "text-txnotcolor bg-dashboard"} `}
         id="nav_menu"
       >

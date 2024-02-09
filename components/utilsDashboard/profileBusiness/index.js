@@ -3,7 +3,7 @@ import React from "react";
 import ModalnewAdd from "./modalnewBusiness";
 const ProfileBusiness = () => {
   return (
-    <div className="pl-4 mx-auto pt-4 pr-4 lg:pr-0">
+    <div className="pl-4 mx-auto pt-20 pr-4 lg:pr-0">
       <div>
         <h3 className="lg:text-xl md:text-lg text-base font-bold ">
           پروفایل کسب و کاری
