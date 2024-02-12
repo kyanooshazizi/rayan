@@ -9,13 +9,13 @@ const index = () => {
       <div className=" lg:w-[90%] w-full flex md:flex-col flex-row justify-center ">
         <div className="md:mb-2 mb-0 flex justify-end relative">
           <input
-            className="bg-[#B4E7C2] text-[#fff] tetx-[12px] outline-none py-1 px-3 lg:w-[180px] md:w-[150px] w-[150px] rounded placeholder:text-colorgreen placeholder:text-[12px]"
+            className="focus:bg-green-200 bg-[#B4E7C2] text-green-500 tetx-[12px] outline-colorgreen py-1 px-3 lg:w-[180px] md:w-[150px] w-[150px] rounded placeholder:text-colorgreen placeholder:text-[14px]"
             placeholder="جستجو نام گیرنده"
           />
           <VscSearch className="absolute text-[#fff] text-[16px] top-[7px] left-[10px]" />
         </div>
         <div className=" flex justify-end relative md:mx-0 mx-4">
-          <button className="text-start bg-[#B4E7C2] text-[#fff] tetx-[12px]  py-1 px-3 rounded lg:w-[180px] md:w-[150px] w-[90px]"><span className="text-colorgreen">فیلتر</span></button>
+          <button className="active:bg-green-200 text-start bg-[#B4E7C2] text-[#fff] tetx-[12px]  py-1 px-3 rounded lg:w-[180px] md:w-[150px] w-[90px]"><span className="text-colorgreen">فیلتر</span></button>
           <VscFilter className="text-[#fff] text-[16px] top-[7px] left-[10px] absolute" />
         </div>
       </div>
@@ -93,6 +93,7 @@ const index = () => {
       </div>
     </>
   );
+  
 };
 
 export default index;

@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { deleteCookie } from "cookies-next";
 import { useThemeContext } from "../../context/store";
 import { AiFillCaretDown } from "react-icons/ai";
-
+import { FaRegUser } from "react-icons/fa6";
 import { IoMdMenu } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 import Link from "next/link";
@@ -48,79 +48,83 @@ const Navbar = ({ setMobile, mobile }) => {
             </span>
           </div>
         </div>
-           {/* end:navbar right */}
+        {/* end:navbar right */}
         {/* start: navbar left  */}
         <div className="lg:flex lg:items-center lg:justify-end hidden">
           <div className="ml-4">
             <div>
-              <Link href="/dashboard/NewOrder" className="inline-block xl:w-[184px] xl:text-[16px] text-[14px] w-[158px] h-[47px] text-center p-3 bg-colorgreen text-txcolor rounded-[5px] ">
+              <Link
+                href="/dashboard/NewOrder"
+                className="inline-block xl:w-[184px] xl:text-[16px] text-[14px] w-[158px] h-[47px] text-center p-3 bg-colorgreen text-txcolor rounded-[5px] "
+              >
                 سفارش جدید
               </Link>
             </div>
           </div>
-            <div className="mx-2">
-              <Image
-                src="/image_dashboard/news.svg"
-                width={20}
-                height={20}
-                alt="logo"
-                priority
-              />
-            </div>
-            <div className="mx-2">
-              <Image
-                src="/image_dashboard/qustion.svg"
-                width={20}
-                height={20}
-                alt="logo"
-                priority
-              />
-            </div>
-            <div className="mx-2">
-              <Image
-                src="/image_dashboard/setting.svg"
-                width={20}
-                height={20}
-                alt="logo"
-                priority
-              />
-            </div>
-            <div className="mr-2 ml-[30px]">
-                <Dropdown>
-                  <DropdownTrigger>
-                    {userdata && userdata.flag ? (
-                      <div className="xl:text-[16px] text-[12px] border-2 border-bgcolor border-solid px-2 py-2 rounded-[5px] text-bgcolor cursor-pointer">
-                        {`${userdata.first_name || userdata.company_name}`}{" "}
-                        <AiFillCaretDown className="inline-block" />
-                      </div>
-                    ) : (
-                      <Image
-                        src="/image_dashboard/user.svg"
-                        width={32}
-                        height={32}
-                        alt="logo"
-                        priority
-                      />
-                    )}
-                  </DropdownTrigger>
-                  <DropdownMenu>
-                    <DropdownItem className="py-3">
-                      {userdata && userdata.username}
-                    </DropdownItem>
-                    <DropdownItem
-                      className="text-[red] py-2"
-                      onClick={() => {
-                        deleteCookie("access_token");
-                        router.push("/");
-                        setIslogin(false);
-                      }}
-                    >
-                      خروج <MdLogout className="inline-block text-2xl mr-4" />
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
-       
+          <div className="mx-2">
+            <Image
+              src="/image_dashboard/news.svg"
+              width={20}
+              height={20}
+              alt="logo"
+              priority
+            />
+          </div>
+          <div className="mx-2">
+            <Image
+              src="/image_dashboard/qustion.svg"
+              width={20}
+              height={20}
+              alt="logo"
+              priority
+            />
+          </div>
+          <div className="mx-2">
+            <Image
+              src="/image_dashboard/setting.svg"
+              width={20}
+              height={20}
+              alt="logo"
+              priority
+            />
+          </div>
+          <div className="mr-2 ml-[30px]">
+            <Dropdown>
+              <DropdownTrigger>
+                {userdata && userdata.flag ? (
+                  <div className="xl:text-[16px] text-[12px] border-2 border-bgcolor border-solid px-2 py-2 rounded-[5px] text-bgcolor cursor-pointer">
+                    {`${userdata.first_name || userdata.company_name}`}{" "}
+                    <AiFillCaretDown className="inline-block" />
+                  </div>
+                ) : (
+                  <Image
+                    src="/image_dashboard/user.svg"
+                    width={32}
+                    height={32}
+                    alt="logo"
+                    priority
+                  />
+                )}
+              </DropdownTrigger>
+              <DropdownMenu className="">
+                <DropdownItem className="py-3">
+                  <FaRegUser className="inline text-2xl ml-4" />
+                  {userdata && userdata.username}
+                </DropdownItem>
+                <DropdownItem
+                  className="text-[red] py-2 "
+                  onClick={() => {
+                    deleteCookie("access_token");
+                    router.push("/");
+                    setIslogin(false);
+                  }}
+                >
+                  <MdLogout className="inline-block text-2xl ml-4" />
+                  خروج
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
         </div>
         {/* end: navbar left  */}
 

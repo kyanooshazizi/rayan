@@ -3,6 +3,11 @@ import Image from "next/image";
 import { IoStar } from "react-icons/io5";
 import Link from "next/link";
 import Slider from "./slider";
+// start icon footer
+import { FiInstagram } from "react-icons/fi";
+import { FaTelegramPlane } from "react-icons/fa";
+import { SiAparat } from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa";
 const Maincomponent = () => {
   return (
     <>
@@ -55,9 +60,7 @@ const Maincomponent = () => {
           </h2>
         </div>
         <div className="flex justify-center items-center lg:flex-nowrap flex-wrap mt-[50px] gap-[40px] px-[10px]">
-          {
-
-          }
+          {}
           <div className="w-[250px] h-[170px] sm:my-0 my-4">
             <Image
               src="/imag_homepage/work_rayan/one.svg"
@@ -265,6 +268,115 @@ const Maincomponent = () => {
         </div>
       </div>
       {/*end section 5  */}
+
+      {/* start Footer */}
+      <div className="bg-[white] w-full mt-[10px]">
+        <div className="md:pt-[90px] pt-[40px] pb-[60px] md:px-[80px] flex justify-between 2lg:flex-nowrap flex-wrap">
+          <div className="mx-auto md:px-[15px] px-[0px] 2lg:basis-[20%] md:basis-[50%] basis-full sm:text-center text-right 2lg:mb-0 mb-[25px]">
+            <p className="text-[18px] font-[600] pb-[14px] text-center">
+              رایان در شبکه های اجتماعی:
+            </p>
+            <div className="flex justify-center items-center">
+              <Link
+                href="/"
+                className="text-bgcolor text-[22px] ml-[8px] bg-[#D9D9D9] p-[5px] rounded-[4px] "
+              >
+                <FiInstagram />
+              </Link>
+              <Link
+                href="/"
+                className="text-bgcolor text-[22px] mx-[8px] bg-[#D9D9D9] p-[5px] rounded-[4px] "
+              >
+                <FaTelegramPlane />
+              </Link>
+              <Link
+                href="/"
+                className="text-bgcolor text-[22px] mx-[8px] bg-[#D9D9D9] p-[5px] rounded-[4px] "
+              >
+                <SiAparat />
+              </Link>
+              <Link
+                href="/"
+                className="text-bgcolor text-[22px] mx-[8px] bg-[#D9D9D9] p-[5px] rounded-[4px] "
+              >
+                <FaLinkedinIn />
+              </Link>
+            </div>
+            <Image
+              src="/imag_homepage/enemad.svg"
+              width={80}
+              height={30}
+              alt="rayan"
+              className="mx-auto mt-[30px]"
+            />
+             <hr className="md:hidden block my-[10px] bg-gray-200 w-full h-[1px] " />
+          </div>
+          <div className="mx-auto px-[15px] 2lg:basis-[20%] md:basis-[50%] basis-full sm:text-center text-right 2lg:mb-0 mb-[25px]">
+            <p className="text-[18px] font-[600] pb-[20px] ">رایان پژوهش</p>
+            <div className="flex flex-col gap-[25px]">
+              <Link href="/" className="text-[16px] text-colorgray">
+                درباره ما
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                پلتفرم
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                خبرکده
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                کسب و کار
+              </Link>
+            </div>
+          </div>
+          <div className="mx-auto px-[15px] 2lg:basis-[20%] md:basis-[50%] basis-full sm:text-center text-right 2lg:mb-0 mb-[25px]">
+            <p className="text-[18px] font-[600] pb-[20px] ">خدمات و محصولات</p>
+            <div className="flex flex-col gap-[25px]">
+              <Link href="/" className="text-[16px] text-colorgray">
+                یکپارچگی با وب سرویس
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                با ما مشارکت کنید
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                به ناوگان رایان بپیوندید
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                میزکار تجارت
+              </Link>
+            </div>
+          </div>
+          <div className="mx-auto px-[15px] 2lg:basis-[20%] md:basis-[50%] basis-full sm:text-center text-right 2lg:mb-0 mb-[25px]">
+            <p className="text-[18px] font-[600] pb-[20px] ">پشتیبانی</p>
+            <div className="flex flex-col gap-[25px]">
+              <Link href="/" className="text-[16px] text-colorgray">
+                مرکز پشتیبانی
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                تماس با ما
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                {" "}
+                رهگیری
+              </Link>
+              <Link href="/" className="text-[16px] text-colorgray">
+                مرکز اطلاعات و داده ها
+              </Link>
+            </div>
+          </div>
+          <div className="mx-auto md:px-[15px]  2lg:order-5 order-first 2lg:basis-[20%] md:basis-[50%] basis-full sm:text-center text-right 2lg:mb-0 mb-[25px]">
+            <Image
+              src="/footer/logo.svg"
+              width={180}
+              height={30}
+              alt="rayan"
+              className="mx-auto"
+            />
+           
+          </div>
+        </div>
+        <div className="text-center py-[20px] bg-bgcolor text-[#fff] sm:text-[16px] text-[14px]">تمام حقوق این سایت متعلق به برند رایان و شرکت رایان پژوهش ایرانیان نیک می باشد</div>
+      </div>
+      {/* end Footer */}
     </>
   );
 };

@@ -3,7 +3,7 @@ import Sidbar from "@/components/utilsDashboard/Sydbar";
 import {getData} from "@/components/utilsFunction/checklogin";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
-import  Main  from "@/components/utilsDashboard/Addaddress";
+import  Main  from "@/components/utilsDashboard/Address";
 
 
 const page = async() => {
@@ -23,15 +23,7 @@ const page = async() => {
 
   return (
    <>
-      <Navbar/>
-      <div className="grid grid-cols-12">
-        <div className="col-start-1 col-end-2">
-          <Sidbar />
-        </div>
-        <div className="col-start-2 col-end-13 mt-20">
-          <Main/>
-        </div>
-      </div>
+      <Main/>
    </>
   )
 }

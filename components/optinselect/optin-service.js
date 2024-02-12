@@ -27,7 +27,7 @@ useEffect(() => {
         onClick={() => {
           return setOpen(!open);
         }}
-        className={` ${stylex} reletive border-l-2 border-gray-200 text-txnotcolor px-6 pt-10 pb-4 text-sm md:text-base bg-white w-full flex items-center justify-between ${
+        className={` ${stylex} reletive border-l-2 border-gray-200 text-txnotcolor px-6 pt-10 pb-4 text-sm md:text-base bg-white w-full flex items-center justify-center ${
           !selected && "text-gray-700"
         }`}
       >
@@ -48,13 +48,13 @@ useEffect(() => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value.toLowerCase())}
             placeholder="جستجو..."
-            className="placeholder:text-gray-500 px-2 py-3 my-3 outline-[blue] bg-green-50 text-sm w-full"
+            className="placeholder:text-gray-500 px-2 py-3 my-3 outline-colorgreen bg-green-50 text-sm w-full"
           />
         </div>
         {data?.map((item) => (
           <li
             key={item.id}
-            className={`group p-2 pr-5 text-sm text-txnotcolor hover:bg-[blue] bg-white
+            className={`group p-2 pr-5 text-sm text-txnotcolor hover:bg-colorgreen bg-white
             ${
               item.title.toLowerCase().startsWith(inputValue)
                 ? "block"
@@ -68,7 +68,7 @@ useEffect(() => {
             }}
           >
             <div
-              className={`border-b-2 border-gray-400 group-hover:bg-[blue] group-hover:text-txcolor`}
+              className={`border-b-2 border-gray-400 group-hover:bg-colorgreen group-hover:text-txcolor`}
             >
               <span className={`block`}>
                 <Image

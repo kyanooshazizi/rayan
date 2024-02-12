@@ -1,40 +1,46 @@
-import React from "react";
-
-import ModalnewAdd from "./modalnewBusiness";
-const ProfileBusiness = () => {
+"use client";
+import React, { useState } from "react";
+import Navbar from "../Navbar";
+import Sidbar from "../Sydbar";
+import Mobile from "../dashboard/mobileshow";
+import { RiErrorWarningLine } from "react-icons/ri";
+import Modal from "./modalnewBusiness";
+import Table from "./Table";
+const index = () => {
+  const [mobile, setMobile] = useState(false);
   return (
-    <div className="pl-4 mx-auto pt-20 pr-4 lg:pr-0">
-      <div>
-        <h3 className="lg:text-xl md:text-lg text-base font-bold ">
-          پروفایل کسب و کاری
-        </h3>
-      </div>
-      <div className="mt-4 bg-txcolor w-full h-[650px]">
-        <div className="p-2 bg-red-400 text-txcolor md:text-base sm:text-sm text-xs">
-          برای ثبت سفارش حداقل یک پروفایل کسب و کاری را بسازید
-        </div>
-        <div className="p-4">
-          <div>
-           <ModalnewAdd/>
+    <div>
+      <Navbar setMobile={setMobile} mobile={mobile} />
+
+      {mobile ? (
+        <Mobile />
+      ) : (
+        <main className="pt-[90px] min-h-screen">
+          <div className="lg:flex hidden fixed w-[140px] mt-[20px]">
+            <Sidbar />
           </div>
-          <hr />
-        </div>
-        {/* start: business */}
-        <div className="p-4 mt-4 flex flex-wrap ">
-         <div className="max-w-full flex-[0_0_100%]">
-         <div className="flex flex-[auto_1] flex-col items-stretch w-full overflow-auto ">
-          {/* thead:start */}
-           <div className="min-w-[1024px] flex-[1_0_auto] flex-col select-none flex ">
-            
-           </div>
-          {/* thead:end */}
-         </div>
-         </div>
-        </div>
-        {/* end: business */}
-      </div>
+          <div className="lg:pr-[160px] pr-[14px] pl-[14px]">
+            <div className="md:text-[24px] font-bold text-[20px]">
+              پروفایل کسب و کار
+            </div>
+            <div className="mt-3 border-b-2 border-colorgreen max-w-fit border-solid ">
+ثبت اطلاعات پروفایل کسب و کار
+            </div>
+            <div className="sm:text-[16px] text-[14px] px-2 mt-6 xl:w-[35%] md:w-[50%] w-full bg-[#fff] border-solid border-2 border-[#FFCB05] rounded-[4px]  py-3 text-bgcolor">
+              <RiErrorWarningLine className="inline-block text-2xl mx-1" /> برای
+              ثبت سفارش یک پروفایل کسب و کار بسازید
+            </div>
+            <div>
+              <Modal />
+            </div>
+            <div className="mt-4">
+              <Table />
+            </div>
+          </div>
+        </main>
+      )}
     </div>
   );
 };
 
-export default ProfileBusiness;
+export default index;

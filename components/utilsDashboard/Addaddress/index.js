@@ -86,7 +86,7 @@ useEffect(()=>{
                   toggle ? "text-[blue]" : ""
                 } cursor-pointer font-bold`}
               >
-                دفترچه آدرس گیرندگان{" "}
+                دفترچه آدرس گیرندگان
                 {toggle ? (
                   <AiOutlineBackward className="inline-block text-2xl mr-2" />
                 ) : (

@@ -1,5 +1,4 @@
-import Navbar from "@/components/utilsDashboard/Navbar";
-import Sidbar from "@/components/utilsDashboard/Sydbar";
+
 import {getData} from "@/components/utilsFunction/checklogin";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
@@ -23,16 +22,7 @@ const page = async() => {
 
   return (
    <>
-      <Navbar/>
-      <div className="lg:relative lg:top-o lg:right-0 bg-dashboard">
-        
-        <div className="lg:flex lg:h-full lg:min-h-[680px] hidden fixed w-[140px]">
-          <Sidbar />
-        </div>
-        <div className="w-100 min-h-[670px] lg:pr-[160px]">
-         <Main/>
-        </div>
-      </div>
+     <Main/> 
    </>
   )
 }
