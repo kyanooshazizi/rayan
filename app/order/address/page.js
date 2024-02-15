@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import Navbar from "@/components/utilsorder/Navbar/navbar";
 // import Sidbar from "@/components/utilsorder/Saidbar/sidbar";
 import Address from "@/components/utilsorder/pageAddress/Address/index";
+import Sidnav from "@/components/utilsDashboard/Sydbar";
 // import { useState } from 'react';
 const Sidbar = dynamic(() => 
 {
@@ -19,29 +20,26 @@ const page = () => {
  }
   return (
     <>
-     {/* start nav */}
-     <Navbar/>
-      {/* end nav */}
-
-      <main className="grid grid-cols-6 gap-2">
-       <Address/>
-        {/* start sidebar */}
-        // {isloading?
-    <div className="skeleton  p-2 fixed top-[60px] left-0 w-1/4 h-[calc(100vh_-_60px)]">
-      {/* شروع:عنوان */}
-    <div className="text-txcolor text-center">
-      <div className="text-center shadow-sm bg-white text-bgcolor mb-3 w-[200px] py-2 rounded font-bold mx-auto !important">
-        خلاصه سفارش
+      <div className="w-full">
+        <div>
+          <Navbar />
+        </div>
+        <div
+          className={` fixed w-[140px] mt-[100px] ${
+            islogin ? "lg:flex hidden" : "hidden"
+          }`}
+        >
+          <Sidnav stylex={"pt-[38px]"} />
+        </div>
+        <div className="flex lg:pr-[20px] pr-0">
+          <div className="xl:basis-[75%] lg:basis-[75%] sm:basis-[90%] basis-full lg:mx-0 mx-auto">
+            <Address />
+          </div>
+          <div className=" lg:block hidden fixed xl:w-[340px] lg:w-[300px] left-0">
+            <Sidbar />
+          </div>
+        </div>
       </div>
-    </div>
-    {/* پایان:عنوان */}
-    
-    </div>
-    :<Sidbar/>} 
- 
-         
-        {/* end sidebar */}
-      </main>
     </>
   )
 }

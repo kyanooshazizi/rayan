@@ -27,7 +27,7 @@ useEffect(() => {
         onClick={() => {
           return setOpen(!open);
         }}
-        className={` ${stylex} reletive border-l-2 border-gray-200 text-txnotcolor px-6 pt-10 pb-4 text-sm md:text-base bg-white w-full flex items-center justify-center ${
+        className={` ${stylex} ${dataorder.service?"pt-12 pb-4":"py-8"}  reletive border-l-2 border-gray-200 text-txnotcolor   text-sm md:text-base bg-white w-full flex items-center justify-center ${
           !selected && "text-gray-700"
         }`}
       >
@@ -38,7 +38,7 @@ useEffect(() => {
         {dataorder.service && isClient ? <span className="absolute top-2 font-bold block text-bgcolor">محتوا مرسوله</span> : ""}
       </div>
       <ul
-        className={`z-40 bg-whit shadow-xl mt-2 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
+        className={`z-40 bg-whit shadow-xl mt-5 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
           open ? "max-h-60" : "hidden"
         }`}
       >

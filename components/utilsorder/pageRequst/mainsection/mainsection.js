@@ -2,15 +2,14 @@
 
 import useCity_servise from "@/components/TanstakQury/useCity_servise";
 import { useDispatch, useSelector } from "react-redux";
-import { MethodService } from "../../../Redux/orderslice";
-import { v4 as uuidv4 } from "uuid";
+
 // utils
 import Pakage from "../orderpackage/package";
-import Document from "../orderDocument/document";
 // servise
 import Selectpick_delivery from "../../../optinselect/optin_city";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+
 const Main_section = () => {
   const { datacity, dataservise } = useCity_servise();
   const dispatch = useDispatch();
@@ -22,13 +21,9 @@ const Main_section = () => {
   }, []);
   // Hydration error:end
   // شروع:انتخاب نوع محصول
-  const OrderHandler = (item) => {
-    switch (item) {
-      case "بسته": 
-        return <Pakage />;
-      case "پاکت":
-        return <Document />;
-    }
+  const OrderHandler = () => {  
+        return <Pakage />;   
+    
   };
   // پایان:انتخاب نوع محصول
   if (datacity.isPending || dataservise.isPending) {
@@ -47,7 +42,7 @@ const Main_section = () => {
 
   return (
     <>
-      <section className="col-span-5 mt-[60px]">
+      <section className=" mt-[60px]">
         {/* مبدا ومقصد شروع*/}
         {datacity.isError ? (
           <div className="flex align-middle justify-center mt-8">
@@ -56,26 +51,39 @@ const Main_section = () => {
             </span>
           </div>
         ) : (
-          <div className="flex align-middle justify-center mt-20 w-full">
-            <div className=" mx-4 basis-52">
-              <Selectpick_delivery
-                stylex="rounded-xl bg-white !important"
-                placholder={datastore.pick_up || "مبدا"}
-                data={datacity.data}
-                slug="pick"
-              />
-            </div>
-            <div className=" mx-4 basis-52">
-              <Selectpick_delivery
-                stylex="rounded-xl bg-white !important"
-                placholder={datastore.delivery || "مقصد"}
-                data={datacity.data}
-                slug="deliv"
-              />
+          <div className="mt-[100px]">
+            <span className="mt-[10px] text-[18px] font-[600] block lg:px-[15%] px-[7.5%] pb-[8px]">
+              جزئیات سفارش
+            </span>
+            <div className="flex lg:flex-row flex-col items-center justify-center  lg:w-[70%] w-[85%] mx-auto">
+              <div className=" lg:basis-[50%] w-full">
+                <Selectpick_delivery
+                  stylex="!rounded-[4px] !bg-[#fff] !border-none !justify-between !w-full px-4"
+                  withw="!w-full"
+                  py1="!pt-8 !pb-4"
+                  py2="!py-6"
+                  placholder={datastore.pick_up || "مبدا"}
+                  data={datacity.data}
+                  slug="pick"
+                />
+              </div>
+              <div className=" lg:basis-[50%] w-full">
+                <Selectpick_delivery
+                  stylex="!rounded-[4px] !bg-[#fff] !border-none !justify-between !w-full px-4"
+                  withw="!w-full"
+                  py1="!pt-8 !pb-4"
+                  py2="!py-6"
+                  placholder={datastore.delivery || "مقصد"}
+                  data={datacity.data}
+                  slug="deliv"
+                />
+              </div>
             </div>
           </div>
         )}
         {/* پایان مبدا و مقصد */}
+
+
         {/* شروع نوع مرسوله */}
         {dataservise.isError ? (
           <div className="flex justify-center">
@@ -84,43 +92,14 @@ const Main_section = () => {
             </span>
           </div>
         ) : (
-          <div className="mt-24">
-            {isClient && datastore.service ? (
-              OrderHandler(datastore.service)
-            ) : (
-              <div>
-                <div className="flex justify-center">
-                  <p className="text-center shadow w-72 py-3 px-4 rounded-md">
-                    مرسوله مورد نظر را انتخاب کنید:
-                  </p>
-                </div>
-                <div className="flex align-middle justify-center m-4">
-                  {dataservise.data?.map((optin) => {
-                    return (
-                      <button
-                        key={uuidv4()}
-                        className="py-2 px-6 rounded-md m-4 bg-utils-300 text-txcolor !important"
-                        onClick={() => {
-                          dispatch(MethodService(optin));
-                        }}
-                      >
-                        {optin.title}
-                        <Image
-                          className="inline-block mr-2 rounded-sm"
-                          src={optin.icon}
-                          width={25}
-                          height={25}
-                          alt="Picture of the author"
-                        />
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+          <div className="mt-[10px]">
+            { 
+              OrderHandler()
+            }
           </div>
         )}
         {/* پایان نوع مرسوله */}
+
       </section>
     </>
   );

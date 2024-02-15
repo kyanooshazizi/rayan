@@ -16,7 +16,6 @@ import { AiOutlineDelete } from "react-icons/ai";
 import useValuedefult from "@/components/TanstakQury/useValuedefult";
 // module style
 import stylecard from "../../../../style/card.module.css";
-import styles from "../../../../style/neumorfism.module.css";
 import usecity_servise from "@/components/TanstakQury/useCity_servise";
 import Datapicker from "@/components/utilsorder/Datapicker";
 const Package = () => {
@@ -87,7 +86,7 @@ const Package = () => {
       <div className="text-center">
         {/* شروع سایز پاکت ها*/}
         <div
-          className={`w-1/2 bg-white mx-auto h-[300px] -translate-x-3 rounded-lg shadow-xl relative ${styles.neumorfism}`}
+          className={`w-1/2 bg-white mx-auto h-[300px] -translate-x-3 rounded-lg shadow-xl relative`}
         >
           {/* modal start */}
           <div>

@@ -21,7 +21,13 @@
 .slick-track .slick-slide > div{
  margin: 0px 15px;
 } 
-
+.rmdp-container {
+  width: 100%;
+}
+.rmdp-header-plugin{
+  background-color: #ADB3C3 !important;
+  color:white !important;
+}  
 @font-face {
   font-family: AbarMidFaNum;
   font-style: normal;

@@ -7,7 +7,7 @@ import { MethodPick_up, MethodDelivery } from "../Redux/orderslice.js";
 import { useDispatch, useSelector } from "react-redux";
 // redux end
 
-const Option = ({ stylex, placholder, data, slug }) => {
+const Option = ({ stylex, placholder, data, slug, withw,py1,py2}) => {
   // start change redux
   const dispatch = useDispatch();
 
@@ -26,14 +26,19 @@ const Option = ({ stylex, placholder, data, slug }) => {
 
   return (
     <div
-      className={` font-medium h-16 cursor-pointer relative lg:basis-[17%] lg:mx-0 mx-auto  w-[80%] lg:mt-0 md:mt-[18px] mt-[13px]`}
+      className={`${withw} font-medium h-16 cursor-pointer relative lg:basis-[17%] lg:mx-0 mx-auto  w-[80%] lg:mt-0 md:mt-[18px] mt-[13px]`}
     >
       <div
         suppressHydrationWarning
         onClick={() => {
           return setOpen(!open);
         }}
-        className={`${stylex} border-l-2  text-txnotcolor border-gray-200 px-6 pt-10 pb-4  text-sm md:text-base w-full flex items-center justify-center ${
+        className={`${stylex} border-l-2 ${slug === "pick"
+        ? dataorder.pick_up
+          ? `${py1} pt-12 pb-4`
+          : `${py2} py-8`
+        : dataorder.delivery
+        ? `${py1} pt-12 pb-4`:`${py2} py-8`}  text-txnotcolor border-gray-200  text-sm md:text-base w-full flex items-center justify-center ${
           !selected && "text-gray-700"
         }`}
       >
@@ -61,7 +66,7 @@ const Option = ({ stylex, placholder, data, slug }) => {
         )}
       </div>
       <ul
-        className={`z-10 bg-white shadow-xl mt-2 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
+        className={`z-10 bg-white shadow-xl mt-5 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${
           open ? "max-h-60" : "hidden"
         } `}
       >

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { ImAddressBook } from "react-icons/im";
 import { IoBusiness } from "react-icons/io5";
 import Image from "next/image";
-const index = () => {
+const index = ({stylex}) => {
   const path = usePathname();
   const pathflag = path.split("/");
   return (
@@ -35,7 +35,7 @@ const index = () => {
             </span>
           </Link>
         </div>
-        <div className={`pt-[30px] pr-[24px] pl-[16px]`} >
+        <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px]`} >
           <Link href="/dashboard/NewOrder" className="block">
             <span>
             {pathflag[2] === "NewOrder"?<Image
@@ -55,7 +55,7 @@ const index = () => {
             <span className={`text-[14px] font-bold ${pathflag[2] === "NewOrder" ? "text-black":" text-[#636363]"} inline-block`}>سفارش جدید</span>
           </Link>
         </div>
-        <div className={`pt-[30px] pr-[24px] pl-[16px]`}>
+        <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px]`}>
           <Link href="/dashboard/Orders" className="block">
             <span>
                {pathflag[2] === "Orders"?<Image
@@ -76,7 +76,7 @@ const index = () => {
           </Link>
         </div>
 
-        <div className={`pt-[30px] pr-[24px] pl-[16px]`}>
+        <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px]`}>
           <Link href="/dashboard/wallet" className="block">
           <span>
                {pathflag[2] === "wallet"?<Image
@@ -97,7 +97,7 @@ const index = () => {
           </Link>
         </div>
 
-        <div className={`pt-[30px] pr-[24px] pl-[16px]`}>
+        <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px]`}>
           <Link href="/dashboard/Profile" className="block">
             <span>
             {pathflag[2] === "Profile"?<Image
@@ -117,7 +117,7 @@ const index = () => {
             <span  className={`text-[14px] font-bold ${pathflag[2] === "Profile" ? "text-black":" text-[#636363]"} inline-block`}>پروفایل</span>
           </Link>
         </div>
-        <div className={`pt-[30px] pr-[24px] pl-[16px]`}>
+        <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px]`}>
           <Link href="/dashboard/ProfileBusiness" className="block">
             <span>
               <IoBusiness
@@ -131,7 +131,7 @@ const index = () => {
           </Link>
         </div>
 
-        <div className={`pt-[30px] pr-[24px] pl-[16px]`}>
+        <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px]`}>
           <Link href="/dashboard/Addres" className="block">
             <span>
               <ImAddressBook

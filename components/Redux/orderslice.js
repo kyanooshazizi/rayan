@@ -9,6 +9,7 @@ const detailsOrder={
   pick_up: "",
   delivery: "",
   service: "",
+  titleprice:"",
   package: {
     packB: { number: 0 },
     packM: { number: 0 },
@@ -147,6 +148,7 @@ MethodBackHomepage:(state) => {
     },
     MethodPrice: (state, action) => {
       state.order.Price = action.payload.amount;
+      state.order.titleprice = action.payload.title; 
       state.order.id.service = action.payload.id;
       encryptData("order", state.order);
     },

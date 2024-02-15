@@ -1,5 +1,5 @@
 export const MethodFlagHandler = (datastore) => {
-    switch (datastore.service) {
+    switch ("بسته") {
       case "بسته":
         return (
           datastore.pick_up &&

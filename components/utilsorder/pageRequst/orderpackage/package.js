@@ -2,36 +2,35 @@
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   Methodpackageadd,
   Methodpackagedelet,
   MethodPrice,
   MethodInsurance_value,
   MethodInsurance_content,
-  MethodBackHomepage
+  MethodBackHomepage,
 } from "../../../Redux/orderslice";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { FaCertificate } from "react-icons/fa";
+import { GoCheckCircleFill } from "react-icons/go";
 import useValuedefult from "@/components/TanstakQury/useValuedefult";
-import usecity_servise from "@/components/TanstakQury/useCity_servise"
-
+import usecity_servise from "@/components/TanstakQury/useCity_servise";
+import { FiCircle } from "react-icons/fi";
 import Datapicker from "@/components/utilsorder/Datapicker";
 import { BsBoxSeamFill } from "react-icons/bs";
 // style module
-import styles from "../../../../style/neumorfism.module.css";
-import stylecard from  "../../../../style/card.module.css";
+import stylecard from "../../../../style/card.module.css";
+import { IoIosWarning } from "react-icons/io";
 const Package = () => {
   const dispatch = useDispatch();
   const dataorder = useSelector((state) => state.order.order);
   const [getprice, setGetprice] = useState("");
   const [isshow, setIsshow] = useState("");
- 
-  const content_value=useValuedefult();
 
-  const {datacity, dataservise}=usecity_servise()
-  
+  const content_value = useValuedefult();
+
+  const { datacity, dataservise } = usecity_servise();
 
   let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.package.packB.number}+${dataorder.package.packM.number}+${dataorder.package.packS.number}`;
   let flag_Complate_Order =
@@ -52,244 +51,346 @@ const Package = () => {
       theme: "light",
     });
 
+  useEffect(() => {
+    if (flag_Complate_Order) {
+      dispatch(MethodBackHomepage());
+      var formData = new FormData();
+      var OrderData = {
+        from_city: dataorder.pick_up,
+        to_city: dataorder.delivery,
+        count: [
+          dataorder.package.packB.number,
+          dataorder.package.packM.number,
+          dataorder.package.packS.number,
+        ],
+        package: ["بسته", "بسته", "بسته"],
+        size: ["بزرگ", "متوسط", "کوچک"],
+      };
 
-    useEffect(() => {
-      if (flag_Complate_Order) {
-        dispatch(MethodBackHomepage());
-        var formData = new FormData();
-        var OrderData = {
-          from_city: dataorder.pick_up,
-          to_city:dataorder.delivery,
-          count: [dataorder.package.packB.number,dataorder.package.packM.number,dataorder.package.packS.number],
-          package: [dataorder.service,dataorder.service,dataorder.service],
-          size: ["بزرگ", "متوسط","کوچک"],
-        };
-    
-        // Loop through the object and append values to FormData
-        Object.keys(OrderData).forEach((key) => {
-          var value = OrderData[key];
-            formData.append(key, value);
-          
-        });
-    
-        // Log FormData key-value pairs
-        formData.forEach((value, key) => {
-         
-        });
-    
-        try {
-          fetch("https://mohaddesepkz.pythonanywhere.com/prices/details/", {
-            method: "POST",
-            body: formData,
+      // Loop through the object and append values to FormData
+      Object.keys(OrderData).forEach((key) => {
+        var value = OrderData[key];
+        formData.append(key, value);
+      });
+
+      // Log FormData key-value pairs
+      formData.forEach((value, key) => {});
+
+      try {
+        fetch("https://mohaddesepkz.pythonanywhere.com/prices/details/", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((res) => {
+            console.log(res);
+            setGetprice(res);
+            setIsshow(new Array([...res].length).fill(0));
           })
-            .then((response) => response.json())
-            .then((res) => {
-            
-              setGetprice(res);
-              setIsshow(new Array([...res].length).fill(0));
-            })
-            .catch((error) => console.error('Error:', error));
-        } catch (error) {
-          console.error('Error:', error);
-        }
+          .catch((error) => console.error("Error:", error));
+      } catch (error) {
+        console.error("Error:", error);
       }
-    }, [refresh_price]);
+    }
+  }, [refresh_price]);
   // send requst for back:end
   return (
     <>
       <div className="text-center">
         {/* شروع سایز بسته ها*/}
-        <div className={`${styles.neumorfism} w-1/2 mx-auto h-[400px] -translate-x-3 rounded-lg`}>
-          {/* modal start */}
-          <div>
-            <button
-              onClick={() => document.getElementById("my_modal_4").showModal()}
-              className="mt-4"
-            >
-              <span className="bg-red-600 py-1 px-3 text-white rounded">
-                توجه!
-              </span>
-              <p className="text-blue-700 inline-block mx-1">
-                ابعاد مجاز برای هر بسته را از اینجا مطالعه کنید
-              </p>
-            </button>
-            <dialog id="my_modal_4" className="modal">
-              <div className="modal-box w-11/12 max-w-5xl">
-                <h3 className="font-bold text-lg">Hello!</h3>
-                <p className="py-4">Click the button below to close</p>
-                <div className="modal-action">
-                  <form method="dialog">
-                    {/* if there is a button, it will close the modal */}
-                    <button className="btn bg-green-600 text-white hover:bg-green-800 !important">
-                      متوجه شدم
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </dialog>
-          </div>
-          {/* modal end */}
-           {/* ثبت سفارش */}
-          <div className="flex justify-around mt-8">
-           
-            {(dataservise.data[1].size).map((item,index)=>{
-              switch(item.title){
+        {/* ثبت سفارش */}
+
+        <div className="mt-[30px] bg-[#fff] lg:w-[70%] w-[85%] min-h-[500px] mx-auto rounded-[8px] pt-4">
+          <div className="flex lg:flex-row flex-col justify-around">
+            {dataservise.data[1].size.map((item, index) => {
+              switch (item.title) {
+                case "کوچک":
+                  return (
+                    <div key={index} className="lg:basis-[29%] mr-2">
+                      <div className="pb-4 lg:text-right text-center text-colorgray">
+                        بسته و پاکت
+                      </div>
+                      <button
+                        onClick={() => {
+                          {
+                            dataorder.package.packS.number == 0
+                              ? dispatch(Methodpackageadd(`packS*${item.id}`))
+                              : "";
+                          }
+                        }}
+                        className="lg:w-full h-[35px] py-[4px] sm:w-[50%] w-[90%] mx-auto bg-dashboard border-2 border-solid border-[#CDCDCD] flex justify-center rounded-[4px]"
+                      >
+                        {dataorder.package.packS.number ? (
+                          <div className="flex ">
+                            <button
+                              className="px-2 mx-3 text-colorgray"
+                              onClick={() => {
+                                dispatch(Methodpackagedelet("packS"));
+                              }}
+                            >
+                              {dataorder.package.packS.number > 1 ? (
+                                " - "
+                              ) : (
+                                <RiDeleteBin6Fill className=" text-colorgray text-[15px]" />
+                              )}
+                            </button>
+                            <div className="mx-3 text-colorgray">
+                              {dataorder.package.packS.number}
+                            </div>
+                            <button
+                              className="px-2 mx-3 text-colorgray"
+                              onClick={() => {
+                                {
+                                  dataorder.package.packS.number >= 30
+                                    ? notify()
+                                    : dispatch(
+                                        Methodpackageadd(`packS*${item.id}`)
+                                      );
+                                }
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
+                        ) : (
+                          "انتخاب کنید"
+                        )}
+                      </button>
+                      <div className="flex justify-center mt-10">
+                        <Image
+                          src="/order/small.svg"
+                          width={80}
+                          height={80}
+                          alt="Picture of the author"
+                          priority
+                        />
+                        <Image
+                          src="/order/packat.svg"
+                          width={40}
+                          height={40}
+                          alt="Picture of the author"
+                          priority
+                        />
+                      </div>
+                    </div>
+                  );
+                case "متوسط":
+                  return (
+                    <div className="lg:basis-[29%] mt-10">
+                      <button
+                        onClick={() => {
+                          {
+                            dataorder.package.packM.number == 0
+                              ? dispatch(Methodpackageadd(`packM*${item.id}`))
+                              : "";
+                          }
+                        }}
+                        className="lg:w-full h-[35px] py-[4px] sm:w-[50%] w-[90%] mx-auto bg-dashboard border-2 border-solid border-[#CDCDCD] flex justify-center rounded-[4px]"
+                      >
+                        {dataorder.package.packM.number ? (
+                          <div className="flex ">
+                            <button
+                              className="px-2 mx-3"
+                              onClick={() => {
+                                dispatch(Methodpackagedelet("packM"));
+                              }}
+                            >
+                              {dataorder.package.packM.number > 1 ? (
+                                " - "
+                              ) : (
+                                <RiDeleteBin6Fill className=" text-colorgray text-[15px]" />
+                              )}
+                            </button>
+                            <div className="mx-3">
+                              {dataorder.package.packM.number}
+                            </div>
+                            <button
+                              className="px-2 mx-3"
+                              onClick={() => {
+                                {
+                                  dataorder.package.packM.number >= 30
+                                    ? notify()
+                                    : dispatch(
+                                        Methodpackageadd(`packM*${item.id}`)
+                                      );
+                                }
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
+                        ) : (
+                          "انتخاب کنید"
+                        )}
+                      </button>
+                      <div className="flex justify-center mt-8">
+                        <Image
+                          src="/order/mediom.svg"
+                          width={110}
+                          height={110}
+                          alt="Picture of the author"
+                          priority
+                        />
+                      </div>
+                    </div>
+                  );
                 case "بزرگ":
-                   {/* start packB */}
-              return <div key={index} className="bg-utils-300 w-40 h-36 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
-              {/* start badge */}
-              {dataorder.package.packB.number ? (
-                <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-4 left-[128px]">
-                  {dataorder.package.packB.number}+
-                </span>
-              ) : (
-                ""
-              )}
-              {/* end badge */}
-              <p className="text-txcolor">بسته {item.title}</p>
-              <div className="flex justify-center text-6xl text-iconbox">
-              <BsBoxSeamFill />
-              </div>
-              <div className="flex justify-center mt-4 cursor-pointer">
-                <button
-                  className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-                  onClick={() => {
-                    {
-                      dataorder.package.packB.number >= 25
-                        ? notify()
-                        : dispatch(Methodpackageadd(`packB*${item.id}`));
-                    }
-                  }}
-                >
-                  {dataorder.package.packB.number ? "+" : "انتخاب کن"}
-                </button>
-                {dataorder.package.packB.number ? (
-                  <button
-                    className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-                    onClick={() => {
-                      dispatch(Methodpackagedelet("packB"));
+                  return (
+                    <div className="lg:basis-[29%] mt-10 ml-2">
+                      <button
+                        onClick={() => {
+                          {
+                            dataorder.package.packB.number == 0
+                              ? dispatch(Methodpackageadd(`packB*${item.id}`))
+                              : "";
+                          }
+                        }}
+                        className="lg:w-full h-[35px] py-[4px] sm:w-[50%] w-[90%] mx-auto bg-dashboard border-2 border-solid border-[#CDCDCD] flex justify-center rounded-[4px]"
+                      >
+                        {dataorder.package.packB.number ? (
+                          <div className="flex ">
+                            <button
+                              className="px-2 mx-3"
+                              onClick={() => {
+                                dispatch(Methodpackagedelet("packB"));
+                              }}
+                            >
+                              {dataorder.package.packB.number > 1 ? (
+                                " - "
+                              ) : (
+                                <RiDeleteBin6Fill className=" text-colorgray text-[15px]" />
+                              )}
+                            </button>
+                            <div className="mx-3">
+                              {dataorder.package.packB.number}
+                            </div>
+                            <button
+                              className="px-2 mx-3"
+                              onClick={() => {
+                                {
+                                  dataorder.package.packB.number >= 30
+                                    ? notify()
+                                    : dispatch(
+                                        Methodpackageadd(`packB*${item.id}`)
+                                      );
+                                }
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
+                        ) : (
+                          "انتخاب کنید"
+                        )}
+                      </button>
+                      <div className="flex justify-center mt-6">
+                        <Image
+                          src="/order/big.svg"
+                          width={140}
+                          height={140}
+                          alt="Picture of the author"
+                          priority
+                        />
+                      </div>
+                    </div>
+                  );
+                  {
+                    /* end packS */
+                  }
+              }
+            })}
+          </div>
+          {content_value.data ? (
+            <div className="w-full text-colorgray">
+              <form className="mt-[10px] flex justify-around">
+                <div className="basis-[44%]">
+                  <span className="lg:text-[16px] text-[14px] text-colorgray block text-right pb-1">
+                    محتوا مرسوله
+                  </span>
+                  <select
+                    className="w-full rounded-l-md  outline-none block text-colorgray cursor-pointer text-[14px] bg-dashboard px-2 py-2 border-2 rounded-[5px] border-[#CDCDCD]"
+                    onClick={(event) => {
+                      const item = content_value.data.Content_data.find(
+                        (item) => item.title === event.target.value
+                      );
+
+                      return dispatch(
+                        MethodInsurance_content(
+                          `${event.target.value}*${item.id}`
+                        )
+                      );
                     }}
                   >
-                    {dataorder.package.packB.number > 1 ? (
-                      "-"
-                    ) : (
-                      <RiDeleteBin6Fill/>
-                    )}
-                  </button>
-                ) : (
-                  ""
-                )}
-              </div>
+                    {content_value.data.Content_data.map((item, index) => {
+                      return <option key={index}>{item.title}</option>;
+                    })}
+                  </select>
+                </div>
+                <div className="basis-[44%]">
+                  <span className="lg:text-[16px] text-[14px] block text-right pb-1 text-colorgray">
+                    ارزش مرسوله
+                  </span>
+                  <select
+                    className="w-full rounded-l-md  outline-none block text-colorgray cursor-pointer text-[14px] bg-dashboard px-2 py-2 border-2 border-[#CDCDCD] rounded-[5px]"
+                    onClick={(event) => {
+                      const item1 = content_value.data.Value_data.find(
+                        (item) =>
+                          item.min_value == event.target.value.split("-")[0]
+                      );
+
+                      return dispatch(
+                        MethodInsurance_value(
+                          `${event.target.value}*${item1.id}`
+                        )
+                      );
+                    }}
+                  >
+                    {content_value.data.Value_data.map((item, index) => {
+                      return (
+                        <option
+                          key={index}
+                        >{`${item.min_value}-${item.max_value} میلیون تومان`}</option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </form>
             </div>
-            {/* end packB */}
-             case "متوسط":
-          {/* start packM */}
-          return <div key={index} className="bg-utils-300 w-36 h-32 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
-          {/* start badge */}
-          {dataorder.package.packM.number ? (
-            <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-4 left-[115px]">
-              {dataorder.package.packM.number}+
-            </span>
           ) : (
             ""
           )}
-          {/* end badge */}
-          <p className="text-txcolor">بسته {item.title}</p>
-          <div className="flex justify-center text-5xl text-iconbox">
-          <BsBoxSeamFill />
+
+          <div className="w-full flex justify-end text-colorgray">
+            <div className="flex justify-end flex-col mt-[10px] w-[26%] ml-6">
+              <span className="inline-block text-right">تعداد کل</span>
+              <div className="bg-dashboard h-[40px] border-2 border-solid border-[#CDCDCD] rounded-[4px] lg:w-[full] py-[4px] px-4">
+                {dataorder.package.packB.number +
+                  dataorder.package.packS.number +
+                  dataorder.package.packM.number}
+              </div>
+            </div>
           </div>
-          <div className="flex justify-center mt-4 cursor-pointer">
-            <button
-              className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-              onClick={() => {
-                {
-                  dataorder.package.packM.number >= 25
-                    ? notify()
-                    : dispatch(Methodpackageadd(`packM*${item.id}`));
-                }
-              }}
-            >
-              {dataorder.package.packM.number ? "+" : "انتخاب کن"}
-            </button>
-            {dataorder.package.packM.number ? (
-              <button
-                className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-                onClick={() => {
-                  dispatch(Methodpackagedelet(`packM`));
-                }}
-              >
-                {dataorder.package.packM.number > 1 ? (
-                  " - "
-                ) : (
-                  <RiDeleteBin6Fill />
-                )}
-              </button>
-            ) : (
-              ""
-            )}
+          <div className="flex justify-end flex-col text-colorgray">
+            <span className="mt-[8px]  text-right mr-[3%]">توضیحات</span>
+            <div className="bg-dashboard border-2 border-solid border-[#CDCDCD] h-[50px] w-[94%] rounded-[5px] px-4 py-4 mx-auto"></div>
           </div>
         </div>
-        {/* end packM */}
-        case "کوچک":
- {/* start packS */}
- return <div key={index} className="bg-utils-300 w-32 h-28 rounded-md self-end mb-3 text-center relative shadow-utils-300 shadow-lg">
- {/* start badge */}
- {dataorder.package.packS.number ? (
-   <span className="bg-bgcolor text-txcolor p-2 ml-2 text-center rounded-full absolute -top-5 left-[100px]">
-     {dataorder.package.packS.number}+
-   </span>
- ) : (
-   ""
- )}
- {/* end badge */}
- <p className="text-txcolor">بسته {item.title}</p>
- <div className="flex justify-center text-3xl text-iconbox">
- <BsBoxSeamFill />
- </div>
- <div className="flex justify-center mt-4 cursor-pointer">
-   <button
-     className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-     onClick={() => {
-       {
-         dataorder.package.packS.number >= 25
-           ? notify()
-           : dispatch(Methodpackageadd(`packS*${item.id}`));
-       }
-     }}
-   >
-     {dataorder.package.packS.number ? "+" : "انتخاب کن"}
-   </button>
-   {dataorder.package.packS.number ? (
-     <button
-       className="bg-bgcolor rounded-md text-txcolor py-1 px-2 mx-2"
-       onClick={() => {
-         dispatch(Methodpackagedelet("packS"));
-       }}
-     >
-       {dataorder.package.packS.number > 1 ? (
-         " - "
-       ) : (
-         <RiDeleteBin6Fill />
-       )}
-     </button>
-   ) : (
-     ""
-   )}
- </div>
-</div>
-{/* end packS */}
-              }
-             
-                  })}    
-           
-          </div>
-          {/* ثبت سفرش */}
+        <div className="lg:w-[70%] w-[85%] rounded-[5px] px-2 py-2 border-2 border-solid border-[#FFCB05] mx-auto bg-[#fff] mt-[15px] mb-[50px] flex text-[14px] ">
+          <IoIosWarning className="text-[#FFCB05] inline-block  mx-1 text-[18px]" />
+          لطفا مطمئن شوید که وزن و ابعاد دقیق باشد تا از هزینه های اضافه بعدی
+          جلوگیری شود
         </div>
+        {flag_Complate_Order ? <div className="lg:w-[70%] w-[85%] mb-[10px] text-right mr-[15%] text-[18px] font-[600]">
+          انتخاب جزئیات سفارش
+        </div>:""}
+       
+        {/* ثبت سفرش */}
         {/* پایان سایز بسته */}
         {/* شروع:نمایش با درخواست سمت بک اند */}
+
         {flag_Complate_Order ? (
           getprice ? (
-            <div className="mt-10" >
+            <div className="mt-1">
               {/*  شروع نمایش هزینه ارسال */}
               {getprice.map((item, index) => (
                 <button
@@ -309,87 +410,130 @@ const Package = () => {
                     });
                     dispatch(MethodPrice(item));
                   }}
-                  className={`${isshow[index]?"shadow-md shadow-bgcolor":""} w-1/2 mx-auto p-6 mt-10 -translate-x-3 block ${stylecard.card} `}
+                  className={`${
+                    isshow[index] ? "" : ""
+                  } lg:w-[70%] w-[85%] mx-auto px-4 pt-4 pb-2 mb-[30px]  block text-[black] bg-[#fff] rounded-md`}
                 >
-                  <div className="z-10 text-txcolor w-full">
-                  <div className="flex justify-between">
-                    <div className="mx-8 font-bold text-lg">{item.title}</div>
-                    <div className="mx-8 font-bold text-lg">
-                      {(item.amount).toLocaleString()} تومان
+                  <div className="z-10 w-full">
+                    <div className="flex justify-between">
+                      <div className="mx-12 font-[600] text-[15px]">
+                        {item.title}
+                      </div>
+                      {/* <div className="mx-8 text-colorgray text-lg">
+                        {item.amount.toLocaleString()} تومان
+                      </div> */}
                     </div>
-                  </div>
-                  <div className="flex justify-between mt-4">
-                    <div className="flex justify-start">
-                      <div className="mx-10">
-                        <p className="font-bold">نزدیک ترین زمان دریافت</p>
-                        <p>{`${item.pickup_time.split("_")[0]}`}</p>
+                    <div className="mt-4">
+                      <div className="flex justify-between">
+                        <div className="flex">
+                          <div className="">
+                            { isshow[index]?<GoCheckCircleFill
+                              className={`w-8 h-8  text-colorgreen`}
+                            />: <FiCircle  className={`w-8 h-8  text-[#d8dde7]`} />}
+                         
+                            
+                          </div>
+                          <div className="mx-4">
+                            <p className="text-[#8A8A8A]">جمع آوری فوری</p>
+                            <p className="text-colorgray pt-2">{`${
+                              item.pickup_time.split("_")[0]
+                            }`}</p>
+                          </div>
+                        </div>
+                        <div className="mx-4">
+                          <div className="flex">
+                            <p className="text-[#8A8A8A] px-3"> تحویل</p>
+                            <div className="flex">
+                              <Image
+                                src="/order/tick.svg"
+                                width={20}
+                                height={20}
+                                alt="Picture of the author"
+                              />
+                              <Image
+                                src="/order/tick.svg"
+                                width={20}
+                                height={20}
+                                alt="Picture of the author"
+                              />
+                              <Image
+                                src="/order/ticke.svg"
+                                width={20}
+                                height={20}
+                                alt="Picture of the author"
+                              />
+                            </div>
+                          </div>
+                          <p className="text-colorgray pt-2">
+                            {item.delivery_time}
+                          </p>
+                        </div>
                       </div>
-                      <div className="mx-10">
-                        <p className="font-bold"> زمان تحویل</p>
-                        <p>{item.delivery_time}</p>
+                      {/* toggle */}
+                    </div>
+                    <div className="flex rounded-[5px] bg-dashboard border-2 border-solid border-[#CDCDCD] px-2 py-2 mt-[5px] justify-between">
+                      <div className="text-[#8A8A8A] flex  px-2 ">
+                        <Image
+                          src="/order/chap.svg"
+                          width={20}
+                          height={20}
+                          alt="Picture of the author"
+                        />
+                        <p className="px-2 text-[14px]">امکان چاپ لیبل بارکد</p>
+                      </div>
+                      <div className="text-[#8A8A8A] flex  px-2">
+                        <Image
+                          src="/order/search.svg"
+                          width={23}
+                          height={23}
+                          alt="Picture of the author"
+                        />
+                        <p className="px-2 text-[14px]">امکان رهگیری</p>
+                      </div>
+                      <div className="text-[#8A8A8A] flex px-2">
+                        <Image
+                          src="/order/bime.svg"
+                          width={18}
+                          height={18}
+                          alt="Picture of the author"
+                        />
+                        <p className="px-2 text-[14px]">بیمه پایه</p>
                       </div>
                     </div>
-                    {/* toggle */}
-                    <FaCertificate
-                      className={`w-8 h-8 ${
-                        isshow[index] ? " text-tickboxprice" : " text-white"
-                      }`}
-                    />
-                  </div>
-                  {isshow[index] ? (
-                    <form className="mt-8 flex ">
-                      <div className="w-3/5 flex">
-                      <span className="text-sm right-3 bottom-2 py-[15px] px-2 bg-tickboxprice text-txcolor rounded-tr-md rounded-br-md outline-none border-none">
-                             محتوا مرسوله را مشخص کنید
-                          </span>
-                        <select className="w-2/5  py-3 px-4 rounded-l-md  outline-none inline-block text-black cursor-pointer text-sm"
-                        onClick={(event)=>{ 
-                          const item=content_value.data.Content_data.find((item)=>item.title===event.target.value)
-                          
-                          return(
-                            dispatch(MethodInsurance_content(`${event.target.value}*${item.id}`))
-                          )
-                          }}
-                        >
-                          {(content_value.data.Content_data).map((item,index)=>{
-                          return <option key={index}>
-                           {item.title}
-                          </option>
-                          })}
-        
-                        </select>
-                      </div>
-                      <div className="w-2/5 flex">
-                      <span className="text-sm right-3 bottom-2 py-[15px] px-2 bg-tickboxprice text-txcolor rounded-r-md outline-none border-none">
-                           ارزش مرسوله
-                          </span>
-                        <select className="border-solid text-black  py-3 px-4 rounded-l-md  outline-none w-3/5 text-sm cursor-pointer"
-                          onClick={(event)=>{
-                            const item1=content_value.data.Value_data.find((item)=>item.min_value==event.target.value.split("-")[0])
-                          
-                            return(
-                              dispatch(MethodInsurance_value(`${event.target.value}*${item1.id}`))
-                            )
-                           }}>
-
-                          {(content_value.data.Value_data).map((item,index)=>{
-                          return <option key={index}>{`${(item.min_value)}-${(item.max_value)} میلیون تومان`}</option>
-                          })}
-                          </select>
-                      </div>
-                    </form>
-                  ) : (
-                    ""
-                  )}
                   </div>
                 </button>
               ))}
 
               {/*  پایان نمایش هزینه ارسال */}
-
+              {/* شروع تصاویر */}
+              <div className="pt-[2px] lg:w-[70%] w-[85%] mx-auto">
+                <Image
+                  src="/order/price/image.svg"
+                  width={500}
+                  height={500}
+                  alt="Picture of the author"
+                  className="w-full"
+                  priority
+                />
+              </div>
+              {/* پایان تصاویر */}
               {/* شروع تقویم */}
-              <Datapicker getprice={getprice}/>
+              <div className="lg:w-[70%] w-[85%] mb-[10px] text-right mr-[20%] text-[18px] font-[600] mt-[50px]">
+                انتخاب روز جمع آوری
+              </div>
+              <div className=" lg:w-[60%] w-[85%] mx-auto mb-[50px]">
+                <Datapicker getprice={getprice} />
+              </div>
               {/* پایان تقویم */}
+              <div className="py-[20px] lg:w-[70%] w-[85%] mx-auto my-6">
+                <Image
+                  src="/order/cal.svg"
+                  width={300}
+                  height={300}
+                  alt="Picture of the author"
+                  className="w-[60%] block mx-auto"
+                />
+              </div>
             </div>
           ) : (
             <div className="flex justify-center mt-10 ">

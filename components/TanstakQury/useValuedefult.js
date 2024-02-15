@@ -6,7 +6,7 @@ const Valuedefult = () => {
       fetch(
         `https://mohaddesepkz.pythonanywhere.com/options/content/value/`
       ).then((res) => res.json()),
-    refetchOnMount: false,
+      refetchOnMount: false
   });
   return Valuedefult;
 };

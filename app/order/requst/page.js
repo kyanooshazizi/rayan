@@ -1,39 +1,40 @@
-"use client"
+"use client";
 // import component:start
 import Navbar from "@/components/utilsorder/Navbar/navbar";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 // import Sidbar from '@/components/utilsorder/Saidbar/sidbar'
-import Mainsection from '@/components/utilsorder/pageRequst/mainsection/mainsection'
-const Sidbar = dynamic(() => import('@/components/utilsorder/Saidbar/sidbar'), { ssr: false })
+import Mainsection from "@/components/utilsorder/pageRequst/mainsection/mainsection";
+const Sidbar = dynamic(() => import("@/components/utilsorder/Saidbar/sidbar"), {
+  ssr: false,
+});
 // const Mainsection = dynamic(() => import('@/components/utilsorder/pageRequst/mainsection/mainsection'), { ssr: false })
 // import component:end
-import { useThemeContext } from '@/components/context/store';
+import { useThemeContext } from "@/components/context/store";
+import Sidnav from "@/components/utilsDashboard/Sydbar";
 const page = () => {
-  const { isloading} = useThemeContext();
+  const { isloading, islogin } = useThemeContext();
   return (
     <>
-      {/* start nav */}
-      <Navbar/>
-      {/* end nav */}
-      <main className="grid grid-cols-6">
-        {/* start section */}
-        <Mainsection/>
-        {/* end section */}
-        {/* start sidebar */}
-        {isloading?
-        <div className="skeleton  p-2 fixed top-[60px] left-0 w-1/4 h-[calc(100vh_-_60px)]">
-          {/* شروع:عنوان */}
-        <div className="text-txcolor text-center">
-          <div className="text-center shadow-sm bg-white text-bgcolor mb-3 w-[200px] py-2 rounded font-bold mx-auto !important">
-            خلاصه سفارش
+      <div className="w-full">
+        <div>
+          <Navbar />
+        </div>
+        <div
+          className={` fixed w-[140px] mt-[100px] ${
+            islogin ? "lg:flex hidden" : "hidden"
+          }`}
+        >
+          <Sidnav stylex={"pt-[38px]"} />
+        </div>
+        <div className="flex lg:pr-[20px] pr-0">
+          <div className="xl:basis-[75%] lg:basis-[72%] basis-full ">
+            <Mainsection />
+          </div>
+          <div className=" lg:block hidden fixed xl:w-[340px] lg:w-[300px] left-0">
+            <Sidbar />
           </div>
         </div>
-        {/* پایان:عنوان */}
-        
-        </div>
-        :<Sidbar/>}
-        {/* end sidebar */}
-      </main>
+      </div>
     </>
   );
 };

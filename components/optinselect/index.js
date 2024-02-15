@@ -47,7 +47,7 @@ const Alloptien = ({btncolor}) => {
       />
      
        <div className="h-16 lg:w-[225px]">
-       <button className={` w-[80%] lg:mx-0 mx-auto lg:rounded-l-lg lg:rounded-none rounded-lg p-4 lg:p-7 ${btncolor?`bg-${btncolor} text-txcolor`:"bg-colorgray"} hover:bg-utils-400 hover:transition-all hover:duration-300 font-bold flex align-middle justify-center lg:justify-between text-xs md:text-[16px] text-txcolor} lg:mt-0 md:mt-[20px] mt-6`}
+       <button className={` w-[80%] lg:mx-0 mx-auto lg:rounded-l-lg lg:rounded-none rounded-lg p-4 lg:py-8  ${btncolor?`bg-${btncolor} text-txcolor`:"bg-colorgray"} hover:bg-utils-400 hover:transition-all hover:duration-300 font-bold flex align-middle justify-center lg:justify-between text-xs md:text-[16px] text-txcolor} lg:mt-0 md:mt-[20px] mt-6`}
         onClick={()=>{
           dispatch(MethodBackHomepage())
           router.push("/order/requst");
