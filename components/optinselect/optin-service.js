@@ -35,7 +35,7 @@ useEffect(() => {
         {isClient&&dataorder.service ? dataorder.service : placholder}
         {/* placeholder:end */}
         <BiChevronDown size={20} className={`${open && "rotate-180"}`} />
-        {dataorder.service && isClient ? <span className="absolute top-2 font-bold block text-bgcolor">محتوا مرسوله</span> : ""}
+        {dataorder.service && isClient ? <span className="absolute top-2 font-bold block text-black">محتوا مرسوله</span> : ""}
       </div>
       <ul
         className={`z-40 bg-whit shadow-xl mt-5 overflow-y-auto overflow-x-hidden absolute w-full top-[52px] rounded-sm border-x-2 border-solid border-gray-300  ${

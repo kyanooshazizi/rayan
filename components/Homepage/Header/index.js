@@ -58,9 +58,9 @@ const Headerpage = () => {
             </div>
             <div className="shadow-lg lg:mx-[20px] sm:mx-[10px] mx-[5px] lg:w-[100px] lg:h-[100px] sm:w-[65px] sm:h-[65px] w-[50px] h-[50px] bg-[#fff] lg:rounded-[16px] sm:rounded-[8px] rounded-[4px] flex justify-center items-center">
               <Image
-                src="/imag_homepage/box_header/rayan.svg"
-                width={70}
-                height={20}
+                src="/imag_homepage/box_header/khayrie.svg"
+                width={90}
+                height={50}
                 alt="Picture of the author"
                 className="lg:px-[0px] sm:px-[4px] px-[6px]"
               />

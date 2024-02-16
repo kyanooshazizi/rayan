@@ -53,14 +53,14 @@ const Option = ({ stylex, placholder, data, slug, withw,py1,py2}) => {
         <BiChevronDown size={20} className={`${open && "rotate-180"}`} />
         {slug === "pick" ? (
           isClient && dataorder.pick_up ? (
-            <span className={`absolute top-2 font-bold text-bgcolor `}>
+            <span className={`absolute top-2 font-bold text-black `}>
               مبدا
             </span>
           ) : (
             ""
           )
         ) : isClient && dataorder.delivery ? (
-          <span className={`absolute top-2 font-bold text-bgcolor `}>مقصد</span>
+          <span className={`absolute top-2 font-bold text-black `}>مقصد</span>
         ) : (
           ""
         )}

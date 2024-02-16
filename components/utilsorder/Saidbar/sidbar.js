@@ -320,7 +320,7 @@ const Sidbar = () => {
                   }
                 }}
               >
-               ادامه ثبت سفارش
+                ادامه ثبت سفارش
               </button>
             </PopoverTrigger>
             {MethodFlagHandlerAddress(dataAddress) ? (
@@ -375,11 +375,18 @@ const Sidbar = () => {
                       {ServiceNameHandler("بسته").map((item, index) => {
                         return <div key={index}>{item}</div>;
                       })}
-                      {datastore.Price ?<div className="flex justify-between mt-2">
-                     <span className="text-[14px] pr-3">{datastore.titleprice} </span>
-                     <span className="text-[14px] px-1">{datastore.Price.toLocaleString()} تومان</span>
-                     </div>:""}
-                     
+                      {datastore.Price ? (
+                        <div className="flex justify-between mt-2">
+                          <span className="text-[14px] pr-3">
+                            {datastore.titleprice}{" "}
+                          </span>
+                          <span className="text-[14px] px-1">
+                            {datastore.Price.toLocaleString()} تومان
+                          </span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                   {datastore.pickup_date ? (
@@ -395,11 +402,13 @@ const Sidbar = () => {
                     ""
                   )}
 
-                  {datastore.Price&&tax ? (
+                  {datastore.Price && tax ? (
                     <div className="p-2 mr-[15px]">
                       <div className=" font-bold  text-[16px]">قیمت</div>
                       <div className="mt-1 text-md bg-[#fff] w-[250px] rounded-[4px] py-2 px-4 text-colorgray">
-                        <span>{(datastore.Price+tax.tax).toLocaleString()} تومان</span>
+                        <span>
+                          {(datastore.Price + tax.tax).toLocaleString()} تومان
+                        </span>
                       </div>
 
                       {/* <div className="flex justify-between py-1  text-txcolor">

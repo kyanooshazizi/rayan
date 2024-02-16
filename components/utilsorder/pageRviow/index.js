@@ -37,7 +37,7 @@ const index = () => {
         {/* شروع:مشخصات گیرنده */}
         <div className="bg-[#fff] w-full p-[15px] mt-[15px]">
           <div className="text-colorgray text-[16px] pr-[5px]">
-            مشخصات فرستنده
+            مشخصات گیرنده
           </div>
           <div className="flex justify-around mt-[20px]">
             <div className="basis-[48%]">
@@ -63,9 +63,7 @@ const index = () => {
         {/* پایان:مشخصات گیرنده */}
         {/* شروع: خلاصه سفارش */}
         <div className="bg-[#fff] w-full p-[15px] mt-[15px]">
-          <div className="text-colorgray text-[16px] pr-[5px]">
-            خلاصه سفارش 
-          </div>
+          <div className="text-colorgray text-[16px] pr-[5px]">خلاصه سفارش</div>
           <div className="flex flex-col mt-[20px]">
             <div className="flex w-full px-4 mb-3">
               <div className="basis-[20%] text-colorgray">مرسوله</div>
@@ -102,19 +100,23 @@ const index = () => {
         {/* پایان: خلاصه سفارش */}
         {/* start:butten */}
         <div className="mt-[15px] flex justify-between mb-[25px]">
-          <button className="basis-[49%] bg-[#7C85A0] p-2 text-[#fff] rounded-[3px]">بازگشت</button>
-          <button className="basis-[49%] bg-bgcolor p-2 text-[#fff] rounded-[3px]">تایید و ادامه</button>
+          <button className="basis-[49%] bg-[#7C85A0] p-2 text-[#fff] rounded-[3px]">
+            بازگشت
+          </button>
+          <button className="basis-[49%] bg-bgcolor p-2 text-[#fff] rounded-[3px]">
+            تایید و ادامه
+          </button>
         </div>
         {/* end:butten */}
-        <div className="mt-[15px] lg:flex hidden justify-between mt-[45px] mx-auto mb-[30px]" >
-            <Image
-              src="/order/preview.svg"
-              width={400}
-              height={200}
-              alt="Picture of the author"
-              className="mx-auto"
-            />
-          </div>
+        <div className=" lg:flex hidden justify-between mt-[45px] mx-auto mb-[30px]">
+          <Image
+            src="/order/preview.svg"
+            width={400}
+            height={200}
+            alt="Picture of the author"
+            className="mx-auto"
+          />
+        </div>
       </section>
     </>
   );

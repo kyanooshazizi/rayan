@@ -44,6 +44,7 @@ const Navbar = () => {
     freqest: false,
     faddress: false,
     freviow: false,
+    fpayment:false,
   });
   useEffect(() => {
     const url = `${pathname}`;
@@ -56,11 +57,13 @@ const Navbar = () => {
     });
     setFlagnav(() => {
       if (url.split("/")[2] === "requst") {
-        return { freqest: true, faddress: false, freviow: false };
+        return { freqest: true, faddress: false, freviow: false,fpayment:false };
       } else if (url.split("/")[2] === "address") {
-        return { freqest: true, faddress: true, freviow: false };
+        return { freqest: true, faddress: true, freviow: false ,fpayment:false};
       } else if (url.split("/")[2] === "OrderReview") {
-        return { freqest: true, faddress: true, freviow: true };
+        return { freqest: true, faddress: true, freviow: true ,fpayment:false};
+      }else if (url.split("/")[2] === "payment"){
+        return { freqest: true, faddress: true, freviow: true ,fpayment:true};
       }
     });
   }, [pathname]);
@@ -107,9 +110,21 @@ const Navbar = () => {
                 flagnav.freviow ? "!text-[black] font-bold" : ""
               }`}
             >
-              بازبینی سفارش <FaAngleLeft className="inline-block mx-6" />
+              {flagnav.fpayment ? (
+                <BsCheckCircleFill className="inline-block ml-1 text-base" />
+              ) : (
+                ""
+              )}
+                 بازبینی سفارش <FaAngleLeft className="inline-block mx-6" />
             </li>
-            <li className="inline-block text-colorgray p-2">پرداخت</li>
+            <li
+              className={`inline-block text-colorgray p-2 ${
+                flagnav.fpayment ? "!text-[black] font-bold" : ""
+              }`}
+            >
+             
+                 پرداخت <FaAngleLeft className="inline-block mx-6" />
+            </li>
           </ul>
         </div>
         {/* start:clock */}
