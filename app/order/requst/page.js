@@ -30,7 +30,7 @@ const page = () => {
           <div className="xl:basis-[75%] lg:basis-[72%] basis-full ">
             <Mainsection />
           </div>
-          <div className=" lg:block hidden fixed xl:w-[340px] lg:w-[300px] left-0">
+          <div className="lg:block hidden fixed xl:w-[340px] lg:w-[300px] left-0">
             <Sidbar />
           </div>
         </div>

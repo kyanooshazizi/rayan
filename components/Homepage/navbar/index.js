@@ -23,6 +23,9 @@ import {
   DropdownItem,
   Button,
 } from "@nextui-org/react";
+import { BsCart3 } from "react-icons/bs";
+import { MethodFlagHandler } from "../../utilsorder/utils/MethodFlagHandler";
+import { useSelector } from "react-redux";
 const Resnav = () => {
   const {
     username,
@@ -34,16 +37,18 @@ const Resnav = () => {
     setToggle,
   } = useThemeContext();
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
+  const datastore = useSelector((state) => state.order.order);
+  console.log("sssss", MethodFlagHandler(datastore));
   const handleScroll = () => {
     setClientWindowHeight(document.documentElement.scrollTop);
     // console.log(clientWindowHeight)
   };
- 
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   });
-  
+
   return (
     <>
       <nav
@@ -218,6 +223,7 @@ const Resnav = () => {
                   <button
                     onClick={() => {
                       deleteCookie("access_token");
+                      localStorage.clear();
                       setIslogin(false);
                     }}
                     className="text-[red] py-4"
@@ -251,15 +257,22 @@ const Resnav = () => {
               شروع کنیم
             </Link>
           </div>
-          <div className="pr-6 pl-4">
+          <div className="pr-6 pl-4 flex items-center">
             <CiGlobe className="text-2xl mx-3 inline-block" />
-            <Image
-              src={"/imag_homepage/shopping.svg"}
-              alt="shopping"
-              width={25}
-              height={25}
-              className="inline-block mx-3"
-            />
+            <Link
+              href={`${MethodFlagHandler(datastore)?"/order/address":"/order/requst"
+              }`}
+              className="mx-2 relative inline-block "
+            >
+              <BsCart3 className={`text-[25px] `} />
+              <div
+                className={`${
+                  MethodFlagHandler(datastore)?"block":"hidden"
+                } bg-colorgreen text-[#fff] w-[25px] h-[25px] p-1 rounded-full absolute top-[-15px] right-[-15px] text-center`}
+              >
+                1
+              </div>
+            </Link>
           </div>
         </div>
         {/* end:nav left */}

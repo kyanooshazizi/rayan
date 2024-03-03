@@ -5,7 +5,7 @@ const index = () => {
     <div className='lg:w-[50%] md:w-[70%] sm:w-[80%] w-full mt-10'>
     <button className='text-[#fff] bg-bgcolor py-3 rounded-[3px] w-full'>وارد کردن آدرس ها زا طریق فایل اکسل</button>
     <div className='bg-[#fff] rounded-[3px] w-full h-[250px] mt-6 flex justify-center items-center p-6'>
-      <div className='bg-[#fff] rounded-[3px] h-[200px] bg-dashboard w-full border-2 border-solid border-gray-200 pr-4 pt-2 text-gray-400'>
+      <div className='rounded-[3px] h-[200px] bg-dashboard w-full border-2 border-solid border-gray-200 pr-4 pt-2 text-gray-400'>
         فایل را در این قسمت بکشید و رها کنید
       </div>
     </div>

@@ -1,18 +1,73 @@
+"use client"
 import React from 'react'
 import { IoSearchSharp } from "react-icons/io5";
-import Modal from "./Modal"
+import Modal from "./Modal";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { getCookie } from "cookies-next";
+import Image from "next/image";
+import Modaledit from "./Modaledit"
+import { MdDelete } from "react-icons/md";
+import { FaPlusSquare } from "react-icons/fa";
+
+// start:save in localhost
+import { useDispatch,useSelector} from "react-redux";
+import {
+  MethodSenderName,
+  MethodSenderAddress,
+  MethodSenderMobile,
+  MethodReceiverName,
+  MethodReceiverAddress,
+  MethodReceiverMobile,
+  MethodSenderAddress_details,
+  MethodReceiverAddress_details
+} from "../../../Redux/orderslice";
+import { useRouter } from "next/navigation";
+import {MethodFlagHandler} from "../../../utilsorder/utils/MethodFlagHandler";
+import Link from 'next/link';
+// end:save in localhost
 const index = () => {
   const empty = Array(10).fill(0);
+  const { data, isLoading } = useQuery("alladdress_receivers", () => {
+    return fetch("https://mohaddesepkz.pythonanywhere.com/address/receivers/", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("access_token")}`,
+      },
+    }).then((res) => res.json());
+  },);
+  const y=data?.results?10-data?.results?.length:10;
+  const x = Array(y).fill(0);
+  console.log(data,y,x)
+  const queryClient = useQueryClient()
+  const { mutate: deletaddress1, data:deletdata ,error,isError } = useMutation(
+    (Id) => {
+      return fetch(`https://mohaddesepkz.pythonanywhere.com/address/delete/${Id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${getCookie("access_token")}`,
+        },
+      });
+    },
+    {
+      onError: () => {
+      console.log("err")
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries(["alladdress_receivers"])
+        
+      },
+    }
+  );
   return (
     <div className='mt-[20px]'>
-      <div className='lg:w-[80%] md:w-[90%] w-full relative '>
+      <div className='lg:w-[85%] md:w-[90%] w-full relative '>
          <input type="text" className='bg-[#AEB3C3] text-[#fff] placeholder:text-[#fff]  focus:bg-bgcolor outline-none px-3 py-3 w-full rounded' 
          placeholder='جستجو در عنوان'
          />
           <IoSearchSharp className="absolute top-[16px] left-[2%] text-[21px] text-[#fff] " />
       </div>
-      <div className='mt-[15px] flex justify-between md:flex-row flex-col lg:w-[80%] md:w-[90%] w-full'>
-        <button className='md:basis-[48%] basis-[90%] bg-bgcolor px-2 py-3 rounded text-[#fff] inline-block'>وارد کردن از فایل </button>
+      <div className='mt-[15px] flex justify-between md:flex-row flex-col lg:w-[85%] md:w-[90%] w-full'>
+        <button className='md:basis-[48%] basis-[90%] bg-bgcolor px-2 py-3 rounded text-[#fff]'>وارد کردن از فایل </button>
         <div className='md:basis-[48%] basis-[90%] bg-bgcolor px-2 py-1 rounded text-[#fff] md:mt-0 mt-4'>
         <Modal/>
         </div>
@@ -20,49 +75,118 @@ const index = () => {
       </div>
 
       <div className="overflow-x-auto overflow-y-hidden">
-        <table className=" mt-[25px] lg:w-[80%] sm:w-[90%] w-full">
+      {isLoading ? 
+        <div className=" mt-[50px] w-full lg:w-[75%] min-h-[200px]">
+          <Image
+            className="mx-auto"
+            src="/loadgetfetch.svg"
+            width={110}
+            height={110}
+            alt="لوگو"
+            priority
+          />
+        </div>:
+        
+        <table className=" mt-[25px] lg:w-[85%] sm:w-[90%] w-full">
           <thead>
             <tr className="bg-dashboard ">
+            <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right pl-4 pr-2 py-2">
+                شناسه
+              </th>
               <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right pl-4 pr-2 py-2">
-                عنوان
+                عنوان کسب و کار
               </th>
               <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right px-4 py-2">
-                استان 
+                نام و نام خانوادگی 
               </th>
               <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right px-4 py-2">
-                شهر
+                شماره همراه
               </th>
               <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right px-4 py-2">
-                کد انحصاری
+                شهر 
               </th>
               <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right px-4 py-2">
-                نام مشتری
+                محله
+              </th>
+              <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right px-4 py-2">
+                آدرس 
               </th>
             </tr>
           </thead>
           <tbody className="">
-            {empty.map((item, index) => {
+            {data?.results?.map((item, index) => {
               return (
                 <tr
                   key={index}
-                  className="bg-[#fff]  h-[60px] rounded border-b-[18px] border-solid border-dashboard"
+                  className="bg-[#fff]  h-[60px] rounded border-b-[18px] border-solid border-dashboard hover:bg-slate-200 cursor-pointer"
                 >
                   <td className="text-right pl-4 py-4 text-[14px] pr-2">
-                    
+                    {item.id+140000}
                   </td>
-                  <td className="text-right px-4 py-4 text-[14px]"></td>
-                  <td className="text-right px-4 py-4 text-[14px]"></td>
-                  <td className="text-right px-4 py-4 text-[14px]"></td>
+                  <td className="text-right pl-4 py-4 text-[14px] pr-2">
+                    {item.title}
+                  </td>
+                  <td className="text-right px-4 py-4 text-[14px]"> {item.name}</td>
+                  <td className="text-right px-4 py-4 text-[14px]"> {item.phone}</td>
                   <td className="text-right px-4 py-4 text-[14px]">
-                    
+                      {item.city.name}
+                    </td>
+                    <td className="text-right px-4 py-4 text-[14px]">
+                      {item.district.name}
+                    </td>
+                  <td className="text-right px-4 py-4 text-[14px]"> {`${item.address},پلاک ${item.plaque}, واحد ${item.unity}`}</td>
+                  <td className="text-right px-4 py-4 text-[14px]">
+                  <Modaledit datainput={item} />
                   </td>
-                  <td className="text-right px-4 py-4 text-[14px]"></td>
-                  <td className="text-right px-4 py-4 text-[14px]"></td>
+                  {/* <td className="text-right px-4 py-4 text-[14px]"><Modal datainput={item}/> </td> */}
+                  <td className="text-right  py-4 text-[14px]"><MdDelete
+                      className="text-[25px] cursor-pointer text-bgcolor"
+                      onClick={()=>deletaddress1(item.id)}
+                    /> </td>
+                     <td className="text-right px-4  py-4 text-[14px]">
+                    <button onClick={()=>{
+                              dispatch(MethodReceiverName(item.name));
+                              dispatch(MethodReceiverAddress(item.address));
+                              dispatch(MethodReceiverAddress_details("پلاک**"+item.plaque));
+
+                              dispatch(MethodReceiverAddress_details("واحد**"+item.unity));
+                              dispatch(MethodReceiverMobile(item.phone));
+                              if(MethodFlagHandler(dataorder)){
+
+                                router.push("/order/address")
+                              }else{
+                                setRequstOrder_reciver({
+                                  flag:true,
+                                  text:"آدرس فرستنده افزوده شد اما هنوز سفارشی را ثبت نکرده اید!"
+                                })
+                              }
+                            }} className="text-bgcolor text-[22px] cursor-pointer mt-[8px]">
+                              <FaPlusSquare />
+                            </button>
+                    </td>
                 </tr>
               );
             })}
+            {x.map((item,index)=>{
+             return <tr
+              key={index}
+              className="bg-[#fff]  h-[60px] rounded border-b-[18px] border-solid border-dashboard hover:bg-slate-200 cursor-pointer"
+            >
+              <td className="text-right pl-4 py-6 text-[14px] pr-2"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+              <td className="text-right px-4 py-6 text-[14px]"></td>
+            </tr>
+            })}
           </tbody>
         </table>
+        }
         <div className="flex mt-[20px] justify-center items-center lg:w-[70%] md:w-[70%] sm:w-[80%] w-full">
           <div className="text-[12px] mt-[15px]">
             <span className="px-2">صفحه</span>
@@ -85,4 +209,3 @@ const index = () => {
 }
 
 export default index
-

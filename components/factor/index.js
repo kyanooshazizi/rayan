@@ -2,21 +2,27 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import QRCode from "react-qr-code";
-import { useReactToPrint } from "react-to-print";
+import ReactToPrint from "react-to-print";
 
-<style type="text/css" media="print">
-
-</style>;
+const pageStyle = `
+@page{
+  size:50mm 30mm
+};
+@media all{
+.pageBreak{
+  display:none
+}
+};
+@media print{
+  .pageBreak{
+    page-break-before:always;
+  }
+}
+`;
 
 const index = () => {
-   
   const componentRef = useRef();
 
-  const generatpdf = useReactToPrint({
-    content: () => componentRef.current,
-    documentTitle: "فاکتور",
-    // onAfterPrint: () => alert(""),
-  });
   return (
     <div className="w-full min-h-screen bg-white ">
       <div className="pt-[30px]">
@@ -31,17 +37,20 @@ const index = () => {
             <span>رایان پست</span>
           </div>
           <div>
-            <button
-              onClick={generatpdf}
-              className="w-[100px] px-2 py-2 text-white bg-colorgreen rounded-md"
-            >
-              پرینت/دانلود
-            </button>
+            <ReactToPrint
+              trigger={() => 
+                <button className="w-[100px] px-2 py-2 text-white bg-colorgreen rounded-md">
+                  پرینت/دانلود
+                </button>
+              }
+              content={() => componentRef.current}
+              pageStyle={pageStyle}
+            />
           </div>
         </div>
       </div>
       <hr className="w-2/3 h-1 my-3 bg-green-400 mx-auto" />
-      <div className="mt-10 w-full" ref={componentRef}>
+      <div className="w-full  mx-auto" ref={componentRef} >
         <div className="w-[85%] p-2 mx-auto border-1 border-solid border-gray-100 rounded-md">
           {/* start:Header factor */}
           <div className="flex justify-between p-4 w-full">

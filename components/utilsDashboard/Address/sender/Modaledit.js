@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client"
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,41 +13,58 @@ import { FaPlus } from "react-icons/fa6";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getCookie } from "cookies-next";
 import swal from "sweetalert";
+import { FaEdit } from "react-icons/fa";
 import useCity_servise from "../../../TanstakQury/useCity_servise";
-export default function App() {
+export default function App({datainput}) {
   const { datacity } = useCity_servise();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleOpen = () => {
     onOpen();
   };
 const [details,setDetails]=useState(true);
-const [address_resiver,setAddress_resiver]=useState({
-  Business:"",
-  Fname:"",
-  mobile:"",
-  address:"",
-  peluck:"",
-  vahed:"",
-  idcity: 3,
-  iddistrict: 15,
+const [address_sender,setAddress_sender]=useState({
+  Business:datainput.title,
+  Fname:datainput.name,
+  mobile:datainput.phone,
+  address:datainput.address,
+  peluck:datainput.plaque,
+  vahed:datainput.unity,
+  id:datainput.id,
+  idcity: datainput.city,
+  iddistrict: datainput.district,
 })
+const id=datainput.id
+if(datainput.id!==address_sender.id){
+  setAddress_sender({
+    Business:datainput.title,
+    Fname:datainput.name,
+    mobile:datainput.phone,
+    address:datainput.address,
+    peluck:datainput.plaque,
+    vahed:datainput.unity,
+    id:datainput.id,
+    idcity: datainput.city,
+    iddistrict: datainput.district,
+  })
+}
+console.log(id,datainput,address_sender)
 const ChangeHandler=(event)=>{
-  setAddress_resiver(prev=>({
+    setAddress_sender(prev=>({
       ...prev,
       [event.target.name]:event.target.value
     }))
+  
   }
-
   const queryClient = useQueryClient()
   const {
-    mutate: addresiverAddress,
+    mutate: addSenderAddress,
     data,
     error,
     isError,
-  } = useMutation((indata)=>{
-    return  fetch("https://mohaddesepkz.pythonanywhere.com/address/new/",{
-      method:"POST",
-          body: JSON.stringify(indata),
+  } = useMutation((variables)=>{
+    return  fetch(`https://mohaddesepkz.pythonanywhere.com/address/edit/${variables.id}/`,{
+      method:"PUT",
+          body: JSON.stringify(variables.indata),
           headers: {
             Authorization: `Bearer ${getCookie("access_token")}`,
             "Content-type": "application/json; charset=UTF-8",
@@ -60,7 +78,7 @@ const ChangeHandler=(event)=>{
     })},{
       
       onSuccess:(data)=>{
-        queryClient.invalidateQueries(["alladdress_receivers"])
+        queryClient.invalidateQueries(["alladdress_sender"])
         if(!data){
           swal({
             text: "لطفا تمام فیلد ها را پر کنید",
@@ -68,16 +86,6 @@ const ChangeHandler=(event)=>{
           })
         }else{
           console.log(data)
-         setAddress_resiver({
-            Business:"",
-            Fname:"",
-            mobile:"",
-            address:"",
-            peluck:"",
-            vahed:"",
-            idcity: 3,
-            iddistrict: 15,
-          })
         }
       },
       onError: (error) => {
@@ -92,30 +100,27 @@ const ChangeHandler=(event)=>{
 
 const SubmitHandler=(event)=>{
     event.preventDefault();
-    addresiverAddress({
-      sender: false,
-      address: address_resiver.address,
-      plaque: address_resiver.peluck,
-      unity: address_resiver.vahed,
-      name: address_resiver.Fname,
-      phone:address_resiver.mobile,
-      title:address_resiver.Business,
-      city:address_resiver.idcity,
-      district:address_resiver.iddistrict,
-    }) 
+    const indata={
+        sender: true,
+        address: address_sender.address,
+        plaque: address_sender.peluck,
+        unity: address_sender.vahed,
+        name: address_sender.Fname,
+        phone:address_sender.mobile,
+        title:address_sender.Business,
+        city:address_sender.idcity,
+        district:address_sender.iddistrict,
+      }
+    addSenderAddress({indata,id})
+     
  
   }
-
   return (
     <>
       <div className="flex flex-wrap gap-3">
-        <Button
-          onPress={() => handleOpen()}
-          className="sm:text-[16px] text-[14px] cursor-pointer  w-full text-[#fff]  bg-bgcolor rounded-[4px] text-center "
-        >
-          <FaPlus className="inline-block mx-1" />
-          ثبت آدرس جدید
-        </Button>
+      <button onClick={onOpen}>
+        <FaEdit className="text-[20px] cursor-pointer text-bgcolor" />
+      </button>
       </div>
       <Modal
         size={"3xl"}
@@ -138,18 +143,18 @@ const SubmitHandler=(event)=>{
                       <div className="lg:basis-[30%] sm:basis-[48%] basis-full mt-[5px]">
                         <label htmlFor="title">عنوان</label>
                         <input
-                         value={address_resiver.Business}
-                        onChange={(event) => ChangeHandler(event)}
-                        name="Business"
-                        id="Business"
-                          type="text"
-                          className="outline-none bg-dashboard border-2 border-solid border-gray-200 w-full px-2 py-2"
+                         value={address_sender.Business}
+                         onChange={(event) => ChangeHandler(event)}
+                         name="Business"
+                         id="Business"
+                         type="text"
+                         className="outline-none bg-dashboard border-2 border-solid border-gray-200 w-full px-2 py-2"
                         />
                       </div>
                       <div className="lg:basis-[30%] sm:basis-[48%] basis-full mt-[5px]">
                         <label htmlFor="title">نام و نام خانوادگی</label>
                         <input
-                         value={address_resiver.Fname}
+                         value={address_sender.Fname}
                          onChange={(event) => ChangeHandler(event)}
                          type="text"
                          name="Fname"
@@ -160,7 +165,7 @@ const SubmitHandler=(event)=>{
                       <div className="lg:basis-[30%] sm:basis-[48%] basis-full mt-[5px]">
                         <label htmlFor="title">شماره همراه</label>
                         <input
-                         value={address_resiver.mobile}
+                         value={address_sender.mobile}
                          onChange={(event) => ChangeHandler(event)}
                           type="number"
                           name="mobile"
@@ -178,7 +183,7 @@ const SubmitHandler=(event)=>{
                             const item1 = datacity?.results.find(
                               (item) => item.name == event.target.value
                             );
-                            setAddress_resiver((prev) => ({
+                            setAddress_sender((prev) => ({
                               ...prev,
                               idcity: item1.id,
                             }));
@@ -200,7 +205,7 @@ const SubmitHandler=(event)=>{
                           className="w-full outline-none rounded-[5px] text-[14px] bg-dashboard border-2 border-solid px-2 py-2 focus:border-colorgreen"
                           onClick={(event) => {
                             const item1 = datacity?.results.find(
-                              (item) => address_resiver.idcity==item.id
+                              (item) => address_sender.idcity==item.id
                             );
                             const item2 = item1?.district.find(
                               (item) => item.name==event.target.value
@@ -213,7 +218,7 @@ const SubmitHandler=(event)=>{
                           }}
                         >
                           {datacity?.results.map((item, index) => {
-                            if (item.id === address_resiver.idcity) {
+                            if (item.id === address_sender.idcity) {
                               return (item?.district.map((k) => {
                                 return (
                                   <option key={k.id} value={k.name}>
@@ -230,7 +235,7 @@ const SubmitHandler=(event)=>{
                     <div className="lg:w-[96%]  w-full mt-[5px] mx-auto">
                       <label htmlFor="title">آدرس</label>
                       <input
-                        value={address_resiver.address}
+                        value={address_sender.address}
                         onChange={(event) => ChangeHandler(event)}
                           type="text"
                           name="address"
@@ -243,7 +248,7 @@ const SubmitHandler=(event)=>{
                         <label htmlFor="title"> پلاک</label>
                         <input
                          onChange={(event) => ChangeHandler(event)}
-                          value={address_resiver.peluck}
+                          value={address_sender.peluck}
                           type="number"
                           name="peluck"
                           id="peluck"
@@ -254,7 +259,7 @@ const SubmitHandler=(event)=>{
                         <label htmlFor="title"> واحد</label>
                         <input
                          onChange={(event) => ChangeHandler(event)}
-                          value={address_resiver.vahed}
+                          value={address_sender.vahed}
                           type="number"
                           name="vahed"
                           id="vahed"
@@ -357,12 +362,12 @@ const SubmitHandler=(event)=>{
                      {/* start hidden adress*/}
                     {/* end table */}
                     <div className="flex justify-around  mt-[50px] mb-[10px]">
-                      <button
+                      <Button
                         onClick={onClose}
                         className="bg-bgcolor basis-[40%] text-[#fff] py-2 rounded"
                       >
                         انصراف
-                      </button>
+                      </Button>
                       <button
                        type="submit"
                         onClick={onClose}

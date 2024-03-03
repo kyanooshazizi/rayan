@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
 // redux start
-import { MethodPick_up, MethodDelivery } from "../Redux/orderslice.js";
+import { MethodPick_up, MethodDelivery ,Idcity_sender,
+  Idcity_resiver,
+ } from "../Redux/orderslice.js";
 import { useDispatch, useSelector } from "react-redux";
 // redux end
 
 const Option = ({ stylex, placholder, data, slug, withw,py1,py2}) => {
+  console.log("datainput",data)
   // start change redux
   const dispatch = useDispatch();
 
@@ -99,8 +102,9 @@ const Option = ({ stylex, placholder, data, slug, withw,py1,py2}) => {
               setInputValue("");
               {
                 slug === "pick"
-                  ? dispatch(MethodPick_up(city.name))
-                  : dispatch(MethodDelivery(city.name));
+                  ? 
+                  dispatch(MethodPick_up(city))
+                  :dispatch(MethodDelivery(city))
               }
             }}
           >

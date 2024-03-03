@@ -5,75 +5,94 @@ import { FaUser } from "react-icons/fa";
 import { getCookie } from "cookies-next";
 import swal from "sweetalert";
 import { useThemeContext } from "../../../context/store";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdEdit } from "react-icons/md";
 import Image from "next/image";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 const personProfile = () => {
-  const { setIslogin, userdata, setFlagchange } = useThemeContext();
+  const { setIslogin, userdata, setFlagchange,setCheck } = useThemeContext();
   const [flagubdate, setFlagubdate] = useState(false);
   const [errorPerson, setErrorPerson] = useState({
     mobile: "",
   });
-  const [profile, setProfile] = useState({
-    flag: false,
-    Fristname: "",
-    Lastname: "",
-    image: "",
-    mobile: "",
-    address: "",
-  });
+
   // start choose file
   const [selectedFile, setSelectedFile] = useState("");
   const handleFileChange = (event) => {
+
     const file = event.target.files[0];
     setSelectedFile(file);
   };
+  
   // end choose file
-  useEffect(() => {
-    try {
-      fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/", {
+  const { data,isError,isLoading} = useQuery(
+    "personprofile",
+   () =>{
+     return fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${getCookie("access_token")}`,
         },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.length) {
-            return setProfile({
-              flag: true,
-              Fristname: res[0].first_name,
-              Lastname: res[0].last_name,
-              image: res[0].image,
-              mobile: res[0].phone_number,
-              address: res[0].address,
-            });
-          } else {
-            setProfile({
-              flag: false,
-              ...profile,
-            });
+      }).then((res) => res.json())
+    },{
+      onSuccess:(data)=>{
+        setProfile(
+          {
+            flag:data&&data.results.length?true:false,
+            Fristname:data&&data.results.length?data.results[0].first_name:"",
+            Lastname: data&&data.results.length?data.results[0].last_name:"",
+            image: data&&data.results.length?data.results[0].image:"",
+            mobile: data&&data.results.length?data.results[0].phone_number:"",
+            address: data&&data.results.length?data.results[0].address:"",
           }
-        })
-        .catch((err) => console.log("realdata", err));
-    } catch (error) {
-      console.error(error);
-    }
-
-  }, [flagubdate]);
-  const notify = () => {
-    toast.error("لطفا تمام فیلد ها را پر کنید", {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
+        )
+      }
     });
-  };
+    const [profile, setProfile] = useState({
+      flag:data&&data.results.length?true:false,
+      Fristname:data&&data.results.length?data.results[0].first_name:"",
+      Lastname: data&&data.results.length?data.results[0].last_name:"",
+      image: data&&data.results.length?data.results[0].image:"",
+      mobile: data&&data.results.length?data.results[0].phone_number:"",
+      address: data&&data.results.length?data.results[0].address:"",
+    });
+  // start edite
+  const queryClient = useQueryClient();
+  const { data:edit,isError:iserroredit,isLoading:isloadingedit,mutate: dataedit} = useMutation(
+   (datain) =>{
+     return  fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/edit/", {
+      method: "PATCH",
+      body: datain,
+      headers: {
+        Authorization: `Bearer ${getCookie("access_token")}`,
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        return null;
+      } else {
+        return res.json();
+      }
+    })
+    },{
+      onSuccess:(data)=>{
+        setFlagchange((prev) => !prev);
+        queryClient.invalidateQueries(["personprofile"]);
+        if(!data){
+          swal({
+            text: "ویرایش موفقیت آمیز نبود",
+            icon: "error",
+          });
+        }else{
+          swal({
+            text: "مشخصات شما با موفقیت تغییر پیدا کرد",
+            icon: "success",
+          });
+        }
+      }
+    });
+  // end edite
+  console.log(profile,data)
+
   const Mhandler = (event) => {
     setProfile({
       ...profile,
@@ -116,41 +135,10 @@ const personProfile = () => {
         });
       } else {
         if (profile.flag) {
-          fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/edit/", {
-            method: "PATCH",
-            body: formData,
-            headers: {
-              Authorization: `Bearer ${getCookie("access_token")}`,
-            },
-          })
-            .then((res) => {
-              if (!res.ok) {
-                return null;
-              } else {
-                return res.json();
-              }
-            })
-            .then((res) => {
-              if (res) {
-                swal({
-                  text: "مشخصات شما با موفقیت تغییر پیدا کرد",
-                  icon: "success",
-                });
-                setFlagchange((prev) => !prev);
-                setFlagubdate((prev) => !prev);
-              } else {
-                swal({
-                  text: "ویرایش موفقیت آمیز نبود!",
-                  icon: "error",
-                });
-              }
-              setErrorPerson({
-                mobile: "",
-              });
-            })
-            .catch((error) => {
-              console.log("error", error);
-            });
+          dataedit(formData)
+          setErrorPerson({
+            mobile: "",
+          });
         } else {
           fetch("https://mohaddesepkz.pythonanywhere.com/profile/real/new/", {
             method: "POST",
@@ -173,6 +161,7 @@ const personProfile = () => {
                   icon: "success",
                 });
                 setFlagchange((prev) => !prev);
+                setCheck(false)
               } else {
                 swal({
                   text: "لطفا اطلاعات را به درستی وارد کنید!",
@@ -189,9 +178,13 @@ const personProfile = () => {
         }
       }
     } else {
-      notify();
+      swal({
+        text: "لطفا تمام فیلد ها را پر کنید",
+        icon: "error",
+      });
     }
   };
+
   return (
     <div className="lg:w-[33%] md:w-[80%] w-full lg:mx-0 mx-auto bg-txcolor py-3 rounded-lg mt-[30px] text-[#404040]">
       <form action="" className="p-2 w-[90%] mx-auto" onSubmit={PersonHandler}>
@@ -201,14 +194,14 @@ const personProfile = () => {
             htmlFor="image"
             className="text-center cursor-pointer flex justify-center "
           >
-            {profile.image ? (
+            {data && data.results[0]?.image ? (
               <div className="mb-3 relative">
                 <div className="absolute bg-colorgreen p-3 rounded-full top-[1px] right-[94px]">
                   <MdEdit className=" text-txcolor" />
                 </div>
                 <Image
                   className="rounded-full"
-                  src={`${profile.image}`}
+                  src={`${data.results[0].image}`}
                   width={100}
                   height={100}
                   alt="تصویر"
@@ -247,7 +240,9 @@ const personProfile = () => {
             id="Fristname"
             placeholder="کیانوش"
             className="outline-none p-2 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 placeholder:opacity-40"
-            value={profile.Fristname}
+            value={
+              profile.Fristname
+            }
             onChange={(event) => Mhandler(event)}
           />
         </div>
@@ -262,7 +257,9 @@ const personProfile = () => {
             id="Lastname"
             placeholder="عزیزی"
             className="outline-none p-2 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 placeholder:opacity-40"
-            value={profile.Lastname}
+            value={
+              profile.Lastname
+            }
             onChange={(event) => Mhandler(event)}
           />
         </div>
@@ -293,7 +290,9 @@ const personProfile = () => {
             name="mobile"
             id="Mobile"
             className="outline-none p-2 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 "
-            value={profile.mobile}
+            value={
+              profile.mobile
+            }
             onChange={(event) => Mhandler(event)}
           />
           <span className="text-[red]">
@@ -310,7 +309,9 @@ const personProfile = () => {
             name="address"
             id="Address"
             className="outline-none p-2 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 "
-            value={profile.address}
+            value={
+              profile.address
+            }
             onChange={(event) => Mhandler(event)}
           />
         </div>
@@ -318,7 +319,7 @@ const personProfile = () => {
           type="submit"
           className="px-2 py-3 border-2 border-solid border-[#efefef] rounded-md w-full block mt-1 bg-bgcolor text-txcolor"
         >
-          {profile.flag ? "ویرایش اطلاعات" : "ثبت اطلاعات"}
+          {data && data.results.length ? "ویرایش اطلاعات" : "ثبت اطلاعات"}
         </button>
       </form>
     </div>

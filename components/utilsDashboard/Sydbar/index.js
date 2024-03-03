@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import { ImAddressBook } from "react-icons/im";
 import { IoBusiness } from "react-icons/io5";
 import Image from "next/image";
+import { useThemeContext } from "../../context/store";
 const index = ({stylex}) => {
+  const { userdata,setCheck,check,check_b } = useThemeContext();
   const path = usePathname();
   const pathflag = path.split("/");
   return (
@@ -72,7 +74,7 @@ const index = ({stylex}) => {
             priority
           />}
             </span>
-            <span className={`text-[14px] font-bold ${pathflag[2] === "Orders" ? "text-black":" text-[#636363]"} inline-block`}>سفارش </span>
+            <span className={`text-[14px] font-bold ${pathflag[2] === "Orders" ? "text-black":" text-[#636363]"} inline-block`}>سفارش ها </span>
           </Link>
         </div>
 
@@ -97,8 +99,8 @@ const index = ({stylex}) => {
           </Link>
         </div>
 
-        <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px]`}>
-          <Link href="/dashboard/Profile" className="block">
+        <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px] `}>
+          <Link href="/dashboard/Profile" className={`block`}>
             <span>
             {pathflag[2] === "Profile"?<Image
               src="/image_dashboard/sidbar/profile1.svg"
@@ -114,11 +116,11 @@ const index = ({stylex}) => {
             priority
           />}
             </span>
-            <span  className={`text-[14px] font-bold ${pathflag[2] === "Profile" ? "text-black":" text-[#636363]"} inline-block`}>پروفایل</span>
+            <span  className={`text-[14px] font-bold ${pathflag[2] === "Profile" ? "text-black":" text-[#636363]"} inline-block ${check?"!border-utils-300 border-b-2 border-solid":""}`}>پروفایل</span>
           </Link>
         </div>
         <div className={`pt-[30px] ${stylex} pr-[24px] pl-[16px]`}>
-          <Link href="/dashboard/ProfileBusiness" className="block">
+          <Link href="/dashboard/ProfileBusiness" className={`block`}>
             <span>
               <IoBusiness
                 className={`mr-1 text-[22px] ${
@@ -126,8 +128,8 @@ const index = ({stylex}) => {
                 }`}
               />
             </span>
-            <span  className={`text-[14px] font-bold ${pathflag[2] === "ProfileBusiness" ? "text-black":" text-[#636363]"} inline-block`}>پروفایل</span>
-            <span className={`text-[14px] font-bold ${pathflag[2] === "ProfileBusiness" ? "text-black":" text-[#636363]"} inline-block`}>کسب و کار</span>
+            <span  className={`text-[14px] font-bold ${pathflag[2] === "ProfileBusiness" ? "text-black":" text-[#636363]"} inline-block `}>پروفایل</span>
+            <span className={`text-[14px] font-bold ${pathflag[2] === "ProfileBusiness" ? "text-black":" text-[#636363]"} inline-block ${check_b?"!border-utils-300 border-b-2 border-solid":""}`}>کسب و کار</span>
           </Link>
         </div>
 

@@ -44,7 +44,6 @@ if(type==="sender"){
 const SubmitHandler=(event)=>{
   event.preventDefault();
  if(!Validate(address_sender.mobile||address_Reciver.mobile)){
-
    if(type==="sender"){
      fetch("https://mohaddesepkz.pythonanywhere.com/address/new/",{
        method:"POST",
@@ -74,7 +73,6 @@ const SubmitHandler=(event)=>{
        }
      })
      .then(res=>{
-       togglesender();
      }).catch(err=>{
        console.log("🚀 ~ file: modal_new_address.js:60 ~ SubmitHandler ~ err:", err)
      }

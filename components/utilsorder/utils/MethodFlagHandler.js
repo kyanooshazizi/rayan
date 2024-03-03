@@ -1,6 +1,6 @@
 export const MethodFlagHandler = (datastore) => {
   return (
-    datastore.pick_up &&
+    !!(datastore.pick_up &&
     datastore.delivery &&
     (datastore.package.packB.number ||
       datastore.package.packM.number ||
@@ -9,22 +9,22 @@ export const MethodFlagHandler = (datastore) => {
     datastore.Price &&
     datastore.pickup_date &&
     datastore.Insurance.Product_value &&
-    datastore.Insurance.Product_content
+    datastore.Insurance.Product_content)
   );
 };
 export const MethodFlagHandlerAddress = (datastore) => {
   return (
-    datastore.SenderName &&
+    !!(datastore.SenderName &&
     datastore.SenderMobile &&
+    datastore.Sendervahed &&
+    datastore.Senderpelak &&
     datastore.SenderAddress &&
     datastore.ReceiverName &&
     datastore.ReceiverMobile &&
     datastore.ReceiverAddress &&
-    datastore.Sendervahed &&
-    datastore.Senderpelak &&
-    datastore.Sendertabaghe &&
     datastore.Receiverpelak &&
     datastore.Receivervahed &&
-    datastore.Receivertabaghe
+    datastore.iddistrict_sender&&
+    datastore.iddistrict_resiver)
   );
 };

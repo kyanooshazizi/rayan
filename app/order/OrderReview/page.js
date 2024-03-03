@@ -28,7 +28,7 @@ const page = async () => {
           <Sidnav stylex={"pt-[38px]"} />
         </div>
         <div className="flex lg:pr-[180px] pr-0">
-          <div className="xl:basis-[60%] lg:basis-[75%] sm:basis-[90%] basis-full">
+          <div className="xl:basis-[75%] lg:basis-[75%] sm:basis-[90%] basis-full">
             <Main />
           </div>
           {/* <div  className="xl:basis-[40%] lg:basis-[15%] lg:block hidden mt-[400px] mx-[40px]" >

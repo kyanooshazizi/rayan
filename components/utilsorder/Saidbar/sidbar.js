@@ -10,32 +10,41 @@ import {
   MethodFlagHandler,
   MethodFlagHandlerAddress,
 } from "../utils/MethodFlagHandler";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Button,
-} from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import { GoCircle } from "react-icons/go";
 import { MethodDeletOrder } from "../../Redux/orderslice";
 import { usePathname } from "next/navigation";
 import { useThemeContext } from "../../context/store";
 import { setCookie, getCookie } from "cookies-next";
 import { LiaTimesSolid } from "react-icons/lia";
+import toast, { Toaster } from "react-hot-toast";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 const Sidbar = () => {
-  const { islogin } = useThemeContext();
+  const {
+    islogin,
+    userdata,
+    setCheck,
+    setCheck_b,
+    setModalIsOpen,
+    idBessiness,
+    setIdBessiness,
+  } = useThemeContext();
+
   const pathname = usePathname();
   const dispatch = useDispatch();
   const router = useRouter();
   const datastore = useSelector((state) => state.order.order);
   const [urldata, setUrldata] = useState("");
-  const [delorder, setDelorder] = useState("");
+
+  // check profile&profile b
+
+  // start type id besiness
+  // end type id besiness
   // start: send data order
   const dataAddress = useSelector((state) => state.order.address);
-
   const size_order = datastore.id.size.filter((item) => item !== "");
+  console.log(size_order)
   const count_order = datastore.id.count.filter((item) => item !== 0);
-
   var faToEnDigits = function (input) {
     if (input == undefined) return;
     var returnModel = "",
@@ -103,7 +112,7 @@ const Sidbar = () => {
                 <LiaTimesSolid className="text-[14px] mx-2 inline-block text-[#000]" />{" "}
                 بسته{" "}
               </span>
-              {/* <span>بزرگ</span> */}
+              <span>بزرگ</span>
             </div>
           ) : (
             ""
@@ -116,7 +125,7 @@ const Sidbar = () => {
                 <LiaTimesSolid className="text-[14px] mx-2 inline-block text-[#000]" />{" "}
                 بسته{" "}
               </span>
-              {/* <span>متوسط</span> */}
+              <span>متوسط</span>
             </div>
           ) : (
             ""
@@ -129,7 +138,7 @@ const Sidbar = () => {
                 <LiaTimesSolid className="text-[14px] mx-2 inline-block text-[#000]" />{" "}
                 بسته{" "}
               </span>
-              {/* <span>کوچک</span> */}
+              <span>کوچک</span>
             </div>
           ) : (
             ""
@@ -188,6 +197,122 @@ const Sidbar = () => {
     }
     return null;
   };
+  const notify1 = () =>
+    toast.error(`لطفا پروفایل شخصی و کسب و کاری خود را تکمیل کنید`);
+  const notify2 = () => toast.error(`لطفا پروفایل شخصی خود را تکمیل کنید`);
+  const notify3 = () =>
+    toast.error(`لطفا پروفایل  کسب و کاری خود را تکمیل کنید`);
+// start Delet order
+const queryClient = useQueryClient();
+  const {
+    mutate: deletorder,
+    data,
+    error,
+    isError,
+  } = useMutation(
+    (idBessiness) => {
+      return fetch(
+        `https://mohaddesepkz.pythonanywhere.com/orders/delete/${idBessiness}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${getCookie("access_token")}`,
+          },
+        }
+      ).then(res=>{
+        if(!res.ok){
+          return null
+        }else{
+          return res.json()
+        }
+      })
+    },
+    {
+      onSuccess: (data) => {
+        if(data){
+          console.log(data)
+          setorder(idBessiness)
+        }else{
+          const notifyorder = () => toast.error(`سفارش شما ثبت نشد`);
+          notifyorder();
+        }
+      },
+    }
+  );
+// end Delet order
+const {
+  mutate: setorder,
+  data: dataorder,
+  error:errorsetorder,
+  isError:isErrorsetorder,
+} = useMutation(
+  (idBessiness) => {
+    
+    return  size_order.map((item, index) => {
+         (
+        fetch(
+          `https://mohaddesepkz.pythonanywhere.com/orders/new/${idBessiness}/`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              count: count_order[index],
+              size: size_order[index],
+              // فعلا فقط یسته را داریم و فقط آیدی بسته را داده ایم
+              package: 2,
+              // package: datastore.id.package,
+              content: datastore.id.content,
+              service: datastore.id.service,
+              value: datastore.id.value,
+              pickup_date,
+              sender_address: dataAddress.SenderAddress,
+              sender_plaque: dataAddress.Senderpelak,
+              sender_unity: dataAddress.Sendervahed,
+              sender_name: dataAddress.SenderName,
+              sender_phone: dataAddress.SenderMobile,
+              receiver_address: dataAddress.ReceiverAddress,
+              receiver_plaque: dataAddress.Receiverpelak,
+              receiver_unity: dataAddress.Receivervahed,
+              receiver_name: dataAddress.ReceiverName,
+              receiver_phone: dataAddress.ReceiverMobile,
+              address_description: dataAddress.Additional_details,
+              order_description:datastore.discription,
+              // user_business: idBessiness,
+              sender_city: datastore.id.idcity_sender,
+              sender_district:
+                dataAddress.iddistrict_sender,
+              receiver_city: datastore.id.idcity_resiver,
+              receiver_district:
+                dataAddress.iddistrict_resiver,
+            }),
+            headers: {
+              Authorization: `Bearer ${getCookie(
+                "access_token"
+              )}`,
+              "Content-type": "application/json",
+            },
+          }
+    ).then(res=>{
+      if(!res.ok){
+        return null
+      }else{
+        return res.json()
+      }
+    }).then(res=>{
+      console.log(res)
+      setCookie("code",res.tracking_code)
+      setCookie("id_business",res.user_business)
+      router.push("/order/OrderReview")
+    })
+      )
+        })   
+  },
+  {
+    onSuccess: () => {  
+    },
+  }
+);
+// start set Order
+// end set Order
   const ButtenCountinueHandler = (path) => {
     switch (path) {
       case "requst":
@@ -255,68 +380,33 @@ const Sidbar = () => {
               <button
                 className={`bg-bgcolor outline-none py-[8px] px-1 rounded-[4px] text-txcolor w-full text-[18px]`}
                 onClick={() => {
-                  if (MethodFlagHandlerAddress(dataAddress)) {
-                    fetch(
-                      "https://mohaddesepkz.pythonanywhere.com/orders/delete/",
-                      {
-                        method: "DELETE",
-                        headers: {
-                          Authorization: `Bearer ${getCookie("access_token")}`,
-                        },
-                      }
-                    )
-                      .then((res) => res.json())
-                      .then((res) => {
-                        console.log(res);
-                        size_order.map((item, index) => {
-                          fetch(
-                            "https://mohaddesepkz.pythonanywhere.com/orders/new/",
-                            {
-                              method: "POST",
-                              body: JSON.stringify({
-                                count: count_order[index],
-                                size: size_order[index],
-                                package: datastore.id.package,
-                                content: datastore.id.content,
-                                service: datastore.id.service,
-                                value: datastore.id.value,
-                                pickup_date,
-                                sender_address: dataAddress.SenderAddress,
-                                sender_plaque: dataAddress.Senderpelak,
-                                sender_stage: dataAddress.Sendertabaghe,
-                                sender_unity: dataAddress.Sendervahed,
-                                sender_name: dataAddress.SenderName,
-                                sender_phone: dataAddress.SenderMobile,
-                                receiver_address: dataAddress.ReceiverAddress,
-                                receiver_plaque: dataAddress.Receiverpelak,
-                                receiver_stage: dataAddress.Receivertabaghe,
-                                receiver_unity: dataAddress.Receivervahed,
-                                receiver_name: dataAddress.ReceiverName,
-                                receiver_phone: dataAddress.ReceiverMobile,
-                                description: dataAddress.Additional_details,
-                              }),
-                              headers: {
-                                Authorization: `Bearer ${getCookie(
-                                  "access_token"
-                                )}`,
-                                "Content-type": "application/json",
-                              },
-                            }
-                          )
-                            .then((res) => res.json())
-                            .then((res) => {
-                              console.log(res);
-                              setCookie("code", res.tracking_code);
-                            })
+                  if (
+                    MethodFlagHandlerAddress(dataAddress) &&
+                    userdata.flag &&
+                    userdata.flag_b
+                  ) {
+                    if (idBessiness) {
+                      deletorder(idBessiness)
+                    } else {
+                      setModalIsOpen(true);
+                    }
 
-                            .catch((err) => console.error(err));
-                        });
-                      })
-                      .catch((err) => console.log("error delet", err));
-
-                    setTimeout(() => {
-                      router.push("/order/OrderReview");
-                    }, 2000);
+                    // setTimeout(() => {
+                    //   router.push("/order/OrderReview");
+                    // }, 2000);
+                  } else {
+                    if (!userdata.flag) {
+                      notify2();
+                      setCheck(true);
+                    } else {
+                      setCheck(false);
+                    }
+                    if (!userdata.flag_b) {
+                      notify3();
+                      setCheck_b(true);
+                    } else {
+                      setCheck_b(false);
+                    }
                   }
                 }}
               >
@@ -407,7 +497,10 @@ const Sidbar = () => {
                       <div className=" font-bold  text-[16px]">قیمت</div>
                       <div className="mt-1 text-md bg-[#fff] w-[250px] rounded-[4px] py-2 px-4 text-colorgray">
                         <span>
-                          {(datastore.Price + tax.tax).toLocaleString()} تومان
+                          {(
+                            datastore.Price + (tax.tax ? tax.tax : 0)
+                          ).toLocaleString()}{" "}
+                          تومان
                         </span>
                       </div>
 
@@ -460,6 +553,7 @@ const Sidbar = () => {
         </div>
         {/* end:button  */}
       </aside>
+      <Toaster position="bottom-left" reverseOrder={false} />
     </>
   );
 };

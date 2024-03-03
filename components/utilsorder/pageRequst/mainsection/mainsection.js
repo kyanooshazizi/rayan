@@ -11,8 +11,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 
 const Main_section = () => {
-  const { datacity, dataservise } = useCity_servise();
-  const dispatch = useDispatch();
+  const { datacity, dataservise,loadcity,loadservicel,error_city,error_service,error } = useCity_servise();
   const datastore = useSelector((state) => state.order.order);
   // Hydration error:strat
   const [isClient, setIsClient] = useState(false);
@@ -26,7 +25,7 @@ const Main_section = () => {
     
   };
   // پایان:انتخاب نوع محصول
-  if (datacity.isPending || dataservise.isPending) {
+  if (loadcity || loadservicel) {
     return (
       <div className="col-span-5 mt-[60px] flex items-center justify-center w-100 h-[100vh] bg-white">
         <Image
@@ -44,10 +43,10 @@ const Main_section = () => {
     <>
       <section className=" mt-[60px]">
         {/* مبدا ومقصد شروع*/}
-        {datacity.isError ? (
-          <div className="flex align-middle justify-center mt-8">
+        {error_city ? (
+          <div className="flex align-middle justify-center mt-[6.5rem]">
             <span className="text-center p-3 bg-white border-2 border-bgcolor w-1/2 rounded-md">
-              {datacity.error.message}
+              {error.message}
             </span>
           </div>
         ) : (
@@ -63,7 +62,7 @@ const Main_section = () => {
                   py1="!pt-8 !pb-4"
                   py2="!py-6"
                   placholder={datastore.pick_up || "مبدا"}
-                  data={datacity.data}
+                  data={datacity.results}
                   slug="pick"
                 />
               </div>
@@ -74,7 +73,7 @@ const Main_section = () => {
                   py1="!pt-8 !pb-4"
                   py2="!py-6"
                   placholder={datastore.delivery || "مقصد"}
-                  data={datacity.data}
+                  data={datacity.results}
                   slug="deliv"
                 />
               </div>
@@ -85,10 +84,10 @@ const Main_section = () => {
 
 
         {/* شروع نوع مرسوله */}
-        {dataservise.isError ? (
+        {error_service? (
           <div className="flex justify-center">
-            <span className="bg-white p-3 mt-6">
-              {dataservise.error.message}
+            <span className="bg-white p-3 mt-8">
+              {error.message}
             </span>
           </div>
         ) : (

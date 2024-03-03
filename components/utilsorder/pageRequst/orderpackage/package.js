@@ -10,6 +10,7 @@ import {
   MethodInsurance_value,
   MethodInsurance_content,
   MethodBackHomepage,
+  MethodDiscription
 } from "../../../Redux/orderslice";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,9 +19,8 @@ import useValuedefult from "@/components/TanstakQury/useValuedefult";
 import usecity_servise from "@/components/TanstakQury/useCity_servise";
 import { FiCircle } from "react-icons/fi";
 import Datapicker from "@/components/utilsorder/Datapicker";
-import { BsBoxSeamFill } from "react-icons/bs";
 // style module
-import stylecard from "../../../../style/card.module.css";
+
 import { IoIosWarning } from "react-icons/io";
 const Package = () => {
   const dispatch = useDispatch();
@@ -30,7 +30,8 @@ const Package = () => {
 
   const content_value = useValuedefult();
 
-  const { datacity, dataservise } = usecity_servise();
+  const { datacity, dataservise,loadcity,loadservicel,error_city,error_service } = usecity_servise();
+  console.log(dataservise)
 
   let refresh_price = `${dataorder.pick_up}+${dataorder.delivery}+${dataorder.package.packB.number}+${dataorder.package.packM.number}+${dataorder.package.packS.number}`;
   let flag_Complate_Order =
@@ -102,7 +103,7 @@ const Package = () => {
 
         <div className="mt-[30px] bg-[#fff] lg:w-[70%] w-[85%] min-h-[500px] mx-auto rounded-[8px] pt-4">
           <div className="flex lg:flex-row flex-col justify-around">
-            {dataservise.data[1].size.map((item, index) => {
+            {dataservise?.results[1].size.map((item, index) => {
               switch (item.title) {
                 case "کوچک":
                   return (
@@ -371,8 +372,16 @@ const Package = () => {
             </div>
           </div>
           <div className="flex justify-end flex-col text-colorgray">
-            <span className="mt-[8px]  text-right mr-[3%]">توضیحات</span>
-            <div className="bg-dashboard border-2 border-solid border-[#CDCDCD] h-[50px] w-[94%] rounded-[5px] px-4 py-4 mx-auto"></div>
+            <label className="mt-[8px]  text-right mr-[3%]">
+              توضیحات
+              <textarea
+                name="postContent"
+                rows={2}
+                value={dataorder.discription}
+                onChange={(e)=>{dispatch(MethodDiscription(e.target.value))}}
+                className="bg-dashboard border-2 border-solid border-[#CDCDCD]  w-[96%] rounded-[5px] px-4 py-4 mx-auto outline-colorgreen"
+              />
+            </label>
           </div>
         </div>
         <div className="lg:w-[70%] w-[85%] rounded-[5px] px-2 py-2 border-2 border-solid border-[#FFCB05] mx-auto bg-[#fff] mt-[15px] mb-[50px] flex text-[14px] ">
@@ -380,10 +389,14 @@ const Package = () => {
           لطفا مطمئن شوید که وزن و ابعاد دقیق باشد تا از هزینه های اضافه بعدی
           جلوگیری شود
         </div>
-        {flag_Complate_Order ? <div className="lg:w-[70%] w-[85%] mb-[10px] text-right mr-[15%] text-[18px] font-[600]">
-          انتخاب جزئیات سفارش
-        </div>:""}
-       
+        {flag_Complate_Order ? (
+          <div className="lg:w-[70%] w-[85%] mb-[10px] text-right mr-[15%] text-[18px] font-[600]">
+            انتخاب جزئیات سفارش
+          </div>
+        ) : (
+          ""
+        )}
+
         {/* ثبت سفرش */}
         {/* پایان سایز بسته */}
         {/* شروع:نمایش با درخواست سمت بک اند */}
@@ -427,11 +440,13 @@ const Package = () => {
                       <div className="flex justify-between">
                         <div className="flex">
                           <div className="">
-                            { isshow[index]?<GoCheckCircleFill
-                              className={`w-8 h-8  text-colorgreen`}
-                            />: <FiCircle  className={`w-8 h-8  text-[#d8dde7]`} />}
-                         
-                            
+                            {isshow[index] ? (
+                              <GoCheckCircleFill
+                                className={`w-8 h-8  text-colorgreen`}
+                              />
+                            ) : (
+                              <FiCircle className={`w-8 h-8  text-[#d8dde7]`} />
+                            )}
                           </div>
                           <div className="mx-4">
                             <p className="text-[#8A8A8A]">جمع آوری فوری</p>
@@ -506,13 +521,21 @@ const Package = () => {
 
               {/*  پایان نمایش هزینه ارسال */}
               {/* شروع تصاویر */}
-              <div className="pt-[2px] lg:w-[70%] w-[85%] mx-auto">
+              <div className="pt-[2px] lg:w-[70%] w-[85%] mx-auto flex ">
                 <Image
-                  src="/order/price/image.svg"
-                  width={500}
-                  height={500}
+                  src="/order/price/img1.svg"
+                  width={300}
+                  height={300}
                   alt="Picture of the author"
-                  className="w-full"
+                  className="w-full basis-[50%] "
+                  priority
+                />
+                <Image
+                  src="/order/price/img2.svg"
+                  width={300}
+                  height={300}
+                  alt="Picture of the author"
+                  className="w-full basis-[50%]"
                   priority
                 />
               </div>

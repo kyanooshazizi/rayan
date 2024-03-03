@@ -40,8 +40,8 @@ const Headerpage = () => {
           <div className="flex justify-center w-full absolute lg:bottom-[-50px] sm:bottom-[-32.5px] bottom-[-25px]">
             <div className="shadow-lg lg:mx-[20px] sm:mx-[10px] mx-[5px] lg:w-[100px] lg:h-[100px] sm:w-[65px] sm:h-[65px] w-[50px] h-[50px] bg-[#fff] lg:rounded-[16px] sm:rounded-[8px] rounded-[4px] flex justify-center items-center">
               <Image
-                src="/imag_homepage/box_header/rayan.svg"
-                width={70}
+                src="/imag_homepage/box_header/Energic.svg"
+                width={80}
                 height={20}
                 alt="Picture of the author"
                 className="lg:px-[0px] sm:px-[4px] px-[6px]"
@@ -58,17 +58,17 @@ const Headerpage = () => {
             </div>
             <div className="shadow-lg lg:mx-[20px] sm:mx-[10px] mx-[5px] lg:w-[100px] lg:h-[100px] sm:w-[65px] sm:h-[65px] w-[50px] h-[50px] bg-[#fff] lg:rounded-[16px] sm:rounded-[8px] rounded-[4px] flex justify-center items-center">
               <Image
-                src="/imag_homepage/box_header/khayrie.svg"
-                width={90}
+                src="/imag_homepage/box_header/aseman.svg"
+                width={70}
                 height={50}
                 alt="Picture of the author"
                 className="lg:px-[0px] sm:px-[4px] px-[6px]"
               />
             </div>
-            <div className="shadow-lg lg:mx-[20px] sm:mx-[10px] mx-[5px] lg:w-[100px] lg:h-[100px] sm:w-[65px] sm:h-[65px] w-[50px] h-[50px] bg-[#fff] lg:rounded-[16px] sm:rounded-[8px] rounded-[4px] flex justify-center items-center">
+            <div className="shadow-lg lg:mx-[20px] sm:mx-[10px] mx-[5px] lg:w-[100px] lg:h-[100px] sm:w-[65px] sm:h-[65px] w-[50px] h-[50px] bg-[#fff] lg:rounded-[16px] sm:rounded-[8px] rounded-[4px] flex justify-center items-center overflow-hidden">
               <Image
-                src="/imag_homepage/box_header/zarin.svg"
-                width={80}
+                src="/imag_homepage/box_header/amirkabir.svg"
+                width={90}
                 height={20}
                 alt="Picture of the author"
                 className="lg:px-[0px] sm:px-[4px] px-[6px]"
@@ -76,8 +76,8 @@ const Headerpage = () => {
             </div>
             <div className="shadow-lg lg:mx-[20px] sm:mx-[10px] mx-[5px] lg:w-[100px] lg:h-[100px] sm:w-[65px] sm:h-[65px] w-[50px] h-[50px] bg-[#fff] lg:rounded-[16px] sm:rounded-[8px] rounded-[4px] flex justify-center items-center">
               <Image
-                src="/imag_homepage/box_header/rayan.svg"
-                width={70}
+                src="/imag_homepage/box_header/naft.svg"
+                width={60}
                 height={30}
                 alt="Picture of the author"
                 className="lg:px-[0px] sm:px-[4px] px-[6px]"

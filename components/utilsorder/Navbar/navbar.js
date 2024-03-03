@@ -45,6 +45,7 @@ const Navbar = () => {
     faddress: false,
     freviow: false,
     fpayment:false,
+    fFinal:false,
   });
   useEffect(() => {
     const url = `${pathname}`;
@@ -57,13 +58,15 @@ const Navbar = () => {
     });
     setFlagnav(() => {
       if (url.split("/")[2] === "requst") {
-        return { freqest: true, faddress: false, freviow: false,fpayment:false };
+        return { freqest: true, faddress: false, freviow: false,fpayment:false,fFinal:false };
       } else if (url.split("/")[2] === "address") {
-        return { freqest: true, faddress: true, freviow: false ,fpayment:false};
+        return { freqest: true, faddress: true, freviow: false ,fpayment:false,fFinal:false};
       } else if (url.split("/")[2] === "OrderReview") {
-        return { freqest: true, faddress: true, freviow: true ,fpayment:false};
+        return { freqest: true, faddress: true, freviow: true ,fpayment:false,fFinal:false};
       }else if (url.split("/")[2] === "payment"){
-        return { freqest: true, faddress: true, freviow: true ,fpayment:true};
+        return { freqest: true, faddress: true, freviow: true ,fpayment:true,fFinal:false};
+      }else{
+        return { freqest: true, faddress: true, freviow: true ,fpayment:true,fFinal:true};
       }
     });
   }, [pathname]);
@@ -122,8 +125,12 @@ const Navbar = () => {
                 flagnav.fpayment ? "!text-[black] font-bold" : ""
               }`}
             >
-             
-                 پرداخت <FaAngleLeft className="inline-block mx-6" />
+              {flagnav.fFinal ? (
+                <BsCheckCircleFill className="inline-block ml-1 text-base" />
+              ) : (
+                ""
+              )}
+                  پرداخت 
             </li>
           </ul>
         </div>
@@ -200,6 +207,7 @@ const Navbar = () => {
                  className="text-[red] py-2 "
                  onClick={() => {
                    deleteCookie("access_token");
+                   localStorage.clear();
                    router.push("/");
                    setIslogin(false);
                  }}

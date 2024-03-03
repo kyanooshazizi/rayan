@@ -1,60 +1,154 @@
-"use client"
+"use client";
 import React from "react";
 import swal from "sweetalert";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaPhone } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import Image from "next/image";
 import { getCookie } from "cookies-next";
 import { useThemeContext } from "../../../context/store";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 const index = () => {
-    const [flagubdate,setFlagubdate]=useState(false)
-  const { setFlagchange } = useThemeContext();
+  const [flagubdate, setFlagubdate] = useState(false);
+  const {setFlagchange,setCheck} = useThemeContext();
   const [errorPerson, setErrorPerson] = useState({
     mobile: "",
   });
-  const [selectedFile, setSelectedFile] = useState('');
-  const [profile, setProfile] = useState({
-    company_name:"",
-    phone:"",
-    company_address: "",
-    logo:"",
-    id:""
-  });
-  useEffect(() => {
-    // legal profile
-    try {
-      fetch("https://mohaddesepkz.pythonanywhere.com/profile/legal/", {
+  const [selectedFile, setSelectedFile] = useState("");
+
+  const { data, isError, isLoading } = useQuery(
+    "legalprofile",
+    () => {
+      return fetch("https://mohaddesepkz.pythonanywhere.com/profile/legal/", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${getCookie("access_token")}`,
         },
-      })
-        .then((res) => res.json())
-        .then((res) =>{
-            if (res.length) {
-                return setProfile({
-                    company_name:res[0].company_name,
-                    phone:res[0].phone,
-                    logo:res[0].logo,
-                  company_address:res[0].company_address ,
-                  id:res[0].id,
-                });
-              } else {
-                setProfile({
-                  ...profile,
-                });
-              }
-        })
-        .catch((err) => console.log("agentdata", err));
-    } catch (error) {
-      console.error(error);
+      }).then((res) => res.json());
+    },
+    {
+      onSuccess: (data) => {
+        setProfile({
+          company_name:
+            data && data.results.length ? data.results[0].company_name : "",
+          phone: data && data.results.length ? data.results[0].phone : "",
+          company_address:
+            data && data.results.length ? data.results[0].company_address : "",
+          logo: data && data.results.length ? data.results[0].logo : "",
+          id: data && data.results.length ? data.results[0].id : "",
+        });
+      },
     }
-  }, [flagubdate]);
-  const notify = () =>   
+  );
+  const [profile, setProfile] = useState({
+    company_name:
+      data && data.results.length ? data.results[0].company_name : "",
+    phone: data && data.results.length ? data.results[0].phone : "",
+    company_address:
+      data && data.results.length ? data.results[0].company_address : "",
+    logo: data && data.results.length ? data.results[0].logo : "",
+    id: data && data.results.length ? data.results[0].id : "",
+  });
+  // start edit profile
+  const queryClient = useQueryClient();
+  const {
+    data: edit,
+    isError: iserroredit,
+    isLoading: isloadingedit,
+    mutate: dataedit,
+  } = useMutation(
+    (variables) => {
+      return fetch(
+        `https://mohaddesepkz.pythonanywhere.com/profile/legal/edit/${variables.id}/`,
+        {
+          method: "PATCH",
+          body: variables.formData,
+          headers: {
+            Authorization: `Bearer ${getCookie("access_token")}`,
+          },
+        }
+      ).then((res) => {
+        if (!res.ok) {
+          return null;
+        } else {
+          return res.json();
+        }
+      });
+    },
+    {
+      onSuccess: (data) => {
+        setFlagchange((prev) => !prev);
+        setErrorPerson({
+          mobile: "",
+        });
+        queryClient.invalidateQueries(["legalprofile"]);
+        if (!data) {
+          swal({
+            text: "ویرایش موفقیت آمیز نبود",
+            icon: "error",
+          });
+        } else {
+          swal({
+            text: "مشخصات شما با موفقیت تغییر پیدا کرد",
+            icon: "success",
+          });
+        }
+      },
+    }
+  );
+  // end edit profile
+  // start new profile
+  const {
+    data: newdata,
+    isError: iserrornew,
+    isLoading: isloadingnew,
+    mutate: datanew,
+  } = useMutation(
+    (variables) => {
+      return fetch(
+        `https://mohaddesepkz.pythonanywhere.com/profile/legal/new/`,
+        {
+          method: "POST",
+          body: variables.formData,
+          headers: {
+            Authorization: `Bearer ${getCookie("access_token")}`,
+          },
+        }
+      ).then((res) => {
+        if (!res.ok) {
+          return null;
+        } else {
+          return res.json();
+        }
+      });
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(["legalprofile"]);
+        if (data) {
+          swal({
+            text: "مشخصات شما با موفقیت ثبت شد",
+            icon: "success",
+          });
+          setFlagchange((prev) => !prev);
+          setErrorPerson({
+            mobile: "",
+          });
+          setCheck(false)
+        } else {
+          swal({
+            text: "لطفا اطلاعات را به درستی وارد کنید",
+            icon: "error",
+          });
+        }
+      },
+    }
+  );
+  // end new profile
+  const notify = () =>
     toast.error("لطفا تمام فیلد ها را پر کنید", {
       position: "top-center",
       autoClose: 2000,
@@ -79,14 +173,14 @@ const index = () => {
   const AgentHandlerSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    if(selectedFile){
+    if (selectedFile) {
       var Data = {
         company_name: profile.company_name,
         phone: profile.phone,
         company_address: profile.company_address,
         logo: selectedFile,
       };
-    }else{
+    } else {
       var Data = {
         company_name: profile.company_name,
         phone: profile.phone,
@@ -97,91 +191,16 @@ const index = () => {
       var value = Data[key];
       formData.append(key, value);
     });
-    if (
-      profile.company_name &&
-      profile.phone &&
-      profile.company_address
-    ) {
+    if (profile.company_name && profile.phone && profile.company_address) {
       if (!/^0[0-9]{10}$/.test(profile.phone)) {
         setErrorPerson({
           mobile: "شماره موبایل وارد شده معتبر نیست!",
         });
       } else {
         if (profile.id) {
-          fetch(
-            `https://mohaddesepkz.pythonanywhere.com/profile/legal/edit/${profile.id}/`,
-            {
-              method: "PATCH",
-              body: formData,
-              headers: {
-                Authorization: `Bearer ${getCookie("access_token")}`,
-              },
-            }
-          )
-            .then((res) => {
-              if (!res.ok) {
-                return null;
-              } else {
-                return res.json();
-              }
-            })
-            .then((res) => {
-              if (res) {
-                swal({
-                  text: "مشخصات شما با موفقیت تغییر پیدا کرد",
-                  icon: "success",
-                });
-                setFlagubdate((prev)=>!prev);
-                setFlagchange((prev)=>!prev);
-              } else {
-                swal({
-                  text: "ویرایش موفقیت آمیز نبود",
-                  icon: "error",
-                });
-              }
-              setErrorPerson({
-                mobile: "",
-              });
-            })
-            .catch((error) => {
-              console.log("error", error);
-            });
+          dataedit({ id: profile.id, formData });
         } else {
-          fetch("https://mohaddesepkz.pythonanywhere.com/profile/legal/new/", {
-            method: "POST",
-            body: formData,
-            headers: {
-              Authorization: `Bearer ${getCookie("access_token")}`,
-            },
-          })
-            .then((res) => {
-              if (!res.ok) {
-                return null;
-              } else {
-                return res.json();
-              }
-            })
-            .then((res) => {
-              if (res) {
-                swal({
-                  text: "مشخصات شما با موفقیت ثبت شد",
-                  icon: "success",
-                });
-                console.log(res);
-                setFlagchange((prev) => !prev);
-              } else {
-                swal({
-                  text: "لطفا اطلاعات را به درستی وارد کنید!",
-                  icon: "error",
-                });
-              }
-              setErrorPerson({
-                mobile: "",
-              });
-            })
-            .catch((error) => {
-              console.log("error", error);
-            });
+          datanew(formData);
         }
       }
     } else {
@@ -218,13 +237,14 @@ const index = () => {
               </div>
             ) : (
               <>
-                
                 <div className="w-20 h-20 rounded bg-slate-300 flex justify-center items-center border-solid border-4 border-slate-100 relative mx-10">
                   <FaUser className="text-txcolor text-6xl" />
                   <div className="absolute bg-slate-400 p-3 rounded-full top-[-15px] right-[48px]">
                     <MdEdit className=" text-txcolor" />
                   </div>
-                  <div className="text-colorgray text-[12px] absolute top-[45px]">لوگو</div>
+                  <div className="text-colorgray text-[12px] absolute top-[45px]">
+                    لوگو
+                  </div>
                 </div>
               </>
             )}
@@ -243,7 +263,7 @@ const index = () => {
         {/* company nanme */}
         <div className=" mb-4">
           <label htmlFor="company_name" className="text-sm text-bgcolor">
-             اسم شرکت
+            اسم شرکت
           </label>
           <input
             type="text"
@@ -258,7 +278,7 @@ const index = () => {
         <div className=" mb-4 relative">
           <label htmlFor="phone" className="text-sm text-bgcolor">
             <FaPhone className="absolute top-[40px] left-[24px]" />
-             تلفن
+            تلفن
           </label>
           <input
             type="number"
@@ -268,6 +288,9 @@ const index = () => {
             value={profile.phone}
             onChange={(event) => AgentHandler(event)}
           />
+          <span className="text-[red]">
+            {errorPerson.mobile ? `${errorPerson.mobile}` : ""}
+          </span>
         </div>
         {/* company_address */}
         <div className=" mb-4 ">
@@ -283,9 +306,6 @@ const index = () => {
             value={profile.company_address}
             onChange={(event) => AgentHandler(event)}
           />
-          <span className="text-[red]">
-            {errorPerson.mobile ? `${errorPerson.mobile}` : ""}
-          </span>
         </div>
         <button
           type="submit"

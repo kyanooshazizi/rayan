@@ -6,8 +6,12 @@ const ThemeContext = createContext({})
 
 
 export const ThemeContextProvider = ({children,user}) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [idBessiness, setIdBessiness] = useState(0);
 // start:toggle mobile for homepage
 const [toggle,setToggle]=useState(true)
+const [check,setCheck]=useState(false)
+const [check_b,setCheck_b]=useState(false)
 // end:toggle mobile for homepage
 const [userdata,setUserdata]=useState("")
 console.log("🚀 ~ file: store.js:10 ~ ThemeContextProvider ~ userdata:", userdata)
@@ -38,7 +42,7 @@ useEffect(()=>{
 
 
     return (
-        <ThemeContext.Provider value={{userdata,islogin,setIslogin,isloading,setFlagchange,toggle,setToggle}}>
+        <ThemeContext.Provider value={{userdata,islogin,setIslogin,isloading,setFlagchange,toggle,setToggle,setCheck,check,setCheck_b,check_b,modalIsOpen,setModalIsOpen,idBessiness, setIdBessiness}}>
             {children}
         </ThemeContext.Provider>
     )

@@ -153,7 +153,7 @@ const Register = () => {
   // end:color outline handler
   if (islogin) {
     if (MethodFlagHandler(datastore)) {
-      router.push("/order/address");
+      router.push("/dashboard");
     } else {
       router.push("/");
     }

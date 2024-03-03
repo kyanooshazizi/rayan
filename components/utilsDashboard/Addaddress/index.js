@@ -28,8 +28,8 @@ const page = () => {
   const router=useRouter();
   const dispatch = useDispatch();
   const dataorder = useSelector((state) => state.order.order);
-  const [requstOrder_sender,setRequstOrder_sender]=useState(false);
-  const [requstOrder_reciver,setRequstOrder_reciver]=useState(false);
+  // const [requstOrder_sender,setRequstOrder_sender]=useState(false);
+  // const [requstOrder_reciver,setRequstOrder_reciver]=useState(false);
   const [datasender,setDatasender]=useState([]);
   const [datareciver,setDatareciver]=useState([]);
   const [togglesender,setTogglesender]=useState(false);

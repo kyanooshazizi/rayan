@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaCalendarDay } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 const index = ({ getprice }) => {
+ 
   const [holidy, setHolidy] = useState();
   useEffect(() => {
     try {
@@ -119,7 +120,8 @@ const index = ({ getprice }) => {
             animations={[transition()]}
             minDate={new DateObject({ calendar: persian }).set(
               "day",
-              +getprice[0].earliest_pickup_date.split("/")[2]
+              date.day+1
+              // +getprice[0].earliest_pickup_date.split("/")[2]
               // getprice?+getprice[0].earliest_pickup_date.split("/")[2]: date.day
             )}
           />

@@ -3,13 +3,14 @@
 "use client"; //this is a client side component
 
 import { createSlice } from "@reduxjs/toolkit";
-import {encryptData,decryptData} from "../utilsFunction/enc_dec";
+import { encryptData, decryptData } from "../utilsFunction/enc_dec";
 
-const detailsOrder={
+const detailsOrder = {
   pick_up: "",
   delivery: "",
   service: "",
-  titleprice:"",
+  titleprice: "",
+  discription: "",
   package: {
     packB: { number: 0 },
     packM: { number: 0 },
@@ -21,76 +22,93 @@ const detailsOrder={
   },
   Price: "",
   Insurance: {
-    Product_value:"",
-    Product_content:"",
+    Product_value: "",
+    Product_content: "",
   },
   pickup_date: "",
-  id:{
-    package:"",
-    size:["","",""],
-    service:"",
-    content:"",
-    value:"",
-    count:[0,0,0],
-  }
-}
-const detailsAddress={
-SenderName:"",
-SenderAddress:"",
-Senderpelak:"",
-Sendervahed:"",
-Sendertabaghe:"",
-SenderMobile:"",
-ReceiverName:"",
-ReceiverAddress:"",
-Receiverpelak:"",
-Receivervahed:"",
-Receivertabaghe:"",
-ReceiverMobile:"",
-Additional_details:""
-}
+  id: {
+    idcity_sender: "",
+    idcity_resiver: "",
+    // فعلا فقط بسته را داریم و فقط آیدی بسته را قرار داده ایم
+    package: "",
+    size: ["", "", ""],
+    service: "",
+    content: "",
+    value: "",
+    count: [0, 0, 0],
+  },
+};
+const detailsAddress = {
+  iddistrict_sender: "",
+  iddistrict_resiver: "",
+  SenderName: "",
+  SenderAddress: "",
+  Senderpelak: "",
+  Sendervahed: "",
+  SenderMobile: "",
+  ReceiverName: "",
+  ReceiverAddress: "",
+  Receiverpelak: "",
+  Receivervahed: "",
+  ReceiverMobile: "",
+  Additional_details: "",
+};
 
 const initialState = {
-    order:typeof window !== "undefined"?(localStorage.getItem("order")
-    ? decryptData("order")
-    :detailsOrder):detailsOrder,
-   address:typeof window !== "undefined"?(decryptData("address")?JSON.parse(decryptData("address")):detailsAddress):detailsAddress
-  };
+  order:
+    typeof window !== "undefined"
+      ? localStorage.getItem("order")
+        ? decryptData("order")
+        : detailsOrder
+      : detailsOrder,
+  address:
+    typeof window !== "undefined"
+      ? decryptData("address")
+        ? JSON.parse(decryptData("address"))
+        : detailsAddress
+      : detailsAddress,
+};
 
 export const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
     // start:detais order
-    
-MethodBackHomepage:(state) => {
-      state.order={...state.order,
-      Price: "",
-      Insurance: {
-        Product_value: "",
-        Product_content: "",
-      },
-      pickup_date: "",
-      id:{
-       ...state.order.id,
-        service:"",
-        content:"",
-        value:"",
-        
-      }
+
+    MethodBackHomepage: (state) => {
+      (state.order = {
+        ...state.order,
+        Price: "",
+        Insurance: {
+          Product_value: "",
+          Product_content: "",
+        },
+        pickup_date: "",
+        id: {
+          ...state.order.id,
+          service: "",
+          content: "",
+          value: "",
+        },
+      }),
+        encryptData("order", state.order);
     },
-    encryptData("order", state.order);
+    MethodDiscription: (state, action) => {
+      state.order.discription = action.payload;
+      encryptData("order", state.order);
     },
-    MethodDeletOrder:(state) => {
-      state.order=detailsOrder;
-      encryptData("order",state.order);
+    MethodDeletOrder: (state) => {
+      state.order = detailsOrder;
+      encryptData("order", state.order);
     },
     MethodPick_up: (state, action) => {
-      state.order.pick_up = action.payload;
+      state.order.pick_up = action.payload.name;
+      state.order.id.idcity_sender = action.payload.id;
       encryptData("order", state.order);
     },
     MethodDelivery: (state, action) => {
-      state.order.delivery = action.payload;
+      state.order.delivery = action.payload.name;
+      state.order.id.idcity_resiver = action.payload.id;
       encryptData("order", state.order);
     },
     MethodService: (state, action) => {
@@ -102,19 +120,19 @@ MethodBackHomepage:(state) => {
       switch (action.payload.split("*")[0]) {
         case "packB":
           state.order.package.packB.number += 1;
-          state.order.id.size[0]=(+(action.payload.split("*")[1]));
-          state.order.id.count[0]=( state.order.package.packB.number);
+          state.order.id.size[0] = +action.payload.split("*")[1];
+          state.order.id.count[0] = state.order.package.packB.number;
           break;
         case "packM":
           state.order.package.packM.number += 1;
-          state.order.id.size[1]=(+(action.payload.split("*")[1]));
-          state.order.id.count[1]=( state.order.package.packM.number);
+          state.order.id.size[1] = +action.payload.split("*")[1];
+          state.order.id.count[1] = state.order.package.packM.number;
 
           break;
         case "packS":
           state.order.package.packS.number += 1;
-          state.order.id.size[2]=(+(action.payload.split("*")[1]));
-          state.order.id.count[2]=( state.order.package.packS.number);
+          state.order.id.size[2] = +action.payload.split("*")[1];
+          state.order.id.count[2] = state.order.package.packS.number;
 
           break;
       }
@@ -124,23 +142,23 @@ MethodBackHomepage:(state) => {
       switch (action.payload) {
         case "packB":
           state.order.package.packB.number -= 1;
-          state.order.id.count[0]=( state.order.package.packB.number);
-          if(state.order.package.packB.number==0){
-            state.order.id.size[0]=""
+          state.order.id.count[0] = state.order.package.packB.number;
+          if (state.order.package.packB.number == 0) {
+            state.order.id.size[0] = "";
           }
           break;
         case "packM":
           state.order.package.packM.number -= 1;
-          state.order.id.count[1]=( state.order.package.packM.number);
-          if(state.order.package.packM.number==0){
-            state.order.id.size[1]=""
+          state.order.id.count[1] = state.order.package.packM.number;
+          if (state.order.package.packM.number == 0) {
+            state.order.id.size[1] = "";
           }
           break;
         case "packS":
           state.order.package.packS.number -= 1;
-          state.order.id.count[2]=( state.order.package.packS.number);
-          if(state.order.package.packS.number==0){
-            state.order.id.size[2]=""
+          state.order.id.count[2] = state.order.package.packS.number;
+          if (state.order.package.packS.number == 0) {
+            state.order.id.size[2] = "";
           }
           break;
       }
@@ -148,18 +166,18 @@ MethodBackHomepage:(state) => {
     },
     MethodPrice: (state, action) => {
       state.order.Price = action.payload.amount;
-      state.order.titleprice = action.payload.title; 
+      state.order.titleprice = action.payload.title;
       state.order.id.service = action.payload.id;
       encryptData("order", state.order);
     },
     MethodInsurance_value: (state, action) => {
       state.order.Insurance.Product_value = action.payload.split("*")[0];
-      state.order.id.value = +(action.payload.split("*")[1]);
+      state.order.id.value = +action.payload.split("*")[1];
       encryptData("order", state.order);
     },
     MethodInsurance_content: (state, action) => {
       state.order.Insurance.Product_content = action.payload.split("*")[0];
-      state.order.id.content = +(action.payload.split("*")[1]);
+      state.order.id.content = +action.payload.split("*")[1];
       encryptData("order", state.order);
     },
     MethodDate: (state, action) => {
@@ -167,106 +185,108 @@ MethodBackHomepage:(state) => {
       encryptData("order", state.order);
     },
     MethodDocument_plus: (state, action) => {
-      switch(action.payload.split("*")[0]){
-          case "A4":
-            state.order.document.afour.number+= 1;
-            state.order.id.size[0]=(+(action.payload.split("*")[1]));
-          state.order.id.count[0]=( state.order.document.afour.number);
-            break;
-          case "A3":
-            state.order.document.athree.number+= 1;
-            state.order.id.size[1]=(+(action.payload.split("*")[1]));
-            state.order.id.count[1]=( state.order.document.athree.number);
-            break;
+      switch (action.payload.split("*")[0]) {
+        case "A4":
+          state.order.document.afour.number += 1;
+          state.order.id.size[0] = +action.payload.split("*")[1];
+          state.order.id.count[0] = state.order.document.afour.number;
+          break;
+        case "A3":
+          state.order.document.athree.number += 1;
+          state.order.id.size[1] = +action.payload.split("*")[1];
+          state.order.id.count[1] = state.order.document.athree.number;
+          break;
       }
-      encryptData("order",state.order);
+      encryptData("order", state.order);
     },
     MethodDocument_mines: (state, action) => {
-      switch(action.payload.split("*")[0]){
-          case "A4":
-            state.order.document.afour.number-= 1;
-            state.order.id.count[0]=( state.order.document.afour.number);
-            if( state.order.document.afour.number==0){
-              state.order.id.size[0]=""
-            }
-            break;
-          case "A3":
-            state.order.document.athree.number-= 1;
-            state.order.id.count[1]=( state.order.document.athree.number);
-            if( state.order.document.athree.number==0){
-              state.order.id.size[1]=""
-            }
-            break;
+      switch (action.payload.split("*")[0]) {
+        case "A4":
+          state.order.document.afour.number -= 1;
+          state.order.id.count[0] = state.order.document.afour.number;
+          if (state.order.document.afour.number == 0) {
+            state.order.id.size[0] = "";
+          }
+          break;
+        case "A3":
+          state.order.document.athree.number -= 1;
+          state.order.id.count[1] = state.order.document.athree.number;
+          if (state.order.document.athree.number == 0) {
+            state.order.id.size[1] = "";
+          }
+          break;
       }
-      encryptData("order",state.order);
+      encryptData("order", state.order);
     },
     // end:details order
     // start:details Address
-    MethodSenderName:(state,action)=>{
-      state.address.SenderName=action.payload;
-      encryptData("address",JSON.stringify(state.address))
+    MethodSenderName: (state, action) => {
+      state.address.SenderName = action.payload;
+      encryptData("address", JSON.stringify(state.address));
     },
-    MethodSenderAddress:(state,action)=>{
-      state.address.SenderAddress=action.payload;
-      encryptData("address",JSON.stringify(state.address))
+    MethodSenderAddress: (state, action) => {
+      state.address.SenderAddress = action.payload;
+      encryptData("address", JSON.stringify(state.address));
     },
-    MethodSenderMobile:(state,action)=>{
-      state.address.SenderMobile=action.payload;
-      encryptData("address",JSON.stringify(state.address))
+    MethodSenderMobile: (state, action) => {
+      state.address.SenderMobile = action.payload;
+      encryptData("address", JSON.stringify(state.address));
     },
-    MethodReceiverName:(state,action)=>{
-      state.address.ReceiverName=action.payload;
-      encryptData("address",JSON.stringify(state.address))
+    MethodReceiverName: (state, action) => {
+      state.address.ReceiverName = action.payload;
+      encryptData("address", JSON.stringify(state.address));
     },
-    MethodReceiverAddress:(state,action)=>{
-      state.address.ReceiverAddress=action.payload;
-      encryptData("address",JSON.stringify(state.address))
+    MethodReceiverAddress: (state, action) => {
+      state.address.ReceiverAddress = action.payload;
+      encryptData("address", JSON.stringify(state.address));
     },
-    MethodReceiverMobile:(state,action)=>{
-      state.address.ReceiverMobile=action.payload;
-      encryptData("address",JSON.stringify(state.address))
+    MethodReceiverMobile: (state, action) => {
+      state.address.ReceiverMobile = action.payload;
+      encryptData("address", JSON.stringify(state.address));
     },
-    MethodAdditional_details:(state,action)=>{
-      state.address.Additional_details=action.payload;
-      encryptData("address",JSON.stringify(state.address))
+    MethodAdditional_details: (state, action) => {
+      state.address.Additional_details = action.payload;
+      encryptData("address", JSON.stringify(state.address));
     },
-    MethodSenderAddress_details:(state,action)=>{
-      const switcha=action.payload.split("**");
-     
-      switch(switcha[0]){
+    MethodSenderAddress_details: (state, action) => {
+      const switcha = action.payload.split("**");
+
+      switch (switcha[0]) {
         case "پلاک":
-           state.address.Senderpelak=switcha[1];
+          state.address.Senderpelak = switcha[1];
           break;
         case "واحد":
-           state.address.Sendervahed=switcha[1];
+          state.address.Sendervahed = switcha[1];
           break;
-        case "طبقه":
-             state.address.Sendertabaghe=switcha[1];
-            break;
-    }
-      encryptData("address",JSON.stringify(state.address))
+      }
+      encryptData("address", JSON.stringify(state.address));
     },
-    MethodReceiverAddress_details:(state,action)=>{
-      const switcha=action.payload.split("**");
-      switch(switcha[0]){
+    MethodReceiverAddress_details: (state, action) => {
+      const switcha = action.payload.split("**");
+      switch (switcha[0]) {
         case "پلاک":
-           state.address.Receiverpelak=switcha[1];
+          state.address.Receiverpelak = switcha[1];
           break;
         case "واحد":
-           state.address.Receivervahed=switcha[1];
+          state.address.Receivervahed = switcha[1];
           break;
-        case "طبقه":
-             state.address.Receivertabaghe=switcha[1];
-            break;
-    }
-      encryptData("address",JSON.stringify(state.address))
-    }
+      }
+      encryptData("address", JSON.stringify(state.address));
+    },
+    Iddistrict_sender: (state, action) => {
+      state.address.iddistrict_sender = action.payload;
+      encryptData("address", JSON.stringify(state.address));
+    },
+    Iddistrict_resiver: (state, action) => {
+      state.address.iddistrict_resiver = action.payload;
+      encryptData("address", JSON.stringify(state.address));
+    },
     // end:details Address
   },
 });
 
-
 export const {
+  MethodDiscription,
   MethodBackHomepage,
   MethodDeletOrder,
   MethodPick_up,
@@ -288,8 +308,11 @@ export const {
   MethodAdditional_details,
   MethodSenderAddress_details,
   MethodReceiverAddress_details,
-  MethodDocument_mines
-  
+  MethodDocument_mines,
+  Idtown_sender,
+  Iddistrict_sender,
+  Idtown_resiver,
+  Iddistrict_resiver,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

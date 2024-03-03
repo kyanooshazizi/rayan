@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -11,34 +11,31 @@ import {
 } from "@nextui-org/react";
 import { FaUser } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import { FaPlus } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getCookie } from "cookies-next";
 import swal from "sweetalert";
 import { useThemeContext } from "../../context/store";
-
-export default function App() {
-  const { setFlagchange,setCheck_b } = useThemeContext();
- 
+export default function App({ datainput}) {
+  const { setFlagchange } = useThemeContext();
+  const [id, setId] = useState(datainput.id);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [checkedMessage, setCheckedMessage] = useState(false);
-  const [checkedFactor, setCheckedFactor] = useState(false);
+  const [checkedFactor, setCheckedFactor] = useState(datainput.bill || false);
   const handleToggleM = () => {
     setCheckedMessage((prev) => !prev);
   };
   const handleToggleF = () => {
     setCheckedFactor((prev) => !prev);
   };
- 
   const [databesiness, setDatabesiness] = useState({
-    title: "",
-    type: 0,
-    number_b: "",
-    number_s: "",
-    codeposti: "",
-    codemeli: "",
+    ...datainput,
   });
+  if(databesiness.id!==datainput.id){
+    setDatabesiness(({...datainput}))
+  }
+  console.log("datainput",datainput,"databesiness",databesiness)
   // start choose file
   const [selectedFile, setSelectedFile] = useState("");
   const handleFileChange = (event) => {
@@ -59,41 +56,30 @@ export default function App() {
   });
   const queryClient = useQueryClient();
   const {
-    mutate: addBusiness,
+    mutate: editBusiness,
     data: datapost,
     error,
     isError,
   } = useMutation(
-    (data_in) => {
-      return fetch("https://mohaddesepkz.pythonanywhere.com/business/new/", {
-        method: "POST",
-        body: data_in,
-        headers: {
-          Authorization: `Bearer ${getCookie("access_token")}`,
-        },
-      }).then(res=>res.json());
+    (variables) => {
+      return fetch(
+        `https://mohaddesepkz.pythonanywhere.com/business/${variables.id}/`,
+        {
+          method:"PUT",
+          body: variables.formData,
+          headers: {
+            Authorization:`Bearer ${getCookie("access_token")}`,
+          },
+        }
+      );
     },
     {
-      onError: () => {
-        console.log("err");
-      },
       onSuccess: () => {
         setFlagchange((prev) => !prev);
-        setCheck_b(false)
         queryClient.invalidateQueries("allbesiness");
-        setDatabesiness({
-          title: "",
-          type: 0,
-          number_b: "",
-          number_s: "",
-          codeposti: "",
-          codemeli: "",
-        });
-        setSelectedFile("")
       },
     }
   );
-
   // start get type besiness
   // start submit
   const subHandler = (event) => {
@@ -102,35 +88,35 @@ export default function App() {
     if (selectedFile && checkedFactor) {
       var Data = {
         logo: selectedFile,
-        name: databesiness.title,
-        postal_code: databesiness.codeposti,
-        economic_number: databesiness.number_b,
-        registration_number: databesiness.number_s,
-        national_code: databesiness.codemeli,
-        b_type: databesiness.type,
+        name: databesiness.name,
+        postal_code: databesiness.postal_code,
+        economic_number: databesiness.economic_number,
+        registration_number: databesiness.registration_number,
+        national_code: databesiness.national_code,
+        b_type: databesiness.b_type,
         bill: true,
       };
     } else if (!selectedFile && checkedFactor) {
       var Data = {
-        name: databesiness.title,
-        postal_code: databesiness.codeposti,
-        economic_number: databesiness.number_b,
-        registration_number: databesiness.number_s,
-        national_code: databesiness.codemeli,
-        b_type: databesiness.type,
+        name: databesiness.name,
+        postal_code: databesiness.postal_code,
+        economic_number: databesiness.economic_number,
+        registration_number: databesiness.registration_number,
+        national_code: databesiness.national_code,
+        b_type: databesiness.b_type,
         bill: true,
       };
     } else if (selectedFile && !checkedFactor) {
       var Data = {
         logo: selectedFile,
-        name: databesiness.title,
-        b_type: databesiness.type,
+        name: databesiness.name,
+        b_type: databesiness.b_type,
         bill: false,
       };
     } else if (!selectedFile && !checkedFactor) {
       var Data = {
-        name: databesiness.title,
-        b_type: databesiness.type,
+        name: databesiness.name,
+        b_type: databesiness.b_type,
         bill: false,
       };
     }
@@ -139,8 +125,8 @@ export default function App() {
       formData.append(key, value);
     });
     if (!checkedFactor) {
-      if (databesiness.title && databesiness.type) {
-        addBusiness(formData);
+      if (databesiness.name && databesiness.b_type) {
+        editBusiness({ formData, id });
       } else {
         swal({
           text: "لطفا تمام فیلد ها را پر کنید",
@@ -148,8 +134,12 @@ export default function App() {
         });
       }
     } else {
-      if (databesiness.title && databesiness.type && databesiness.codemeli) {
-        addBusiness(formData);
+      if (
+        databesiness.name &&
+        databesiness.b_type &&
+        databesiness.national_code
+      ) {
+        editBusiness({ formData, id });
       } else {
         swal({
           text: "لطفا تمام فیلد ها را پر کنید",
@@ -161,13 +151,9 @@ export default function App() {
   // end submit
   return (
     <>
-      <Button
-        onPress={onOpen}
-        className="sm:text-[16px] text-[14px] cursor-pointer mt-6 xl:w-[35%] md:w-[50%] w-full text-[#fff]  bg-bgcolor rounded-[4px] text-center py-[12px]"
-      >
-        <FaPlus className="ml-1 inline-block aligne-top" />
-        افزودن کسب و کار جدید
-      </Button>
+      <button onClick={onOpen}>
+        <FaEdit className="text-[20px] cursor-pointer text-bgcolor" />
+      </button>
 
       <Modal size={"5xl"} isOpen={isOpen} onClose={onClose} placement={"top"}>
         <ModalContent className="bg-dashboard">
@@ -185,42 +171,51 @@ export default function App() {
                         onClick={onClose}
                         className="text-[#fff] bg-bgcolor py-2 px-[10px] rounded-[5px] mx-4"
                       >
-                        ثبت اطلاعات
+                        ثبت تغییرات
                       </button>
                       {/* <button className="text-[#fff] bg-bgcolor py-2 px-[10px] rounded-[5px] red">انصراف</button> */}
                     </div>
                   </div>
                   {/* start logo */}
-                  <div className=" my-2">
-                    <label
-                      htmlFor="image"
-                      className="text-center cursor-pointer flex justify-center "
-                    >
-                      <div className="w-full min-h-[150px] rounded-[10px] bg-[#fff] flex justify-start ">
-                        <span className="mt-[20px] mr-5 ml-5">لوگو</span>
-                        <div className="flex flex-col">
-                          <div className="w-20 h-20 rounded bg-[#F1F1F1] flex justify-center items-center relative mx-10 mt-[20px] cursor-pointer">
-                            <FaUser className="text-[#D9D9D9] text-6xl" />
-                            <div className="absolute bg-[#D9D9D9] p-1 rounded-full top-[-10px] right-[65px]">
-                              <MdEdit className=" text-[#fff]" />
+                  <label htmlFor="image" className=" cursor-pointer">
+                    {datainput.logo ? (
+                      <div className=" my-2 mx-4">
+                        <Image
+                          className="rounded-full"
+                          src={datainput.logo}
+                          width={110}
+                          height={110}
+                          alt="لوگو"
+                          priority
+                        />
+                      </div>
+                    ) : (
+                      <div className=" my-2">
+                        <div className="w-full min-h-[150px] rounded-[10px] bg-[#fff] flex justify-start ">
+                          <span className="mt-[20px] mr-5 ml-5">لوگو</span>
+                          <div className="flex flex-col">
+                            <div className="w-20 h-20 rounded bg-[#F1F1F1] flex justify-center items-center relative mx-10 mt-[20px] cursor-pointer">
+                              <FaUser className="text-[#D9D9D9] text-6xl" />
+                              <div className="absolute bg-[#D9D9D9] p-1 rounded-full top-[-10px] right-[65px]">
+                                <MdEdit className=" text-[#fff]" />
+                              </div>
                             </div>
+                            <span className="text-[12px] mt-[18px]">
+                              فایل های معتبر Png,Jpeg,Jpg
+                            </span>
                           </div>
-                          <span className="text-[12px] mt-[18px]">
-                            فایل های معتبر Png,Jpeg,Jpg
-                          </span>
                         </div>
                       </div>
-                    </label>
-
-                    <input
-                      type="file"
-                      id="image"
-                      name="image"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                  </div>
+                    )}
+                  </label>
+                  <input
+                          type="file"
+                          id="image"
+                          name="image"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="hidden"
+                        />
                   {/* end logo */}
 
                   <div className="w-full min-h-[60px] rounded-[8px] bg-[#fff] flex items-center ">
@@ -230,7 +225,8 @@ export default function App() {
                       </span>
                       <input
                         type="text"
-                        name="title"
+                        name="name"
+                        value={databesiness.name}
                         placeholder="رایان ادمین"
                         className="bg-dashboard placeholder:text-[12px] placeholder:text-[#CDCDCD] px-[10px] outline-colorgreen border-[2px] border-solid border-gray-200 rounded py-[5px] w-[90%]"
                         onChange={(e) => dataHandler(e)}
@@ -250,7 +246,7 @@ export default function App() {
 
                           setDatabesiness((prev) => ({
                             ...prev,
-                            type: item1.id,
+                            b_type: item1.id,
                           }));
                         }}
                         className="bg-dashboard placeholder:text-[12px] placeholder:text-[#CDCDCD] px-[10px] outline-colorgreen border-[2px] border-solid border-gray-200 rounded py-[5px] w-[75%]"
@@ -315,8 +311,9 @@ export default function App() {
                         شماره اقتصادی
                       </label>
                       <input
+                        value={databesiness.economic_number}
                         type="text"
-                        name="number_b"
+                        name="economic_number"
                         placeholder=""
                         onChange={(e) => dataHandler(e)}
                         className="bg-dashboard w-full  placeholder:text-[12px] placeholder:text-[#CDCDCD] px-[10px] outline-colorgreen border-[2px] border-solid border-gray-200 rounded py-[5px]"
@@ -327,8 +324,9 @@ export default function App() {
                         شماره ثبت
                       </label>
                       <input
+                        value={databesiness.registration_number}
                         type="text"
-                        name="number_s"
+                        name="registration_number"
                         placeholder=""
                         onChange={(e) => dataHandler(e)}
                         className="bg-dashboard w-full  placeholder:text-[12px] placeholder:text-[#CDCDCD] px-[10px] outline-colorgreen border-[2px] border-solid border-gray-200 rounded py-[5px] "
@@ -339,8 +337,9 @@ export default function App() {
                         کد پستی
                       </label>
                       <input
+                        value={databesiness.postal_code}
                         type="text"
-                        name="codeposti"
+                        name="postal_code"
                         placeholder=""
                         onChange={(e) => dataHandler(e)}
                         className="bg-dashboard w-full  placeholder:text-[12px] placeholder:text-[#CDCDCD] px-[10px] outline-colorgreen border-[2px] border-solid border-gray-200 rounded py-[5px] "
@@ -351,8 +350,9 @@ export default function App() {
                         شناسه ملی
                       </label>
                       <input
+                        value={databesiness.national_code}
                         type="text"
-                        name="codemeli"
+                        name="national_code"
                         placeholder=""
                         onChange={(e) => dataHandler(e)}
                         className="bg-dashboard w-full placeholder:text-[12px] placeholder:text-[#CDCDCD] px-[10px] outline-colorgreen border-[2px] border-solid border-gray-200 rounded py-[5px] "

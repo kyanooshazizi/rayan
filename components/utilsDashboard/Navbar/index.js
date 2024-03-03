@@ -18,7 +18,8 @@ import { FaRegUser } from "react-icons/fa6";
 import { IoMdMenu } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 import Link from "next/link";
-
+import { BsCart3 } from "react-icons/bs";
+import {MethodFlagHandler} from "../../utilsorder/utils/MethodFlagHandler"
 const Navbar = ({ setMobile, mobile }) => {
   const dataAddress = useSelector((state) => state.order.address);
   const datastore = useSelector((state) => state.order.order);
@@ -61,15 +62,19 @@ const Navbar = ({ setMobile, mobile }) => {
               </Link>
             </div>
           </div>
-          <div className="mx-2">
-            <Image
+          <Link href={`${MethodFlagHandler(datastore)?"/order/address":"/order/requst"}`} className="mx-2 relative inline-block">
+            {/* <Image
               src="/image_dashboard/news.svg"
               width={20}
               height={20}
               alt="logo"
               priority
-            />
-          </div>
+            /> */}
+            <BsCart3 className="text-[25px] text-slate-500" />
+            <div className={`${MethodFlagHandler(datastore)?"bg-colorgreen text-[#fff] w-[25px] h-[25px] p-1 rounded-full absolute top-[-15px] right-[-15px] text-center":"hidden"}`}>
+             1
+            </div>
+          </Link>
           <div className="mx-2">
             <Image
               src="/image_dashboard/qustion.svg"
@@ -115,6 +120,7 @@ const Navbar = ({ setMobile, mobile }) => {
                   className="text-[red] py-2 "
                   onClick={() => {
                     deleteCookie("access_token");
+                    localStorage.clear();
                     router.push("/");
                     setIslogin(false);
                   }}

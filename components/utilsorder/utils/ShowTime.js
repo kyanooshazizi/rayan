@@ -148,4 +148,9 @@ export const getPersianDate = (format) => {
     if(format==="d/m/y")
       return `${day}/${month}/${year}`;
   }
-  
+  // "scripts": {
+  //   "dev": "next dev",
+  //   "build": "next build",
+  //   "lint": "next lint",
+  //   "start": "NODE_ENV=production node server.js"
+  // },
