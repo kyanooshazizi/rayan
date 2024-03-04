@@ -30,8 +30,8 @@ export default function App({ datainput }) {
     address: datainput.address,
     peluck: datainput.plaque,
     vahed: datainput.unity,
-    idcity: datainput.city,
-    iddistrict: datainput.district,
+    idcity: datainput.city.id,
+    iddistrict: datainput.district.id,
   });
   const id = datainput.id;
   if (datainput.id !== address_resiver1.id) {
@@ -43,8 +43,8 @@ export default function App({ datainput }) {
       address: datainput.address,
       peluck: datainput.plaque,
       vahed: datainput.unity,
-      idcity: datainput.city,
-      iddistrict: datainput.district,
+      idcity: datainput.city.id,
+      iddistrict: datainput.district.id,
     });
   }
   console.log(id, datainput, address_resiver1);
@@ -198,7 +198,7 @@ export default function App({ datainput }) {
                             const item1 = datacity?.results.find(
                               (item) => item.name == event.target.value
                             );
-                            setAddress_sender((prev) => ({
+                            setAddress_resiver1((prev) => ({
                               ...prev,
                               idcity: item1.id,
                             }));
@@ -220,20 +220,20 @@ export default function App({ datainput }) {
                           className="w-full outline-none rounded-[5px] text-[14px] bg-dashboard border-2 border-solid px-2 py-2 focus:border-colorgreen"
                           onClick={(event) => {
                             const item1 = datacity?.results.find(
-                              (item) => address_sender.idcity==item.id
+                              (item) => address_resiver1.idcity==item.id
                             );
                             const item2 = item1?.district.find(
                               (item) => item.name==event.target.value
                             );
                             console.log(item1,item2)
-                            setAddress_sender((prev) => ({
+                            setAddress_resiver1((prev) => ({
                               ...prev,
                               iddistrict: item2.id,
                             }));
                           }}
                         >
                           {datacity?.results.map((item, index) => {
-                            if (item.id === address_sender.idcity) {
+                            if (item.id === address_resiver1.idcity) {
                               return (item?.district.map((k) => {
                                 return (
                                   <option key={k.id} value={k.name}>

@@ -366,12 +366,12 @@ export default function App() {
                     {/* start hidden adress*/}
                     {/* end table */}
                     <div className="flex justify-around  mt-[50px] mb-[10px]">
-                      <button
+                      <Button
                         onClick={onClose}
                         className="bg-bgcolor basis-[40%] text-[#fff] py-2 rounded"
                       >
                         انصراف
-                      </button>
+                      </Button>
                       <button
                         type="submit"
                         onClick={onClose}

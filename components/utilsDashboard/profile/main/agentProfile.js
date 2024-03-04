@@ -107,12 +107,12 @@ const index = () => {
     isLoading: isloadingnew,
     mutate: datanew,
   } = useMutation(
-    (variables) => {
+    (formData) => {
       return fetch(
         `https://mohaddesepkz.pythonanywhere.com/profile/legal/new/`,
         {
           method: "POST",
-          body: variables.formData,
+          body: formData,
           headers: {
             Authorization: `Bearer ${getCookie("access_token")}`,
           },

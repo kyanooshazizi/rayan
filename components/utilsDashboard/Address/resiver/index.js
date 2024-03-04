@@ -8,9 +8,10 @@ import Image from "next/image";
 import Modaledit from "./Modaledit"
 import { MdDelete } from "react-icons/md";
 import { FaPlusSquare } from "react-icons/fa";
-
+import {Tooltip, Button} from "@nextui-org/react";
+import toast, { Toaster } from 'react-hot-toast';
 // start:save in localhost
-import { useDispatch,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   MethodSenderName,
   MethodSenderAddress,
@@ -19,13 +20,17 @@ import {
   MethodReceiverAddress,
   MethodReceiverMobile,
   MethodSenderAddress_details,
-  MethodReceiverAddress_details
+  MethodReceiverAddress_details,
+  Iddistrict_resiver
 } from "../../../Redux/orderslice";
 import { useRouter } from "next/navigation";
 import {MethodFlagHandler} from "../../../utilsorder/utils/MethodFlagHandler";
 import Link from 'next/link';
 // end:save in localhost
 const index = () => {
+  const dispatch = useDispatch();
+  const dataorder = useSelector((state) => state.order.order);
+  const router = useRouter();
   const empty = Array(10).fill(0);
   const { data, isLoading } = useQuery("alladdress_receivers", () => {
     return fetch("https://mohaddesepkz.pythonanywhere.com/address/receivers/", {
@@ -144,25 +149,30 @@ const index = () => {
                       onClick={()=>deletaddress1(item.id)}
                     /> </td>
                      <td className="text-right px-4  py-4 text-[14px]">
+                     <Tooltip showArrow={true}  content="افزودن آدرس">
                     <button onClick={()=>{
-                              dispatch(MethodReceiverName(item.name));
+                              
+                              if(item.city.id==dataorder.id.idcity_resiver){
+                                dispatch(MethodReceiverName(item.name));
                               dispatch(MethodReceiverAddress(item.address));
                               dispatch(MethodReceiverAddress_details("پلاک**"+item.plaque));
-
+                              dispatch(Iddistrict_resiver(item.district.id))
                               dispatch(MethodReceiverAddress_details("واحد**"+item.unity));
                               dispatch(MethodReceiverMobile(item.phone));
-                              if(MethodFlagHandler(dataorder)){
-
-                                router.push("/order/address")
+                                if (MethodFlagHandler(dataorder)) {
+                                  router.push("/order/address");
+                                  toast.success('با موفقیت افزوده شد', {
+                                    position: "top-center"
+                                  })
+                                }
+    
                               }else{
-                                setRequstOrder_reciver({
-                                  flag:true,
-                                  text:"آدرس فرستنده افزوده شد اما هنوز سفارشی را ثبت نکرده اید!"
-                                })
+                                toast.error("شهر مقصد تطابقت ندارد")
                               }
                             }} className="text-bgcolor text-[22px] cursor-pointer mt-[8px]">
                               <FaPlusSquare />
                             </button>
+                            </Tooltip>
                     </td>
                 </tr>
               );
@@ -204,6 +214,7 @@ const index = () => {
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   )
 }

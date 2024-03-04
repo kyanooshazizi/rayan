@@ -26,6 +26,7 @@ import {
 import { BsCart3 } from "react-icons/bs";
 import { MethodFlagHandler } from "../../utilsorder/utils/MethodFlagHandler";
 import { useSelector } from "react-redux";
+import { TbLayoutDashboard } from "react-icons/tb";
 const Resnav = () => {
   const {
     username,
@@ -210,12 +211,12 @@ const Resnav = () => {
               <DropdownMenu aria-label="Static Actions" className="">
                 <DropdownItem>
                   <Link href="/dashboard">
-                    <div className="text-bgcolor py-4 ">
-                      <span className="pr-2">
-                        <FaUserAlt className="inline text-md ml-3 text-bgcolor" />
-                        مشاهده حساب کاربری
+                    <div className="text-bgcolor py-2 ">
+                      <span className="">
+                      <TbLayoutDashboard className="text-[24px] inline-block ml-2" />
+                        داشبورد
                       </span>
-                      <MdOutlineKeyboardDoubleArrowLeft className="inline mr-4 font-bold text-lg" />
+                      
                     </div>
                   </Link>
                 </DropdownItem>
@@ -226,11 +227,11 @@ const Resnav = () => {
                       localStorage.clear();
                       setIslogin(false);
                     }}
-                    className="text-[red] py-4"
+                    className="text-[red] py-2"
                   >
-                    <span className="pr-2">
-                      <TbLogout className="inline text-lg ml-3" />
-                      خروج از حساب کاربری
+                    <span className="">
+                      <TbLogout className="inline text-[24px] ml-2" />
+                      خروج 
                     </span>
                   </button>
                 </DropdownItem>

@@ -6,7 +6,7 @@ import ReactToPrint from "react-to-print";
 
 const pageStyle = `
 @page{
-  size:50mm 30mm
+  size:140mm 100mm
 };
 @media all{
 .pageBreak{

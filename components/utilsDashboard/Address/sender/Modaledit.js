@@ -30,8 +30,8 @@ const [address_sender,setAddress_sender]=useState({
   peluck:datainput.plaque,
   vahed:datainput.unity,
   id:datainput.id,
-  idcity: datainput.city,
-  iddistrict: datainput.district,
+  idcity: datainput.city.id,
+  iddistrict: datainput.district.id,
 })
 const id=datainput.id
 if(datainput.id!==address_sender.id){
@@ -43,8 +43,8 @@ if(datainput.id!==address_sender.id){
     peluck:datainput.plaque,
     vahed:datainput.unity,
     id:datainput.id,
-    idcity: datainput.city,
-    iddistrict: datainput.district,
+    idcity: datainput.city.id,
+    iddistrict: datainput.district.id,
   })
 }
 console.log(id,datainput,address_sender)
@@ -70,11 +70,11 @@ const ChangeHandler=(event)=>{
             "Content-type": "application/json; charset=UTF-8",
           },
     }).then(res=>{
-      if(res.ok){
-        return res.json()
-      }else{
-        return null
-      }
+     if(res.ok){
+return res.json()
+     }else{
+      return null
+     }
     })},{
       
       onSuccess:(data)=>{
@@ -211,10 +211,10 @@ const SubmitHandler=(event)=>{
                               (item) => item.name==event.target.value
                             );
                             console.log(item1,item2)
-                            // setAddress_sender((prev) => ({
-                            //   ...prev,
-                            //   iddistrict: item2.id,
-                            // }));
+                            setAddress_sender((prev) => ({
+                              ...prev,
+                              iddistrict: item2.id,
+                            }));
                           }}
                         >
                           {datacity?.results.map((item, index) => {

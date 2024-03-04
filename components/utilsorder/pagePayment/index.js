@@ -33,18 +33,18 @@ const Payment = () => {
       <div className="bg-white w-full mt-[15px] text-colorgray p-4 flex flex-wrap justify-around text-[15px]">
         <div className="mt-[10px] rounded-[4px] py-[10px] bg-dashboard basis-[48%] border-2 border-solid border-[#CDCDCD] flex justify-between items-center px-4">
           <span>مجموع</span>
-          <span>{orderReviw?.results[0].price.toLocaleString()} تومان</span>
+          <span>{orderReviw?.results[0]?.price.toLocaleString()} تومان</span>
         </div>
         <div className="mt-[10px] rounded-[4px] py-[10px] bg-dashboard basis-[48%] border-2 border-solid border-[#CDCDCD] flex justify-between items-center px-4">
           <span>مالیات بر ارزش افزوده</span>
-          <span>{(orderReviw?.results[0].total_price - orderReviw?.results[0].price).toLocaleString()} تومان</span>
+          <span>{(orderReviw?.results[0]?.total_price - orderReviw?.results[0]?.price).toLocaleString()} تومان</span>
         </div>
         <div className="mt-[10px] rounded-[4px] py-[10px] bg-dashboard basis-[48%] border-2 border-solid border-[#CDCDCD] px-4 text-bgcolor">
           کد تخفیف
         </div>
         <div className="mt-[10px] rounded-[4px] py-[10px] bg-dashboard basis-[48%] border-2 border-solid border-[#CDCDCD] flex justify-between items-center px-4 text-[#000]">
           <span>مجموع قابل پرداخت</span>
-          <span>{orderReviw?.results[0].total_price.toLocaleString()} تومان  </span>
+          <span>{orderReviw?.results[0]?.total_price.toLocaleString()} تومان  </span>
         </div>
         <div className="px-4 py-[5px] basis-[98%] bg-dashboard border-2 border-solid border-[#CDCDCD] h-[55px] mt-2 rounded-[3px] flex justify-between">
           <div>
@@ -97,9 +97,9 @@ const Payment = () => {
               className="mx-auto"
             />
           </button>
-          
+        
           <Link
-            href={`https://mohaddesepkz.pythonanywhere.com/payment/request/order/?tracking_code=NX057123737MC&wallet=false&id=${userdata.user_id}`}
+            href={`https://mohaddesepkz.pythonanywhere.com/payment/request/order/?tracking_code=${orderReviw.results[0].tracking_code}&wallet=false&id=${userdata.user_id}`}
             className="basis-[22%] bg-dashboard border-2 border-solid border-[#CDCDCD] rounded-[5px] inline-block pt-[17px]"
           >
             <Image
@@ -129,3 +129,4 @@ export default Payment;
 
 
 
+// https://mohaddesepkz.pythonanywhere.com/payment/request/order/?tracking_code=NX057123737MC&wallet=false&id=${userdata.user_id}

@@ -206,10 +206,10 @@ const SubmitHandler=(event)=>{
                               (item) => item.name==event.target.value
                             );
                             console.log(item1,item2)
-                            // setAddress_sender((prev) => ({
-                            //   ...prev,
-                            //   iddistrict: item2.id,
-                            // }));
+                            setAddress_resiver((prev) => ({
+                              ...prev,
+                              iddistrict: item2.id,
+                            }));
                           }}
                         >
                           {datacity?.results.map((item, index) => {
@@ -357,12 +357,12 @@ const SubmitHandler=(event)=>{
                      {/* start hidden adress*/}
                     {/* end table */}
                     <div className="flex justify-around  mt-[50px] mb-[10px]">
-                      <button
+                      <Button
                         onClick={onClose}
                         className="bg-bgcolor basis-[40%] text-[#fff] py-2 rounded"
                       >
                         انصراف
-                      </button>
+                      </Button>
                       <button
                        type="submit"
                         onClick={onClose}

@@ -8,6 +8,8 @@ import Image from "next/image";
 import Modaledit from "./Modaledit";
 import { MdDelete } from "react-icons/md";
 import { FaPlusSquare } from "react-icons/fa";
+import { Tooltip, Button } from "@nextui-org/react";
+import toast, { Toaster } from "react-hot-toast";
 // start:save in localhost
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,6 +21,7 @@ import {
   MethodReceiverMobile,
   MethodSenderAddress_details,
   MethodReceiverAddress_details,
+  Iddistrict_sender,
 } from "../../../Redux/orderslice";
 import { useRouter } from "next/navigation";
 import { MethodFlagHandler } from "../../../utilsorder/utils/MethodFlagHandler";
@@ -119,7 +122,7 @@ const index = () => {
                   شهر
                 </th>
                 <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right px-4 py-2">
-                محله
+                  محله
                 </th>
                 <th className="text-colorgray lg:text-[14px] text-[12px] !font-[400] text-right px-4 py-2">
                   آدرس
@@ -170,33 +173,43 @@ const index = () => {
                       />{" "}
                     </td>
                     <td className="text-right px-4  py-4 text-[14px]">
-                      <button
-                        onClick={() => {
-                          dispatch(MethodReceiverName(item.name));
-                          dispatch(MethodReceiverAddress(item.address));
-                          dispatch(
-                            MethodReceiverAddress_details(
-                              "پلاک**" + item.plaque
-                            )
-                          );
+                      <Tooltip showArrow={true} content="افزودن آدرس">
+                        <button
+                          onClick={() => {
+                            if (item.city.id == dataorder.id.idcity_sender) {
+                              dispatch(MethodSenderName(item.name));
+                              dispatch(Iddistrict_sender(item.district.id));
 
-                          dispatch(
-                            MethodReceiverAddress_details("واحد**" + item.unity)
-                          );
-                          dispatch(MethodReceiverMobile(item.phone));
-                          if (MethodFlagHandler(dataorder)) {
-                            router.push("/order/address");
-                          } else {
-                            setRequstOrder_reciver({
-                              flag: true,
-                              text: "آدرس فرستنده افزوده شد اما هنوز سفارشی را ثبت نکرده اید!",
-                            });
-                          }
-                        }}
-                        className="text-bgcolor text-[22px] cursor-pointer mt-[8px]"
-                      >
-                        <FaPlusSquare />
-                      </button>
+                              dispatch(MethodSenderAddress(item.address));
+                              dispatch(
+                                MethodSenderAddress_details(
+                                  "پلاک**" + item.plaque
+                                )
+                              );
+
+                              dispatch(
+                                MethodSenderAddress_details(
+                                  "واحد**" + item.unity
+                                )
+                              );
+                              dispatch(MethodSenderMobile(item.phone));
+                              if (MethodFlagHandler(dataorder)) {
+                                router.push("/order/address");
+                                toast.success("با موفقیت افزوده شد", {
+                                  position: "top-center",
+                                });
+                              }
+                            } else {
+                              toast.error("شهر مبدا تطابقت ندارد");
+                            }
+                          }}
+                          className={`text-bgcolor ${
+                            MethodFlagHandler(dataorder) ? "block" : "hidden"
+                          } text-[22px] cursor-pointer mt-[2px]`}
+                        >
+                          <FaPlusSquare />
+                        </button>
+                      </Tooltip>
                     </td>
                   </tr>
                 );
@@ -240,6 +253,7 @@ const index = () => {
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };
